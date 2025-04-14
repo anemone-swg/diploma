@@ -1,0 +1,223 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    --background-color: #232323;
+    --light-background-color: #353535;
+    --text-color: #b3b3b3;
+    --default-btn-hover: #3c3c3c;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 10px 20px 10px 20px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.icon {
+    margin-right: 4px;
+    vertical-align: middle;
+    font-size: 14px;
+}
+
+.bigIcon {
+    margin-right: 4px;
+    vertical-align: middle;
+    font-size: 20px;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 20px;
+    right: 20px;
+}
+
+.title {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+hr {
+    margin: 0 0 20px 0;
+    border: none; /* Убираем стандартную границу */
+    border-top: 2px solid var(--text-color); /* Новая граница (цвет: красный) */
+}
+
+.menu {
+    display: flex;
+    justify-content: space-between;
+}
+
+.menuBtn {
+    background-color: transparent;
+    color: var(--text-color);
+    border: none;
+    padding: 5px 10px 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s ease background-color;
+}
+
+.menuBtn:hover {
+    background-color: var(--default-btn-hover);
+}
+
+.disable {
+    pointer-events: none;
+    opacity: 0;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-color);
+    box-sizing: border-box;
+    opacity: 0; /* Начальная прозрачность */
+    visibility: hidden; /* Скрыть элемент из DOM-потока */
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out; /* Плавное изменение */
+}
+
+.modal.active {
+    opacity: 1; /* Полная видимость */
+    visibility: visible; /* Показать элемент */
+}
+
+.modalContent {
+    background-color: var(--light-background-color);
+    padding: 1.5rem;
+    border-radius: 8px;
+    width: 400px;
+}
+
+.modalContent h3 {
+    margin-top: 0;
+}
+
+.defaultInput {
+    width: 100%;
+    padding: 0.5rem;
+    margin: 1rem 0;
+    outline: none;
+    border: 1px solid var(--light-background-color);
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: var(--text-color);
+}
+
+.defaultInput:focus {
+    outline: 3px solid var(--background-color); /* Цвет обводки при фокусе */
+    border-color: transparent; /* Опционально: скрыть исходный border */
+}
+
+.modalActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.cancelBtn {
+    background-color: #e82929;
+    border: none;
+    padding: 5px 10px 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.4s ease background-color;
+}
+
+.cancelBtn:hover {
+    background-color: #9a2c2c;
+}
+
+.createConfirmBtn {
+    background-color: #5aac44;
+    color: white;
+    border: none;
+    padding: 5px 10px 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.4s ease background-color;
+}
+
+.createConfirmBtn:hover {
+    background-color: #3a6e2d;
+}
+
+.boardsContainer {
+    margin-top: 122px;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.board {
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid var(--text-color);
+}
+
+.boardTitle {
+    margin: 0 0 10px 0;
+}
+
+.boardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.addColumnBtn {
+    background: transparent;
+    color: var(--text-color);
+    border: none;
+    padding: 5px 10px 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-left: 20px;
+}
+
+.addColumnBtn:hover {
+    background: var(--default-btn-hover);
+}
+
+/* Стили для колонок */
+.columnsContainer {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+}
+
+.column {
+    background: transparent;
+    padding: 15px;
+    border-radius: 6px;
+    min-width: 250px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--text-color);
+}
+
+.columnTitle {
+    margin: 0 0 15px 0;
+    font-size: 16px;
+}
+
+/* Поле ввода колонки */
+.columnInputContainer {
+    margin-bottom: 20px;
+    width: 250px;
+}
+
+.columnInputActions {
+    display: flex;
+    gap: 8px;
+}
