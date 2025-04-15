@@ -1,10 +1,14 @@
 import {useEffect, useState} from 'react';
-import styles from './App.module.css';
+import styles from './styles/App.module.css';
 import {FaPlus, FaProjectDiagram, FaTrash, FaUsers} from "react-icons/fa";
 import {MdEmojiPeople} from "react-icons/md";
 import {IoCheckmarkDoneOutline} from "react-icons/io5";
 import {RxCross1} from "react-icons/rx";
 import {PiKanban} from "react-icons/pi";
+import KanbanBoardSection from "./features/kanban/components/KanbanBoardSection.jsx";
+import TeamSection from "./features/team/components/TeamSection.jsx";
+import DefaultBtn from "./components/ui/DefaultBtn.jsx";
+import classNames from "classnames";
 
 function App() {
     const [boards, setBoards] = useState([]);
@@ -12,12 +16,14 @@ function App() {
     const [newBoardTitle, setNewBoardTitle] = useState('');
     const [newColumnTitle, setNewColumnTitle] = useState('');
     const [showColumnInput, setShowColumnInput] = useState(false);
+    const [activeSection, setActiveSection] = useState('');
 
     // Эффект для закрытия модалки
     useEffect(() => {
         const handleClickOutside = (e) => {
-            if (showModal && e.target.classList.contains(styles.modal)) {
+            if (e.target.classList.contains(styles.modal)) {
                 setShowModal(false);
+                setNewBoardTitle('');
             }
         };
 
@@ -36,12 +42,16 @@ function App() {
             setBoards([newBoard]);
             setNewBoardTitle('');
             setShowModal(false);
+            setActiveSection('kanban');
         }
     };
 
     // Удаление доски
     const handleDeleteBoard = () => {
-        setBoards([]);
+        if (window.confirm('Вы уверены, что хотите полностью удалить доску? Все данные будут потеряны.')) {
+            setBoards([]);
+            setActiveSection('');
+        }
     };
 
     // Создание колонки
@@ -65,37 +75,76 @@ function App() {
         }
     };
 
+    const renderContent = () => {
+        switch (activeSection) {
+            case 'kanban':
+                return (
+                    <KanbanBoardSection
+                        boards={boards}
+                        showColumnInput={showColumnInput}
+                        newColumnTitle={newColumnTitle}
+                        setShowColumnInput={setShowColumnInput}
+                        setNewColumnTitle={setNewColumnTitle}
+                        handleCreateColumn={handleCreateColumn}
+                    />
+                );
+
+            case 'team':
+                return <TeamSection/>;
+
+            default:
+                return (
+                    <div className={styles.defaultSection}>
+                        <h3>Создайте kanban-доску или присоединитесь к существующему проекту.</h3>
+                    </div>
+                );
+        }
+    };
+
     return (
         <div>
             <div className={styles.navbar}>
                 <nav>
-                    <h1 className={styles.title}><FaProjectDiagram style={{marginRight: "15px"}}
-                                                                   className={styles.bigIcon}/>Планировщик проектов
-                        / Kanban-доска</h1>
+                    <h1 className={styles.title}>
+                        <FaProjectDiagram style={{marginRight: "15px"}} className={styles.icon}/>
+                        Планировщик проектов / Kanban-доска
+                    </h1>
                     <div className={styles.menu}>
                         <div>
-                            <button
-                                className={styles.menuBtn}
-                                onClick={boards.length === 0 ? () => setShowModal(true) : handleDeleteBoard}
+                            <DefaultBtn
+                                icon={boards.length === 0 ? FaPlus : PiKanban}
+                                active={activeSection === 'kanban'}
+                                onClick={() => {
+                                    if (boards.length > 0) setActiveSection('kanban');
+                                    else setShowModal(true);
+                                }}
+                                disabled={false}
+                                className={activeSection === 'kanban' ? styles.activeDefaultBtn : ''}
                             >
-                                {boards.length === 0 ? (
-                                    <>
-                                        <FaPlus className={styles.icon}/> Создать kanban-доску
-                                    </>
-                                ) : (
-                                    <>
-                                        <FaTrash className={styles.icon}/> Удалить kanban-доску
-                                    </>
+                                {boards.length === 0 ? 'Создать kanban-доску' : 'Kanban-доска'}
+                            </DefaultBtn>
+
+                            <DefaultBtn
+                                icon={FaUsers}
+                                active={activeSection === 'team'}
+                                onClick={() => setActiveSection('team')}
+                                disabled={boards.length === 0}
+                                className={classNames(
+                                    {[styles.disable]: boards.length === 0},
+                                    {[styles.activeDefaultBtn]: activeSection === 'team'}
                                 )}
-                            </button>
-                            <button className={`${styles.menuBtn} ${boards.length === 0 ? styles.disable : ''}`}>
-                                <FaUsers className={styles.icon}/>Команда
-                            </button>
+                            >
+                                Команда
+                            </DefaultBtn>
                         </div>
                         <div>
-                            <button className={`${styles.menuBtn} ${boards.length !== 0 ? styles.disable : ''}`}>
-                                <MdEmojiPeople className={styles.bigIcon}/>Присоединиться к проекту
-                            </button>
+                            <DefaultBtn
+                                icon={boards.length === 0 ? MdEmojiPeople : FaTrash}
+                                onClick={boards.length === 0 ? undefined : handleDeleteBoard}
+                                disabled={false}
+                            >
+                                {boards.length === 0 ? 'Присоединиться к проекту' : 'Удалить kanban-доску'}
+                            </DefaultBtn>
                         </div>
                     </div>
                 </nav>
@@ -103,10 +152,10 @@ function App() {
             </div>
 
             {/* Модальное окно создания доски */}
-            {showModal && (
-                <div className={`${styles.modal} ${showModal ? styles.active : ''}`}>
+            <div className={`${styles.modal} ${showModal ? styles.activeModal : ''}`}>
+                {showModal && (
                     <div className={styles.modalContent}>
-                        <h3><PiKanban className={styles.bigIcon}/>Создание kanban-доски</h3>
+                        <h3><PiKanban className={styles.icon}/>Создание kanban-доски</h3>
                         <input
                             className={styles.defaultInput}
                             type="text"
@@ -117,84 +166,31 @@ function App() {
                             autoFocus
                         />
                         <div className={styles.modalActions}>
-                            <button
-                                className={styles.createConfirmBtn}
+                            <DefaultBtn
+                                variant="createConfirmBtn"
+                                icon={IoCheckmarkDoneOutline}
                                 onClick={handleCreateBoard}
                             >
-                                <IoCheckmarkDoneOutline className={styles.icon}/>Создать
-                            </button>
-                            <button
-                                className={styles.cancelBtn}
-                                onClick={() => setShowModal(false)}
+                                Создать
+                            </DefaultBtn>
+
+                            <DefaultBtn
+                                variant="cancelBtn"
+                                icon={RxCross1}
+                                onClick={() => {
+                                    setShowModal(false);
+                                    setNewBoardTitle('')
+                                }}
                             >
-                                <RxCross1 className={styles.icon}/>Отмена
-                            </button>
+                                Отмена
+                            </DefaultBtn>
                         </div>
                     </div>
-                </div>
-            )}
+                )}
+            </div>
 
-            {/* Отображение досок с колонками */}
-            <div className={styles.boardsContainer}>
-                {boards.map(board => (
-                    <div key={board.id} className={styles.board}>
-                        <div className={styles.boardHeader}>
-                            <h3 className={styles.boardTitle}>{board.title}</h3>
-                            <button
-                                className={styles.addColumnBtn}
-                                onClick={() => setShowColumnInput(true)}
-                            >
-                                <FaPlus className={styles.icon}/>Добавить столбец
-                            </button>
-
-                        </div>
-                        <hr/>
-                        {/* Поле ввода новой колонки */}
-                        {showColumnInput && (
-                            <div className={styles.columnInputContainer}>
-                                <input
-                                    className={styles.defaultInput}
-                                    type="text"
-                                    placeholder="Название столбца..."
-                                    value={newColumnTitle}
-                                    onKeyPress={(e) => e.key === 'Enter' && handleCreateColumn(board.id)}
-                                    onChange={(e) => setNewColumnTitle(e.target.value)}
-                                    autoFocus
-                                />
-                                <div className={styles.columnInputActions}>
-                                    <button
-                                        className={styles.createConfirmBtn}
-                                        onClick={() => handleCreateColumn(board.id)}
-                                    >
-                                        <IoCheckmarkDoneOutline className={styles.icon}/>Добавить
-                                    </button>
-                                    <button
-                                        className={styles.cancelBtn}
-                                        onClick={() => {
-                                            setShowColumnInput(false);
-                                            setNewColumnTitle('');
-                                        }}
-                                    >
-                                        <RxCross1 className={styles.icon}/>Отмена
-                                    </button>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Отображение колонок */}
-                        <div className={styles.columnsContainer}>
-                            {board.columns.map(column => (
-                                <div key={column.id} className={styles.column}>
-                                    <h3 className={styles.columnTitle}>{column.title}</h3>
-                                    <hr/>
-                                    <div className={styles.tasksContainer}>
-                                        {/* Здесь будут задачи */}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                ))}
+            <div className={styles.contentContainer}>
+                {renderContent()}
             </div>
         </div>
     );

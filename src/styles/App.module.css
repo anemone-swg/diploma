@@ -17,12 +17,6 @@ body {
 .icon {
     margin-right: 4px;
     vertical-align: middle;
-    font-size: 14px;
-}
-
-.bigIcon {
-    margin-right: 4px;
-    vertical-align: middle;
     font-size: 20px;
 }
 
@@ -49,19 +43,50 @@ hr {
     justify-content: space-between;
 }
 
-.menuBtn {
+.defaultBtn {
     background-color: transparent;
     color: var(--text-color);
     border: none;
     padding: 5px 10px 5px 10px;
-    border-radius: 4px;
+    margin-right: 3px;
+    border-radius: 4px 4px 0 0;
     cursor: pointer;
     font-size: 14px;
     transition: 0.3s ease background-color;
 }
 
-.menuBtn:hover {
+.defaultBtn:hover {
     background-color: var(--default-btn-hover);
+}
+
+.addColumnBtn {
+    border-radius: 4px;
+    margin-left: 20px;
+}
+
+.activeDefaultBtn {
+    background-color: var(--default-btn-hover);
+    border-bottom: 2px solid var(--text-color);
+}
+
+.cancelBtn {
+    background-color: #e82929;
+    color: white;
+    border-radius: 4px;
+}
+
+.cancelBtn:hover {
+    background-color: #9a2c2c;
+}
+
+.createConfirmBtn {
+    background-color: #5aac44;
+    color: white;
+    border-radius: 4px;
+}
+
+.createConfirmBtn:hover {
+    background-color: #3a6e2d;
 }
 
 .disable {
@@ -70,6 +95,7 @@ hr {
 }
 
 .modal {
+    pointer-events: none;
     position: fixed;
     top: 0;
     left: 0;
@@ -86,9 +112,10 @@ hr {
     transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out; /* Плавное изменение */
 }
 
-.modal.active {
+.modal.activeModal {
     opacity: 1; /* Полная видимость */
     visibility: visible; /* Показать элемент */
+    pointer-events: auto;
 }
 
 .modalContent {
@@ -124,37 +151,9 @@ hr {
     gap: 0.5rem;
 }
 
-.cancelBtn {
-    background-color: #e82929;
-    border: none;
-    padding: 5px 10px 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: 0.4s ease background-color;
-}
-
-.cancelBtn:hover {
-    background-color: #9a2c2c;
-}
-
-.createConfirmBtn {
-    background-color: #5aac44;
-    color: white;
-    border: none;
-    padding: 5px 10px 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: 0.4s ease background-color;
-}
-
-.createConfirmBtn:hover {
-    background-color: #3a6e2d;
-}
-
-.boardsContainer {
+.contentContainer {
     margin-top: 122px;
     display: flex;
-    gap: 1rem;
     flex-wrap: wrap;
 }
 
@@ -173,21 +172,6 @@ hr {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-}
-
-.addColumnBtn {
-    background: transparent;
-    color: var(--text-color);
-    border: none;
-    padding: 5px 10px 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.3s;
-    margin-left: 20px;
-}
-
-.addColumnBtn:hover {
-    background: var(--default-btn-hover);
 }
 
 /* Стили для колонок */
