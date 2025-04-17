@@ -1,207 +1,305 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 :root {
-    --background-color: #232323;
-    --light-background-color: #353535;
-    --text-color: #b3b3b3;
-    --default-btn-hover: #3c3c3c;
+  --background-color: #232323;
+  --light-background-color: #303030;
+  --text-color: #b3b3b3;
+  --default-btn-hover: #3c3c3c;
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    margin: 10px 20px 10px 20px;
-    background-color: var(--background-color);
-    color: var(--text-color);
+  font-family: "Inter", sans-serif;
+  margin: 10px 20px 10px 20px;
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 .icon {
-    margin-right: 4px;
-    vertical-align: middle;
-    font-size: 20px;
+  margin-right: 4px;
+  vertical-align: middle;
+  font-size: 20px;
 }
 
 .navbar {
-    position: fixed;
-    top: 0;
-    left: 20px;
-    right: 20px;
-}
-
-.title {
-    font-size: 28px;
-    margin-bottom: 10px;
-}
-
-hr {
-    margin: 0 0 20px 0;
-    border: none; /* Убираем стандартную границу */
-    border-top: 2px solid var(--text-color); /* Новая граница (цвет: красный) */
-}
-
-.menu {
-    display: flex;
-    justify-content: space-between;
-}
-
-.defaultBtn {
-    background-color: transparent;
-    color: var(--text-color);
-    border: none;
-    padding: 5px 10px 5px 10px;
-    margin-right: 3px;
-    border-radius: 4px 4px 0 0;
-    cursor: pointer;
-    font-size: 14px;
-    transition: 0.3s ease background-color;
-}
-
-.defaultBtn:hover {
-    background-color: var(--default-btn-hover);
-}
-
-.addColumnBtn {
-    border-radius: 4px;
-    margin-left: 20px;
-}
-
-.activeDefaultBtn {
-    background-color: var(--default-btn-hover);
-    border-bottom: 2px solid var(--text-color);
-}
-
-.cancelBtn {
-    background-color: #e82929;
-    color: white;
-    border-radius: 4px;
-}
-
-.cancelBtn:hover {
-    background-color: #9a2c2c;
-}
-
-.createConfirmBtn {
-    background-color: #5aac44;
-    color: white;
-    border-radius: 4px;
-}
-
-.createConfirmBtn:hover {
-    background-color: #3a6e2d;
-}
-
-.disable {
-    pointer-events: none;
-    opacity: 0;
-}
-
-.modal {
-    pointer-events: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--text-color);
-    box-sizing: border-box;
-    opacity: 0; /* Начальная прозрачность */
-    visibility: hidden; /* Скрыть элемент из DOM-потока */
-    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out; /* Плавное изменение */
-}
-
-.modal.activeModal {
-    opacity: 1; /* Полная видимость */
-    visibility: visible; /* Показать элемент */
-    pointer-events: auto;
-}
-
-.modalContent {
-    background-color: var(--light-background-color);
-    padding: 1.5rem;
-    border-radius: 8px;
-    width: 400px;
-}
-
-.modalContent h3 {
-    margin-top: 0;
-}
-
-.defaultInput {
-    width: 100%;
-    padding: 0.5rem;
-    margin: 1rem 0;
-    outline: none;
-    border: 1px solid var(--light-background-color);
-    border-radius: 4px;
-    box-sizing: border-box;
-    background-color: var(--text-color);
-}
-
-.defaultInput:focus {
-    outline: 3px solid var(--background-color); /* Цвет обводки при фокусе */
-    border-color: transparent; /* Опционально: скрыть исходный border */
-}
-
-.modalActions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.5rem;
+  background-color: var(--light-background-color);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 0 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
 }
 
 .contentContainer {
-    margin-top: 122px;
-    display: flex;
-    flex-wrap: wrap;
+  margin-top: 122px;
+  display: flex;
+  flex-wrap: wrap;
 }
 
+.title {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+hr {
+  margin: 0 0 20px 0;
+  border: none; /* Убираем стандартную границу */
+  border-top: 2px solid var(--text-color); /* Новая граница (цвет: красный) */
+}
+
+.menu {
+  display: flex;
+  justify-content: space-between;
+}
+
+.defaultBtn {
+  background-color: transparent;
+  color: var(--text-color);
+  border: none;
+  padding: 5px 10px 5px 10px;
+  border-radius: 4px 4px 0 0;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.3s ease background-color;
+  margin-right: 3px;
+}
+
+.defaultBtn:hover {
+  background-color: var(--default-btn-hover);
+}
+
+.roundCornersBtn {
+  border-radius: 4px;
+  margin-right: 0;
+}
+
+.activeDefaultBtn {
+  background-color: var(--default-btn-hover);
+  border-bottom: 2px solid var(--text-color);
+}
+
+.cancelBtn {
+  background-color: #e75050;
+  color: white;
+  border-radius: 4px;
+  margin-right: 0;
+}
+
+.cancelBtn:hover {
+  background-color: #9a2c2c;
+}
+
+.createConfirmBtn {
+  background-color: #5aac44;
+  color: white;
+  border-radius: 4px;
+  margin-right: 0;
+}
+
+.createConfirmBtn:hover {
+  background-color: #3a6e2d;
+}
+
+.disable {
+  pointer-events: none;
+  opacity: 0;
+}
+
+.modal {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-color);
+  box-sizing: border-box;
+  opacity: 0; /* Начальная прозрачность */
+  visibility: hidden; /* Скрыть элемент из DOM-потока */
+  transition:
+    opacity 0.3s ease-in-out,
+    visibility 0.3s ease-in-out; /* Плавное изменение */
+}
+
+.modal.activeModal {
+  opacity: 1; /* Полная видимость */
+  visibility: visible; /* Показать элемент */
+  pointer-events: auto;
+}
+
+.modalContent {
+  background-color: var(--background-color);
+  padding: 1.5rem;
+  border-radius: 8px;
+  width: 400px;
+  text-align: justify;
+}
+
+.modalContent h3 {
+  margin-top: 0;
+}
+
+.defaultInput {
+  width: 100%;
+  padding: 0.5rem;
+  margin: 0 0 24px 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  color: var(--text-color);
+  transition: all 0.3s;
+  box-sizing: border-box;
+}
+
+.defaultInput:focus {
+  border-color: rgba(255, 255, 255, 0.4);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/*.board {
+  margin: 0 20px 20px 0;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid var(--text-color);
+}*/
+
 .board {
-    padding: 20px;
-    border-radius: 8px;
-    border: 1px solid var(--text-color);
+  background-color: var(--light-background-color);
+  margin: 0 20px 20px 0;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.05),
+    0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Эффекты при наведении */
+.board:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.08),
+    0 8px 24px rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+/* Акцентная полоса сверху */
+.board::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+}
+
+.titleProject {
+  display: inline-block;
+}
+
+.titleProject input {
+  width: 200px;
+  margin: 20px 0 20px 0;
 }
 
 .boardTitle {
-    margin: 0 0 10px 0;
+  cursor: pointer;
+  margin: 20px 0 20px 0;
+  padding: 5px 10px 5px 10px;
+  transition: 0.3s ease background-color;
+}
+
+.boardTitle:hover {
+  background-color: var(--default-btn-hover);
+  border-radius: 4px;
 }
 
 .boardHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.boardHeader input {
+  width: 200px;
+  margin: 0 10px 0 0;
 }
 
 /* Стили для колонок */
 .columnsContainer {
-    display: flex;
-    gap: 20px;
-    overflow-x: auto;
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
 }
 
 .column {
-    background: transparent;
-    padding: 15px;
-    border-radius: 6px;
-    min-width: 250px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--text-color);
+  background: var(--background-color);
+  padding: 15px;
+  border-radius: 6px;
+  min-width: 250px;
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.08),
+    0 8px 24px rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.15);
 }
 
 .columnTitle {
-    margin: 0 0 15px 0;
-    font-size: 16px;
+  margin: 0 0 15px 0;
+  font-size: 16px;
 }
 
-/* Поле ввода колонки */
 .columnInputContainer {
-    margin-bottom: 20px;
-    width: 250px;
+  background: var(--background-color);
+  border-radius: 6px;
+  margin-bottom: 20px;
+  padding: 15px;
+  width: 250px;
 }
 
 .columnInputActions {
-    display: flex;
-    gap: 8px;
+  display: flex;
+  gap: 8px;
+}
+
+.teamTitle {
+  cursor: pointer;
+  margin: 0 10px 0 0;
+  padding: 8px;
+  transition: 0.3s ease background-color;
+}
+
+.teamTitle:hover {
+  background-color: var(--default-btn-hover);
+  border-radius: 4px;
 }
