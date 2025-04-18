@@ -2,7 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "../../../styles/App.module.css";
 import DefaultBtn from "../../../components/ui/DefaultBtn.jsx"; // Путь к компоненту кнопки
 
-const TeamDropdownMenu = ({ setShowColumnInput }) => {
+const TeamDropdownMenu = ({
+  setShowColumnInput,
+  setShowDeleteTeamModal,
+  setDeletingTeam,
+}) => {
   const [isOpen, setIsOpen] = useState(false); // Состояние для открытия/закрытия меню
   const menuRef = useRef(null); // Реф для меню
   const buttonRef = useRef(null); // Реф для кнопки
@@ -12,7 +16,8 @@ const TeamDropdownMenu = ({ setShowColumnInput }) => {
     if (action === "addColumn") {
       setShowColumnInput();
     } else if (action === "deleteTeam") {
-      console.log("Удалить команду");
+      setDeletingTeam();
+      setShowDeleteTeamModal(true);
     }
     setIsOpen(false); // Закрываем меню после выбора действия
   };

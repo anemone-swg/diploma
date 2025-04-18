@@ -11,10 +11,10 @@ function App() {
   const [boards, setBoards] = useState([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showDeleteTeamModal, setShowDeleteTeamModal] = useState(false);
   const [newBoardTitle, setNewBoardTitle] = useState("");
-  const [newColumnTitle, setNewColumnTitle] = useState("");
-  const [showColumnInput, setShowColumnInput] = useState(false);
   const [activeSection, setActiveSection] = useState("main");
+  const [deletingTeam, setDeletingTeam] = useState(null);
 
   const renderContent = () => {
     switch (activeSection) {
@@ -22,13 +22,11 @@ function App() {
         return (
           <KanbanBoardSection
             boards={boards}
-            showColumnInput={showColumnInput}
-            newColumnTitle={newColumnTitle}
-            setShowColumnInput={setShowColumnInput}
-            setNewColumnTitle={setNewColumnTitle}
             setBoards={setBoards}
             newBoardTitle={newBoardTitle}
             setNewBoardTitle={setNewBoardTitle}
+            setShowDeleteTeamModal={setShowDeleteTeamModal}
+            setDeletingTeam={setDeletingTeam}
           />
         );
 
@@ -75,6 +73,20 @@ function App() {
         setActiveSection={setActiveSection}
         boards={boards}
         modalType={ModalTypes.DELETE}
+      />
+
+      {/*Модальное окно для удаления команды канбан-доски*/}
+      <ModalWindow
+        newBoardTitle={newBoardTitle}
+        setNewBoardTitle={setNewBoardTitle}
+        setShowModal={setShowDeleteTeamModal}
+        showModal={showDeleteTeamModal}
+        setBoards={setBoards}
+        setActiveSection={setActiveSection}
+        boards={boards}
+        modalType={ModalTypes.DELETE_TEAM}
+        setDeletingTeam={setDeletingTeam}
+        deletingTeam={deletingTeam}
       />
 
       <div className={styles.contentContainer}>{renderContent()}</div>
