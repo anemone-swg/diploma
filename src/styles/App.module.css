@@ -110,6 +110,7 @@ hr {
 .modal {
   pointer-events: none;
   position: fixed;
+  z-index: 100;
   top: 0;
   left: 0;
   right: 0;
@@ -170,25 +171,22 @@ hr {
   gap: 0.5rem;
 }
 
-/*.board {
+.boardContainer {
+  max-width: 95vw;
   margin: 0 20px 20px 0;
-  padding: 20px;
-  border-radius: 8px;
-  border: 1px solid var(--text-color);
-}*/
+  width: max-content; /* Ширина по содержимому */
+}
 
 .board {
   background-color: var(--light-background-color);
-  margin: 0 20px 20px 0;
   padding: 20px;
-  border-radius: 12px;
+  border-radius: 6px 6px 12px 12px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow:
     0 2px 4px rgba(0, 0, 0, 0.05),
     0 4px 12px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
   position: relative;
-  overflow: hidden;
   animation: fadeIn 0.4s ease-out;
 }
 
@@ -216,6 +214,7 @@ hr {
 .board::before {
   content: "";
   position: absolute;
+  border-radius: 12px 12px 0 0;
   top: 0;
   left: 0;
   right: 0;
@@ -260,7 +259,27 @@ hr {
 .columnsContainer {
   display: flex;
   gap: 20px;
-  overflow-x: auto;
+  overflow: auto;
+  padding: 0 0 20px 0;
+}
+
+/* Стили для кастомной полосы прокрутки */
+.columnsContainer::-webkit-scrollbar {
+  height: 8px; /* Высота горизонтальной полосы прокрутки */
+}
+
+.columnsContainer::-webkit-scrollbar-track {
+  background: var(--text-color); /* Цвет фона трека */
+  border-radius: 10px;
+}
+
+.columnsContainer::-webkit-scrollbar-thumb {
+  background: var(--background-color); /* Цвет самой полосы */
+  border-radius: 10px; /* Скругление концов полосы */
+}
+
+.columnsContainer::-webkit-scrollbar-thumb:hover {
+  background: #4a4949; /* Цвет при наведении */
 }
 
 .column {
@@ -302,4 +321,50 @@ hr {
 .teamTitle:hover {
   background-color: var(--default-btn-hover);
   border-radius: 4px;
+}
+
+/* Контейнер для кнопки и меню */
+.dropdownContainer {
+  position: relative;
+  display: flex;
+}
+
+/* Всплывающее меню */
+.dropdownMenu {
+  position: absolute;
+  right: 30px;
+  bottom: -20px;
+  background-color: var(--background-color);
+  border: 1px solid var(--text-color);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 150px;
+  margin-top: 5px;
+  border-radius: 4px;
+  z-index: 10;
+  animation: fadeInDrop 0.3s ease-out forwards;
+}
+
+@keyframes fadeInDrop {
+  from {
+    opacity: 0;
+    transform: translateY(1px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Стили для каждого пункта меню */
+.dropdownItem {
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: 0.3s ease background-color;
+}
+
+/* Ховер-эффект для пунктов меню */
+.dropdownItem:hover {
+  background-color: var(--default-btn-hover);
 }

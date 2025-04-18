@@ -10,6 +10,7 @@ const DefaultBtn = ({
   onClick,
   children,
   className,
+  ...props
 }) => {
   return (
     <button
@@ -24,6 +25,7 @@ const DefaultBtn = ({
       )}
       onClick={onClick}
       disabled={disabled}
+      {...props}
     >
       {Icon && <Icon className={styles.icon} />}
       {children}

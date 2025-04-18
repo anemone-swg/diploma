@@ -6,6 +6,7 @@ import DefaultBtn from "../../../components/ui/DefaultBtn.jsx";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
 import DefaultInput from "../../../components/ui/DefaultInput.jsx";
+import TeamDropdownMenu from "./TeamDropdownMenu.jsx";
 
 /*const KanbanBoardSection = ({
   boards,
@@ -257,90 +258,88 @@ const KanbanBoardSection = ({
           </div>
 
           {board.teams.map((team) => (
-            <div key={team.id} className={styles.board}>
-              <div className={styles.boardHeader}>
-                {editingTeamId === team.id ? (
-                  <DefaultInput
-                    value={teamTitle}
-                    onChange={(e) => setTeamTitle(e.target.value)}
-                    onKeyPress={(e) => {
-                      if (e.key === "Enter") {
+            <div key={team.id} className={styles.boardContainer}>
+              <div className={styles.board}>
+                <div className={styles.boardHeader}>
+                  {editingTeamId === team.id ? (
+                    <DefaultInput
+                      value={teamTitle}
+                      onChange={(e) => setTeamTitle(e.target.value)}
+                      onKeyPress={(e) => {
+                        if (e.key === "Enter") {
+                          handleTeamTitleChange(board.id, team.id, teamTitle);
+                          setEditingTeamId(null);
+                        }
+                      }}
+                      placeholder="Название команды..."
+                      autoFocus
+                      onBlur={() => {
                         handleTeamTitleChange(board.id, team.id, teamTitle);
                         setEditingTeamId(null);
-                      }
-                    }}
-                    placeholder="Название команды..."
-                    autoFocus
-                    onBlur={() => {
-                      handleTeamTitleChange(board.id, team.id, teamTitle);
-                      setEditingTeamId(null);
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === "Escape") {
-                        setEditingTeamId(null);
-                      }
-                    }}
-                  />
-                ) : (
-                  <h3
-                    className={styles.teamTitle}
-                    onClick={() => {
-                      setTeamTitle(team.title);
-                      setEditingTeamId(team.id);
-                    }}
-                  >
-                    <FaEdit className={styles.icon} /> {team.title}
-                  </h3>
-                )}
-
-                <button
-                  className={`${styles.defaultBtn} ${styles.roundCornersBtn}`}
-                  onClick={() => setShowColumnInput(team.id)}
-                >
-                  <FaPlus className={styles.icon} />
-                  Добавить столбец
-                </button>
-              </div>
-
-              <hr />
-
-              {showColumnInput === team.id && (
-                <div className={styles.columnInputContainer}>
-                  <DefaultInput
-                    value={newColumnTitle}
-                    onChange={(e) => setNewColumnTitle(e.target.value)}
-                    onKeyPress={(e) =>
-                      e.key === "Enter" && handleCreateColumn(board.id, team.id)
-                    }
-                    placeholder="Название столбца..."
-                    autoFocus
-                  />
-                  <div className={styles.columnInputActions}>
-                    <DefaultBtn
-                      variant="createConfirmBtn"
-                      icon={IoCheckmarkDoneOutline}
-                      onClick={() => handleCreateColumn(board.id, team.id)}
-                    >
-                      Добавить
-                    </DefaultBtn>
-                    <DefaultBtn
-                      variant="cancelBtn"
-                      icon={RxCross1}
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Escape") {
+                          setEditingTeamId(null);
+                        }
+                      }}
+                    />
+                  ) : (
+                    <h3
+                      className={styles.teamTitle}
                       onClick={() => {
-                        setShowColumnInput(false);
-                        setNewColumnTitle("");
+                        setTeamTitle(team.title);
+                        setEditingTeamId(team.id);
                       }}
                     >
-                      Отмена
-                    </DefaultBtn>
-                  </div>
+                      <FaEdit className={styles.icon} /> {team.title}
+                    </h3>
+                  )}
+                  <TeamDropdownMenu
+                    setShowColumnInput={() => setShowColumnInput(team.id)}
+                  />
                 </div>
-              )}
 
-              <div className={styles.columnsContainer}>
-                {team.columns.map((column) => (
-                  <KanbanColumn key={column.id} column={column} />
-                ))}
+                <hr />
+
+                {showColumnInput === team.id && (
+                  <div className={styles.columnInputContainer}>
+                    <DefaultInput
+                      value={newColumnTitle}
+                      onChange={(e) => setNewColumnTitle(e.target.value)}
+                      onKeyPress={(e) =>
+                        e.key === "Enter" &&
+                        handleCreateColumn(board.id, team.id)
+                      }
+                      placeholder="Название столбца..."
+                      autoFocus
+                    />
+                    <div className={styles.columnInputActions}>
+                      <DefaultBtn
+                        variant="createConfirmBtn"
+                        icon={IoCheckmarkDoneOutline}
+                        onClick={() => handleCreateColumn(board.id, team.id)}
+                      >
+                        Добавить
+                      </DefaultBtn>
+                      <DefaultBtn
+                        variant="cancelBtn"
+                        icon={RxCross1}
+                        onClick={() => {
+                          setShowColumnInput(false);
+                          setNewColumnTitle("");
+                        }}
+                      >
+                        Отмена
+                      </DefaultBtn>
+                    </div>
+                  </div>
+                )}
+
+                <div className={styles.columnsContainer}>
+                  {team.columns.map((column) => (
+                    <KanbanColumn key={column.id} column={column} />
+                  ))}
+                </div>
               </div>
             </div>
           ))}
