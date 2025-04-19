@@ -1,7 +1,8 @@
 import React from "react";
 import { FaEdit } from "react-icons/fa";
 import DefaultInput from "./DefaultInput.jsx";
-import styles from "../../styles/App.module.css";
+import main_styles from "../../styles/App.module.css";
+import title_styles from "./EditableTitle.module.css";
 
 const EditableTitle = ({
   item,
@@ -40,14 +41,16 @@ const EditableTitle = ({
     />
   ) : (
     <HeadingTag
-      className={level === 2 ? styles.boardTitle : styles.teamTitle}
+      className={
+        level === 2 ? title_styles.boardTitle : title_styles.smallTitle
+      }
       onClick={() => {
         onTitleChange(item.title);
         onEditStart(item.id);
       }}
     >
       <FaEdit
-        className={styles.icon}
+        className={main_styles.icon}
         style={{ verticalAlign: level === 2 ? "baseline" : "middle" }}
       />
       {level === 2 && <span>Название проекта: </span>}

@@ -1,0 +1,72 @@
+.board {
+  background-color: var(--light-background-color);
+  padding: 20px;
+  border-radius: 6px 6px 12px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.05),
+    0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  position: relative;
+  animation: fadeIn 0.4s ease-out;
+  min-width: 220px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Эффекты при наведении */
+.board:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.08),
+    0 8px 24px rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+/* Акцентная полоса сверху */
+.board::before {
+  content: "";
+  position: absolute;
+  border-radius: 12px 12px 0 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+}
+
+/* Стили для колонок */
+.columnsContainer {
+  display: flex;
+  gap: 20px;
+  overflow: auto;
+  padding: 0 0 20px 0;
+}
+
+/* Стили для кастомной полосы прокрутки */
+.columnsContainer::-webkit-scrollbar {
+  height: 8px; /* Высота горизонтальной полосы прокрутки */
+}
+
+.columnsContainer::-webkit-scrollbar-track {
+  background: var(--text-color); /* Цвет фона трека */
+  border-radius: 10px;
+}
+
+.columnsContainer::-webkit-scrollbar-thumb {
+  background: var(--background-color); /* Цвет самой полосы */
+  border-radius: 10px; /* Скругление концов полосы */
+}
+
+.columnsContainer::-webkit-scrollbar-thumb:hover {
+  background: #4a4949; /* Цвет при наведении */
+}

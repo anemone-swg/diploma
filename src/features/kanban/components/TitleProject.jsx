@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "../../../styles/App.module.css";
+import titleProject_styles from "./TitleProject.module.css";
 import EditableTitle from "../../../components/ui/EditableTitle.jsx";
 
 const TitleProject = ({
@@ -20,7 +20,7 @@ const TitleProject = ({
   };
 
   return (
-    <div className={styles.titleProject}>
+    <div className={titleProject_styles.titleProject}>
       <EditableTitle
         item={board}
         isEditing={editingBoardId === board.id}

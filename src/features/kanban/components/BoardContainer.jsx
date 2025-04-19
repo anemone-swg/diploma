@@ -1,20 +1,23 @@
 import React, { useState } from "react";
-import styles from "../../../styles/App.module.css";
+import boards_container from "./BoardContainer.module.css";
+import kanban_styles from "../styles/Kanban.module.css";
 import DefaultInput from "../../../components/ui/DefaultInput.jsx";
-import TeamDropdownMenu from "./TeamDropdownMenu.jsx";
 import DefaultBtn from "../../../components/ui/DefaultBtn.jsx";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
 import KanbanColumn from "./KanbanColumn.jsx";
 import EditableTitle from "../../../components/ui/EditableTitle.jsx";
+import DropdownMenu from "./DropdownMenu.jsx";
 
-const BoardsContainer = ({
+const BoardContainer = ({
   team,
   setDeletingTeam,
   setShowDeleteTeamModal,
   setBoards,
   boards,
   board,
+  setDeletingColumn,
+  setShowDeleteColumnModal,
 }) => {
   const [editingTeamId, setEditingTeamId] = useState(null);
   const [teamTitle, setTeamTitle] = useState("");
@@ -81,8 +84,8 @@ const BoardsContainer = ({
   };
 
   return (
-    <div className={styles.board}>
-      <div className={styles.boardHeader}>
+    <div className={boards_container.board}>
+      <div className={kanban_styles.elementHeader}>
         <EditableTitle
           item={team}
           isEditing={editingTeamId === team.id}
@@ -96,19 +99,23 @@ const BoardsContainer = ({
           }
           level={3}
         />
-        <TeamDropdownMenu
-          setShowColumnInput={() => setShowColumnInput(team.id)}
-          setShowDeleteTeamModal={setShowDeleteTeamModal}
-          setDeletingTeam={() => {
-            setDeletingTeam({ boardId: board.id, teamId: team.id });
-          }}
+        <DropdownMenu
+          type="team"
+          onAdd={() => setShowColumnInput(team.id)}
+          onDelete={setShowDeleteTeamModal}
+          onPrepareDelete={() =>
+            setDeletingTeam({
+              boardId: board.id,
+              teamId: team.id,
+            })
+          }
         />
       </div>
 
       <hr />
 
       {showColumnInput === team.id && (
-        <div className={styles.columnInputContainer}>
+        <div className={kanban_styles.inputContainer}>
           <DefaultInput
             value={newColumnTitle}
             onChange={(e) => setNewColumnTitle(e.target.value)}
@@ -118,7 +125,7 @@ const BoardsContainer = ({
             placeholder="Название столбца..."
             autoFocus
           />
-          <div className={styles.columnInputActions}>
+          <div className={kanban_styles.inputActions}>
             <DefaultBtn
               variant="createConfirmBtn"
               icon={IoCheckmarkDoneOutline}
@@ -140,13 +147,23 @@ const BoardsContainer = ({
         </div>
       )}
 
-      <div className={styles.columnsContainer}>
+      <div className={boards_container.columnsContainer}>
         {team.columns.map((column) => (
-          <KanbanColumn key={column.id} column={column} />
+          <KanbanColumn
+            key={column.id}
+            column={column}
+            newColumnTitle={newColumnTitle}
+            setNewColumnTitle={setNewColumnTitle}
+            setBoards={setBoards}
+            boards={boards}
+            setDeletingColumn={setDeletingColumn}
+            setShowDeleteColumnModal={setShowDeleteColumnModal}
+            team={team}
+          />
         ))}
       </div>
     </div>
   );
 };
 
-export default BoardsContainer;
+export default BoardContainer;

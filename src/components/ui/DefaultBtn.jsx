@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from "classnames";
-import styles from "../../styles/App.module.css";
+import main_styles from "../../styles/App.module.css";
+import btn_styles from "./DefaultBtn.module.css";
 
 const DefaultBtn = ({
   variant = "",
@@ -15,11 +16,11 @@ const DefaultBtn = ({
   return (
     <button
       className={classNames(
-        styles.defaultBtn,
-        styles[variant],
+        btn_styles.defaultBtn,
+        btn_styles[variant],
         {
-          [styles.activeDefaultBtn]: active,
-          [styles.disable]: disabled,
+          [btn_styles.activeDefaultBtn]: active,
+          [btn_styles.disable]: disabled,
         },
         className,
       )}
@@ -27,7 +28,7 @@ const DefaultBtn = ({
       disabled={disabled}
       {...props}
     >
-      {Icon && <Icon className={styles.icon} />}
+      {Icon && <Icon className={main_styles.icon} />}
       {children}
     </button>
   );

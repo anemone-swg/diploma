@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../styles/App.module.css";
+import input_styles from "./DefaultInput.module.css";
 
 const DefaultInput = ({
   value,
@@ -7,7 +7,7 @@ const DefaultInput = ({
   onKeyPress,
   placeholder,
   autoFocus = false,
-  className = styles.defaultInput,
+  className = input_styles.defaultInput,
   maxLength = 20,
   ...props
 }) => {

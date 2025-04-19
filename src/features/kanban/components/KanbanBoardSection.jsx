@@ -1,9 +1,10 @@
 import React from "react";
 import { FaPlus } from "react-icons/fa";
-import styles from "../../../styles/App.module.css";
+import kanban_board_section_styles from "./KanbanBoardSection.module.css";
+import btn_styles from "../../../components/ui/DefaultBtn.module.css";
 import DefaultBtn from "../../../components/ui/DefaultBtn.jsx";
 import TitleProject from "./TitleProject.jsx";
-import BoardsContainer from "./BoardsContainer.jsx";
+import BoardContainer from "./BoardContainer.jsx";
 
 const KanbanBoardSection = ({
   boards,
@@ -12,6 +13,8 @@ const KanbanBoardSection = ({
   setNewBoardTitle,
   setShowDeleteTeamModal,
   setDeletingTeam,
+  setDeletingColumn,
+  setShowDeleteColumnModal,
 }) => {
   // Добавление новой команды
   const handleAddTeam = (boardId) => {
@@ -48,14 +51,19 @@ const KanbanBoardSection = ({
           />
 
           {board.teams.map((team) => (
-            <div key={team.id} className={styles.boardContainer}>
-              <BoardsContainer
+            <div
+              key={team.id}
+              className={kanban_board_section_styles.boardContainer}
+            >
+              <BoardContainer
                 team={team}
                 setDeletingTeam={setDeletingTeam}
                 setShowDeleteTeamModal={setShowDeleteTeamModal}
                 setBoards={setBoards}
                 boards={boards}
                 board={board}
+                setDeletingColumn={setDeletingColumn}
+                setShowDeleteColumnModal={setShowDeleteColumnModal}
               />
             </div>
           ))}
@@ -63,7 +71,7 @@ const KanbanBoardSection = ({
           <div>
             <DefaultBtn
               onClick={() => handleAddTeam(board.id)}
-              className={styles.roundCornersBtn}
+              className={btn_styles.roundCornersBtn}
               icon={FaPlus}
             >
               Добавить команду

@@ -1,0 +1,28 @@
+.inputContainer {
+  background: var(--background-color);
+  border-radius: 6px;
+  margin-bottom: 20px;
+  padding: 15px;
+  width: 250px;
+}
+
+.inputContainerLight {
+  background: var(--light-background-color);
+}
+
+.inputActions {
+  display: flex;
+  gap: 8px;
+}
+
+.elementHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.elementHeader input {
+  width: 200px;
+  margin: 0 10px 0 0;
+}

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import styles from "../../styles/App.module.css";
+import main_styles from "../../styles/App.module.css";
+import navbar_styles from "./ModalWindow.module.css";
 import DefaultBtn from "../ui/DefaultBtn.jsx";
 import DefaultInput from "../ui/DefaultInput.jsx";
 import { PiKanban } from "react-icons/pi";
@@ -12,6 +13,7 @@ export const ModalTypes = {
   CREATE: "create",
   DELETE: "delete",
   DELETE_TEAM: "delete_team",
+  DELETE_COLUMN: "delete_column",
 };
 
 const ModalWindow = ({
@@ -25,11 +27,13 @@ const ModalWindow = ({
   modalType = ModalTypes.CREATE,
   setDeletingTeam,
   deletingTeam,
+  setDeletingColumn,
+  deletingColumn,
 }) => {
   // Эффект для закрытия модалки
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (e.target.classList.contains(styles.modal)) {
+      if (e.target.classList.contains(navbar_styles.modal)) {
         setShowModal(false);
         setNewBoardTitle("");
       }
@@ -86,17 +90,42 @@ const ModalWindow = ({
     setShowModal(false);
   };
 
+  const handleDeleteColumnBoard = ({ teamId, columnId }) => {
+    setBoards(
+      boards.map((board) => ({
+        ...board,
+        teams: board.teams.map((team) => {
+          if (team.id === teamId) {
+            // Фильтруем массив колонок, удаляя нужную колонку
+            const updatedColumns = team.columns.filter(
+              (column) => column.id !== columnId,
+            );
+
+            return {
+              ...team,
+              columns: updatedColumns,
+            };
+          }
+          return team;
+        }),
+      })),
+    );
+    setShowModal(false);
+  };
+
   return (
-    <div className={`${styles.modal} ${showModal ? styles.activeModal : ""}`}>
+    <div
+      className={`${navbar_styles.modal} ${showModal ? navbar_styles.activeModal : ""}`}
+    >
       {showModal && (
-        <div className={styles.modalContent}>
+        <div className={navbar_styles.modalContent}>
           {(() => {
             switch (modalType) {
               case ModalTypes.CREATE:
                 return (
                   <>
                     <h3>
-                      <PiKanban className={styles.icon} />
+                      <PiKanban className={main_styles.icon} />
                       Создание kanban-доски
                     </h3>
                     <DefaultInput
@@ -108,7 +137,7 @@ const ModalWindow = ({
                       placeholder="Название проекта..."
                       autoFocus
                     />
-                    <div className={styles.modalActions}>
+                    <div className={navbar_styles.modalActions}>
                       <DefaultBtn
                         variant="createConfirmBtn"
                         icon={IoCheckmarkDoneOutline}
@@ -134,14 +163,14 @@ const ModalWindow = ({
                 return (
                   <>
                     <h3>
-                      <FaTrash className={styles.icon} />
+                      <FaTrash className={main_styles.icon} />
                       Удаление kanban-доски
                     </h3>
                     <p>
                       Вы уверены, что хотите полностью удалить доску? Все данные
                       будут потеряны.
                     </p>
-                    <div className={styles.modalActions}>
+                    <div className={navbar_styles.modalActions}>
                       <DefaultBtn
                         variant="cancelBtn"
                         icon={FaTrash}
@@ -152,7 +181,7 @@ const ModalWindow = ({
                       <DefaultBtn
                         icon={RxCross1}
                         onClick={() => setShowModal(false)}
-                        className={styles.roundCornersBtn}
+                        className={main_styles.roundCornersBtn}
                       >
                         Отмена
                       </DefaultBtn>
@@ -164,14 +193,14 @@ const ModalWindow = ({
                 return (
                   <>
                     <h3>
-                      <FaTrash className={styles.icon} />
+                      <FaTrash className={main_styles.icon} />
                       Удаление команды kanban-доски
                     </h3>
                     <p>
                       Вы уверены, что хотите удалить команду? Все данные будут
                       потеряны.
                     </p>
-                    <div className={styles.modalActions}>
+                    <div className={navbar_styles.modalActions}>
                       <DefaultBtn
                         variant="cancelBtn"
                         icon={FaTrash}
@@ -185,7 +214,40 @@ const ModalWindow = ({
                       <DefaultBtn
                         icon={RxCross1}
                         onClick={() => setShowModal(false)}
-                        className={styles.roundCornersBtn}
+                        className={main_styles.roundCornersBtn}
+                      >
+                        Отмена
+                      </DefaultBtn>
+                    </div>
+                  </>
+                );
+
+              case ModalTypes.DELETE_COLUMN:
+                return (
+                  <>
+                    <h3>
+                      <FaTrash className={main_styles.icon} />
+                      Удаление столбца kanban-доски
+                    </h3>
+                    <p>
+                      Вы уверены, что хотите удалить столбец? Все данные будут
+                      потеряны.
+                    </p>
+                    <div className={navbar_styles.modalActions}>
+                      <DefaultBtn
+                        variant="cancelBtn"
+                        icon={FaTrash}
+                        onClick={() => {
+                          handleDeleteColumnBoard(deletingColumn);
+                          setDeletingColumn(null);
+                        }}
+                      >
+                        Удалить
+                      </DefaultBtn>
+                      <DefaultBtn
+                        icon={RxCross1}
+                        onClick={() => setShowModal(false)}
+                        className={main_styles.roundCornersBtn}
                       >
                         Отмена
                       </DefaultBtn>

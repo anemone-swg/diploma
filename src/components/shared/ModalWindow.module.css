@@ -1,0 +1,44 @@
+.modal {
+  pointer-events: none;
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-color);
+  box-sizing: border-box;
+  opacity: 0; /* Начальная прозрачность */
+  visibility: hidden; /* Скрыть элемент из DOM-потока */
+  transition:
+    opacity 0.3s ease-in-out,
+    visibility 0.3s ease-in-out; /* Плавное изменение */
+}
+
+.modal.activeModal {
+  opacity: 1; /* Полная видимость */
+  visibility: visible; /* Показать элемент */
+  pointer-events: auto;
+}
+
+.modalContent {
+  background-color: var(--background-color);
+  padding: 1.5rem;
+  border-radius: 8px;
+  width: 400px;
+  text-align: justify;
+}
+
+.modalContent h3 {
+  margin-top: 0;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}

@@ -1,0 +1,52 @@
+.defaultBtn {
+  background-color: transparent;
+  color: var(--text-color);
+  border: none;
+  padding: 5px 10px 5px 10px;
+  border-radius: 4px 4px 0 0;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.3s ease background-color;
+  margin-right: 3px;
+}
+
+.defaultBtn:hover {
+  background-color: var(--default-btn-hover);
+}
+
+.roundCornersBtn {
+  border-radius: 4px;
+  margin-right: 0;
+}
+
+.activeDefaultBtn {
+  background-color: var(--default-btn-hover);
+  border-bottom: 2px solid var(--text-color);
+}
+
+.cancelBtn {
+  background-color: #e75050;
+  color: white;
+  border-radius: 4px;
+  margin-right: 0;
+}
+
+.cancelBtn:hover {
+  background-color: #9a2c2c;
+}
+
+.createConfirmBtn {
+  background-color: #5aac44;
+  color: white;
+  border-radius: 4px;
+  margin-right: 0;
+}
+
+.createConfirmBtn:hover {
+  background-color: #3a6e2d;
+}
+
+.disable {
+  pointer-events: none;
+  opacity: 0;
+}

@@ -1,0 +1,17 @@
+.task {
+  background-color: var(--light-background-color);
+  border-radius: 4px;
+  padding: 12px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.task:hover {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.taskContent {
+  word-break: break-word;
+  line-height: 1.4;
+}

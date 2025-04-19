@@ -1,5 +1,7 @@
 import React from "react";
-import styles from "../../styles/App.module.css";
+import main_styles from "../../styles/App.module.css";
+import navbar_styles from "./NavBar.module.css";
+import btn_styles from "../ui/DefaultBtn.module.css";
 import { FaPlus, FaProjectDiagram, FaTrash, FaUsers } from "react-icons/fa";
 import DefaultBtn from "../ui/DefaultBtn.jsx";
 import { PiKanban } from "react-icons/pi";
@@ -15,16 +17,16 @@ const NavBar = ({
   setShowDeleteModal,
 }) => {
   return (
-    <div className={styles.navbar}>
+    <div className={navbar_styles.navbar}>
       <nav>
-        <h1 className={styles.title}>
+        <h1 className={navbar_styles.title}>
           <FaProjectDiagram
             style={{ marginRight: "15px" }}
-            className={styles.icon}
+            className={main_styles.icon}
           />
           Планировщик проектов / Kanban-доска
         </h1>
-        <div className={styles.menu}>
+        <div className={navbar_styles.menu}>
           <div>
             <DefaultBtn
               icon={IoHomeOutline}
@@ -45,7 +47,7 @@ const NavBar = ({
               }}
               disabled={false}
               className={
-                activeSection === "kanban" ? styles.activeDefaultBtn : ""
+                activeSection === "kanban" ? main_styles.activeDefaultBtn : ""
               }
             >
               {boards.length === 0 ? "Создать kanban-доску" : "Kanban-доска"}
@@ -57,8 +59,8 @@ const NavBar = ({
               onClick={() => setActiveSection("team")}
               disabled={boards.length === 0}
               className={classNames(
-                { [styles.disable]: boards.length === 0 },
-                { [styles.activeDefaultBtn]: activeSection === "team" },
+                { [btn_styles.disable]: boards.length === 0 },
+                { [btn_styles.activeDefaultBtn]: activeSection === "team" },
               )}
             >
               Команда

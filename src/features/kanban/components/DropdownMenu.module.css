@@ -1,0 +1,45 @@
+/* Контейнер для кнопки и меню */
+.dropdownContainer {
+  position: relative;
+  display: flex;
+}
+
+/* Всплывающее меню */
+.dropdownMenu {
+  position: absolute;
+  right: 30px;
+  bottom: -20px;
+  background-color: var(--background-color);
+  border: 1px solid var(--text-color);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 150px;
+  margin-top: 5px;
+  border-radius: 4px;
+  z-index: 10;
+  animation: fadeInDrop 0.3s ease-out forwards;
+}
+
+@keyframes fadeInDrop {
+  from {
+    opacity: 0;
+    transform: translateY(1px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Стили для каждого пункта меню */
+.dropdownItem {
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: 0.3s ease background-color;
+}
+
+/* Ховер-эффект для пунктов меню */
+.dropdownItem:hover {
+  background-color: var(--default-btn-hover);
+}
