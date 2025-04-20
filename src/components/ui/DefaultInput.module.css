@@ -16,3 +16,13 @@
   outline: none;
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
 }
+
+input.boardInput {
+  width: 321px;
+  height: 39px;
+}
+
+input.teamInput {
+  width: 186px;
+  height: 39px;
+}

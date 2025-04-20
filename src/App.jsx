@@ -41,7 +41,13 @@ function App() {
         return <JoinSection />;
 
       case "main":
-        return <MainSection />;
+        return (
+          <MainSection
+            boards={boards}
+            setActiveSection={setActiveSection}
+            setShowCreateModal={setShowCreateModal}
+          />
+        );
     }
   };
 

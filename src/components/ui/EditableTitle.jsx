@@ -3,6 +3,7 @@ import { FaEdit } from "react-icons/fa";
 import DefaultInput from "./DefaultInput.jsx";
 import main_styles from "../../styles/App.module.css";
 import title_styles from "./EditableTitle.module.css";
+import input_styles from "./DefaultInput.module.css";
 
 const EditableTitle = ({
   item,
@@ -38,6 +39,7 @@ const EditableTitle = ({
           onEditEnd();
         }
       }}
+      className={`${input_styles.defaultInput} ${level === 2 ? input_styles.boardInput : input_styles.teamInput}`}
     />
   ) : (
     <HeadingTag

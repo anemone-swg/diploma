@@ -1,13 +1,10 @@
 import React, { useState } from "react";
 import boards_container from "./BoardContainer.module.css";
 import kanban_styles from "../styles/Kanban.module.css";
-import DefaultInput from "../../../components/ui/DefaultInput.jsx";
-import DefaultBtn from "../../../components/ui/DefaultBtn.jsx";
-import { IoCheckmarkDoneOutline } from "react-icons/io5";
-import { RxCross1 } from "react-icons/rx";
 import KanbanColumn from "./KanbanColumn.jsx";
 import EditableTitle from "../../../components/ui/EditableTitle.jsx";
 import DropdownMenu from "./DropdownMenu.jsx";
+import InputWithActions from "../../../components/ui/InputWithActions.jsx";
 
 const BoardContainer = ({
   team,
@@ -115,36 +112,17 @@ const BoardContainer = ({
       <hr />
 
       {showColumnInput === team.id && (
-        <div className={kanban_styles.inputContainer}>
-          <DefaultInput
-            value={newColumnTitle}
-            onChange={(e) => setNewColumnTitle(e.target.value)}
-            onKeyPress={(e) =>
-              e.key === "Enter" && handleCreateColumn(board.id, team.id)
-            }
-            placeholder="Название столбца..."
-            autoFocus
-          />
-          <div className={kanban_styles.inputActions}>
-            <DefaultBtn
-              variant="createConfirmBtn"
-              icon={IoCheckmarkDoneOutline}
-              onClick={() => handleCreateColumn(board.id, team.id)}
-            >
-              Добавить
-            </DefaultBtn>
-            <DefaultBtn
-              variant="cancelBtn"
-              icon={RxCross1}
-              onClick={() => {
-                setShowColumnInput(false);
-                setNewColumnTitle("");
-              }}
-            >
-              Отмена
-            </DefaultBtn>
-          </div>
-        </div>
+        <InputWithActions
+          type="column"
+          value={newColumnTitle}
+          onChange={(e) => setNewColumnTitle(e.target.value)}
+          onSubmit={() => handleCreateColumn(board.id, team.id)}
+          onCancel={() => {
+            setShowColumnInput(false);
+            setNewColumnTitle("");
+          }}
+          placeholder="Название столбца..."
+        />
       )}
 
       <div className={boards_container.columnsContainer}>

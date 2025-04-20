@@ -50,3 +50,14 @@
   pointer-events: none;
   opacity: 0;
 }
+
+.mainSectionBtn {
+  font-size: 1rem;
+  color: white;
+  background-color: #007bff;
+  padding-bottom: 7px;
+}
+
+.mainSectionBtn:hover {
+  background-color: #0f4987;
+}

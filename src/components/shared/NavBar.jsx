@@ -47,7 +47,7 @@ const NavBar = ({
               }}
               disabled={false}
               className={
-                activeSection === "kanban" ? main_styles.activeDefaultBtn : ""
+                activeSection === "kanban" ? btn_styles.activeDefaultBtn : ""
               }
             >
               {boards.length === 0 ? "Создать kanban-доску" : "Kanban-доска"}
