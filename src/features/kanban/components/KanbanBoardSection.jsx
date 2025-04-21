@@ -26,7 +26,7 @@ const KanbanBoardSection = ({
             teams: [
               ...board.teams,
               {
-                id: Date.now(),
+                id: crypto.randomUUID(),
                 title: "Новая команда",
                 columns: [],
               },

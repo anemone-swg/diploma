@@ -15,3 +15,22 @@
   word-break: break-word;
   line-height: 1.4;
 }
+
+.task {
+  /* Обязательные стили для корректного перетаскивания */
+  user-select: none;
+  touch-action: none; /* Для мобильных устройств */
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.task {
+  transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.task.dragging {
+  transform: rotate(3deg);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}

@@ -47,12 +47,12 @@ const ModalWindow = ({
   const handleCreateBoard = () => {
     if (newBoardTitle.trim() && boards.length === 0) {
       const newBoard = {
-        id: Date.now(),
+        id: crypto.randomUUID(),
         title: newBoardTitle,
         teams: [
           // Теперь доска содержит массив команд
           {
-            id: Date.now(),
+            id: crypto.randomUUID(),
             title: "Новая команда", // Изначальное название команды
             columns: [], // Колонки для этой команды
           },

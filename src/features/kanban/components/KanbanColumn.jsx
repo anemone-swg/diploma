@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import kanban_styles from "../styles/Kanban.module.css";
 import column_styles from "./KanbanColumn.module.css";
 import EditableTitle from "../../../components/ui/EditableTitle.jsx";
-import KanbanTask from "./KanbanTask.jsx";
 import DropdownMenu from "./DropdownMenu.jsx";
 import InputWithActions from "../../../components/ui/InputWithActions.jsx";
+import KanbanTask from "./KanbanTask.jsx";
+import { StrictModeDroppable } from "./StrictModeDroppable.jsx";
 
 const KanbanColumn = ({
   column,
@@ -52,7 +53,7 @@ const KanbanColumn = ({
                       tasks: [
                         ...column.tasks,
                         {
-                          id: Date.now(),
+                          id: crypto.randomUUID(),
                           content: newTaskContent,
                           completed: false,
                           // Другие свойства задачи
@@ -68,6 +69,7 @@ const KanbanColumn = ({
           }),
         })),
       );
+
       // Очищаем поле ввода после создания
       setNewTaskContent("");
       setShowTaskInput(false);
@@ -121,11 +123,34 @@ const KanbanColumn = ({
         />
       )}
 
-      <div className={column_styles.taskContainer}>
-        {column.tasks.map((task) => (
-          <KanbanTask key={task.id} task={task} />
-        ))}
-      </div>
+      <StrictModeDroppable
+        droppableId={String(column.id)}
+        type="TASK"
+        isDropDisabled={false}
+        isCombineEnabled={false}
+        ignoreContainerClipping={true}
+      >
+        {(provided, snapshot) => (
+          <div
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+            className={`${column_styles.taskContainer} ${
+              snapshot.isDraggingOver ? column_styles.draggingOver : ""
+            }`}
+          >
+            {column.tasks.map((task, taskIndex) => (
+              <KanbanTask
+                key={task.id}
+                task={task}
+                index={taskIndex}
+                columnId={column.id}
+                teamId={team.id}
+              />
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </StrictModeDroppable>
     </div>
   );
 };
