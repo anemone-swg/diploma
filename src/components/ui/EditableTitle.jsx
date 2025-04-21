@@ -15,6 +15,7 @@ const EditableTitle = ({
   onChange,
   onTitleChange,
   level = 2, // h2 по умолчанию, можно передать 3 для h3
+  isPastelColor,
 }) => {
   const HeadingTag = `h${level}`;
 
@@ -39,13 +40,14 @@ const EditableTitle = ({
           onEditEnd();
         }
       }}
-      className={`${input_styles.defaultInput} ${level === 2 ? input_styles.boardInput : input_styles.teamInput}`}
+      className={`${input_styles.defaultInput} ${level === 2 ? input_styles.boardInput : input_styles.teamInput} ${isPastelColor ? input_styles.pastel : ""}`}
     />
   ) : (
     <HeadingTag
-      className={
-        level === 2 ? title_styles.boardTitle : title_styles.smallTitle
-      }
+      className={`
+        ${level === 2 ? title_styles.boardTitle : title_styles.smallTitle}
+        ${isPastelColor ? title_styles.pastel : ""}
+      `}
       onClick={() => {
         onTitleChange(item.title);
         onEditStart(item.id);

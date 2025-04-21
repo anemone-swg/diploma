@@ -2,7 +2,7 @@ import React from "react";
 import task_styles from "./KanbanTask.module.css";
 import { Draggable } from "react-beautiful-dnd";
 
-const KanbanTask = ({ task, index, columnId, teamId }) => {
+const KanbanTask = ({ task, index }) => {
   return (
     <Draggable draggableId={task.id} index={index}>
       {(provided, snapshot) => (

@@ -3,11 +3,11 @@
   margin: 20px 0 20px 0;
   padding: 5px 10px 5px 10px;
   transition: 0.3s ease background-color;
+  border-radius: 4px;
 }
 
 .boardTitle:hover {
   background-color: var(--default-btn-hover);
-  border-radius: 4px;
 }
 
 .smallTitle {
@@ -15,9 +15,17 @@
   margin: 0 0 0 0;
   padding: 8px;
   transition: 0.3s ease background-color;
+  border-radius: 4px;
+}
+
+.smallTitle.pastel {
+  color: var(--text-color-dark);
 }
 
 .smallTitle:hover {
   background-color: var(--default-btn-hover);
-  border-radius: 4px;
+}
+
+.smallTitle.pastel:hover {
+  color: var(--text-color);
 }

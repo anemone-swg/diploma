@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import main_styles from "../../styles/App.module.css";
+import btn_styles from "../ui/DefaultBtn.module.css";
 import navbar_styles from "./ModalWindow.module.css";
 import DefaultBtn from "../ui/DefaultBtn.jsx";
 import DefaultInput from "../ui/DefaultInput.jsx";
@@ -181,7 +182,7 @@ const ModalWindow = ({
                       <DefaultBtn
                         icon={RxCross1}
                         onClick={() => setShowModal(false)}
-                        className={main_styles.roundCornersBtn}
+                        className={btn_styles.roundCornersBtn}
                       >
                         Отмена
                       </DefaultBtn>
@@ -214,7 +215,7 @@ const ModalWindow = ({
                       <DefaultBtn
                         icon={RxCross1}
                         onClick={() => setShowModal(false)}
-                        className={main_styles.roundCornersBtn}
+                        className={btn_styles.roundCornersBtn}
                       >
                         Отмена
                       </DefaultBtn>
@@ -247,7 +248,7 @@ const ModalWindow = ({
                       <DefaultBtn
                         icon={RxCross1}
                         onClick={() => setShowModal(false)}
-                        className={main_styles.roundCornersBtn}
+                        className={btn_styles.roundCornersBtn}
                       >
                         Отмена
                       </DefaultBtn>

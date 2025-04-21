@@ -10,6 +10,7 @@ const DropdownMenu = ({
   onAdd, // Функция добавления (столбца или задачи)
   onDelete, // Функция удаления (команды или столбца)
   onPrepareDelete, // Подготовка данных перед удалением
+  isPastelColor,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
@@ -72,9 +73,12 @@ const DropdownMenu = ({
     <div className={dropdownMenu_styles.dropdownContainer}>
       <DefaultBtn
         ref={buttonRef}
-        className={btn_styles.roundCornersBtn}
+        className={`${btn_styles.roundCornersBtn} ${isPastelColor ? btn_styles.pastel : ""}`}
         onClick={() => setIsOpen((prev) => !prev)}
         aria-label={`Меню ${type === "team" ? "команды" : "столбца"}`}
+        style={{
+          fontSize: "20px",
+        }}
       >
         &#x22EE;
       </DefaultBtn>

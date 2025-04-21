@@ -6,6 +6,7 @@ import DropdownMenu from "./DropdownMenu.jsx";
 import InputWithActions from "../../../components/ui/InputWithActions.jsx";
 import KanbanTask from "./KanbanTask.jsx";
 import { StrictModeDroppable } from "./StrictModeDroppable.jsx";
+import ColorPicker from "./ColorPicker.jsx";
 
 const KanbanColumn = ({
   column,
@@ -20,6 +21,8 @@ const KanbanColumn = ({
   const [editingColumnId, setEditingColumnId] = useState(null);
   const [showTaskInput, setShowTaskInput] = useState(null);
   const [newTaskContent, setNewTaskContent] = useState("");
+  const [selectedColor, setSelectedColor] = useState(""); // Состояние для выбранного цвета
+  const isPastelColor = selectedColor && selectedColor !== "#232323";
 
   const handleColumnTitleChange = (columnId, newTitle) => {
     if (newColumnTitle.trim()) {
@@ -77,7 +80,10 @@ const KanbanColumn = ({
   };
 
   return (
-    <div className={column_styles.column}>
+    <div
+      className={column_styles.column}
+      style={{ backgroundColor: selectedColor }}
+    >
       <div className={kanban_styles.elementHeader}>
         <EditableTitle
           item={column}
@@ -93,21 +99,38 @@ const KanbanColumn = ({
             handleColumnTitleChange(id, newTitle);
           }}
           level={3}
+          isPastelColor={isPastelColor}
         />
-        <DropdownMenu
-          type="column"
-          onAdd={() => setShowTaskInput(column.id)}
-          onDelete={setShowDeleteColumnModal}
-          onPrepareDelete={() =>
-            setDeletingColumn({
-              teamId: team.id,
-              columnId: column.id,
-            })
-          }
-        />
+        <div className={column_styles.columnBtns}>
+          <DropdownMenu
+            type="column"
+            onAdd={() => setShowTaskInput(column.id)}
+            onDelete={setShowDeleteColumnModal}
+            onPrepareDelete={() =>
+              setDeletingColumn({
+                teamId: team.id,
+                columnId: column.id,
+              })
+            }
+            isPastelColor={isPastelColor}
+          />
+          <ColorPicker
+            setSelectedColor={setSelectedColor}
+            setBoards={setBoards}
+            boards={boards}
+            column={column}
+            isPastelColor={isPastelColor}
+          />
+        </div>
       </div>
 
-      <hr />
+      <hr
+        style={{
+          borderTop: isPastelColor
+            ? "2px solid var(--text-color-dark)"
+            : "2px solid var(--text-color)",
+        }}
+      />
 
       {showTaskInput === column.id && (
         <InputWithActions
@@ -122,7 +145,6 @@ const KanbanColumn = ({
           placeholder="Ваша задача..."
         />
       )}
-
       <StrictModeDroppable
         droppableId={String(column.id)}
         type="TASK"
@@ -139,13 +161,7 @@ const KanbanColumn = ({
             }`}
           >
             {column.tasks.map((task, taskIndex) => (
-              <KanbanTask
-                key={task.id}
-                task={task}
-                index={taskIndex}
-                columnId={column.id}
-                teamId={team.id}
-              />
+              <KanbanTask key={task.id} task={task} index={taskIndex} />
             ))}
             {provided.placeholder}
           </div>

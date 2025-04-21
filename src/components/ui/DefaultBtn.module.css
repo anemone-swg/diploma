@@ -10,6 +10,14 @@
   margin-right: 3px;
 }
 
+.defaultBtn.pastel {
+  color: var(--text-color-dark);
+}
+
+.defaultBtn.pastel:hover {
+  color: var(--text-color);
+}
+
 .defaultBtn:hover {
   background-color: var(--default-btn-hover);
 }
