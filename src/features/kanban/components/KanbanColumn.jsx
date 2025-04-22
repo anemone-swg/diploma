@@ -21,8 +21,12 @@ const KanbanColumn = ({
   const [editingColumnId, setEditingColumnId] = useState(null);
   const [showTaskInput, setShowTaskInput] = useState(null);
   const [newTaskContent, setNewTaskContent] = useState("");
-  const [selectedColor, setSelectedColor] = useState(""); // Состояние для выбранного цвета
-  const isPastelColor = selectedColor && selectedColor !== "#232323";
+  const isPastelColor =
+    column.color && column.color !== "var(--background-color)";
+
+  /*useEffect(() => {
+    console.log(boards);
+  }, [boards]);*/
 
   const handleColumnTitleChange = (columnId, newTitle) => {
     if (newColumnTitle.trim()) {
@@ -38,10 +42,14 @@ const KanbanColumn = ({
         })),
       );
     }
+    setNewColumnTitle("");
   };
 
-  const handleCreateTask = (teamId, columnId, newTaskContent) => {
+  const handleCreateTask = (teamId, columnId) => {
     if (newTaskContent.trim()) {
+      const now = new Date();
+      const defaultDeadline = new Date();
+      defaultDeadline.setDate(now.getDate() + 7); // Дефолтный срок - через неделю
       setBoards(
         boards.map((board) => ({
           ...board,
@@ -59,7 +67,9 @@ const KanbanColumn = ({
                           id: crypto.randomUUID(),
                           content: newTaskContent,
                           completed: false,
-                          // Другие свойства задачи
+                          user: "Исполнитель не назначен",
+                          deadline: defaultDeadline.toISOString(), // Дефолтный срок
+                          createdAt: now.toISOString(), // Дата создания
                         },
                       ],
                     };
@@ -82,7 +92,7 @@ const KanbanColumn = ({
   return (
     <div
       className={column_styles.column}
-      style={{ backgroundColor: selectedColor }}
+      style={{ backgroundColor: column.color }}
     >
       <div className={kanban_styles.elementHeader}>
         <EditableTitle
@@ -115,9 +125,7 @@ const KanbanColumn = ({
             isPastelColor={isPastelColor}
           />
           <ColorPicker
-            setSelectedColor={setSelectedColor}
             setBoards={setBoards}
-            boards={boards}
             column={column}
             isPastelColor={isPastelColor}
           />
@@ -137,7 +145,7 @@ const KanbanColumn = ({
           type="task"
           value={newTaskContent}
           onChange={(e) => setNewTaskContent(e.target.value)}
-          onSubmit={() => handleCreateTask(team.id, column.id, newTaskContent)}
+          onSubmit={() => handleCreateTask(team.id, column.id)}
           onCancel={() => {
             setShowTaskInput(false);
             setNewTaskContent("");
@@ -161,7 +169,15 @@ const KanbanColumn = ({
             }`}
           >
             {column.tasks.map((task, taskIndex) => (
-              <KanbanTask key={task.id} task={task} index={taskIndex} />
+              <KanbanTask
+                key={task.id}
+                task={task}
+                index={taskIndex}
+                newTaskContent={newTaskContent}
+                setNewTaskContent={setNewTaskContent}
+                setBoards={setBoards}
+                boards={boards}
+              />
             ))}
             {provided.placeholder}
           </div>

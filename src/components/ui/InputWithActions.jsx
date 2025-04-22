@@ -30,13 +30,13 @@ const InputWithActions = ({
       />
       <div className={inputWithActions_styles.inputActions}>
         <DefaultBtn
-          variant="createConfirmBtn"
+          variant="confirmBtn"
           icon={IoCheckmarkDoneOutline}
           onClick={onSubmit}
         >
           Добавить
         </DefaultBtn>
-        <DefaultBtn variant="cancelBtn" icon={RxCross1} onClick={onCancel}>
+        <DefaultBtn variant="confirmBtn" icon={RxCross1} onClick={onCancel}>
           Отмена
         </DefaultBtn>
       </div>

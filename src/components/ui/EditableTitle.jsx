@@ -49,7 +49,12 @@ const EditableTitle = ({
         ${isPastelColor ? title_styles.pastel : ""}
       `}
       onClick={() => {
-        onTitleChange(item.title);
+        {
+          item.content
+            ? onTitleChange(item.content)
+            : onTitleChange(item.title);
+        }
+        // onTitleChange(item.title);
         onEditStart(item.id);
       }}
     >
@@ -58,7 +63,7 @@ const EditableTitle = ({
         style={{ verticalAlign: level === 2 ? "baseline" : "middle" }}
       />
       {level === 2 && <span>Название проекта: </span>}
-      {item.title}
+      {item.content ? item.content : item.title}
     </HeadingTag>
   );
 };

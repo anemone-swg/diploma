@@ -43,15 +43,10 @@
   background-color: #9a2c2c;
 }
 
-.createConfirmBtn {
-  background-color: #5aac44;
-  color: white;
+.confirmBtn {
   border-radius: 4px;
   margin-right: 0;
-}
-
-.createConfirmBtn:hover {
-  background-color: #3a6e2d;
+  border: 1px solid var(--text-color);
 }
 
 .disable {

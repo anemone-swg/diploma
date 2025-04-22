@@ -64,6 +64,7 @@ const BoardContainer = ({
                       {
                         id: crypto.randomUUID(),
                         title: newColumnTitle,
+                        color: "var(--background-color)",
                         tasks: [],
                       },
                     ],
@@ -80,10 +81,6 @@ const BoardContainer = ({
       setShowColumnInput(false);
     }
   };
-
-  /*useEffect(() => {
-      console.log("Обновленные boards:", boards);
-    }, [boards]);*/ // Срабатывает при каждом изменении boards
 
   const handleDragEnd = (result) => {
     const { destination, source } = result;

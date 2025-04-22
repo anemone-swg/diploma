@@ -4,15 +4,9 @@ import DefaultBtn from "../../../components/ui/DefaultBtn.jsx";
 import btn_styles from "../../../components/ui/DefaultBtn.module.css";
 import { IoIosColorWand } from "react-icons/io";
 
-const ColorPicker = ({
-  setSelectedColor,
-  setBoards,
-  boards,
-  column,
-  isPastelColor,
-}) => {
+const ColorPicker = ({ setBoards, column, isPastelColor }) => {
   const colors = [
-    "#232323", // основной цвет (темный, не изменен)
+    "var(--background-color)", // основной цвет (темный, не изменен)
     "#FFDFDF", // светлый пастельный розовый
     "#D4FFDB", // светлый пастельный зеленый
     "#D0E4FF", // светлый пастельный голубой
@@ -44,15 +38,20 @@ const ColorPicker = ({
   }, []);
 
   const handleColorSelect = (color) => {
-    setSelectedColor(color);
-    // Обновляем стиль столбца
-    const updatedBoards = boards.map((board) => {
-      if (board.id === column.id) {
-        board.color = color; // Здесь можно обновить объект колонны с выбранным цветом
-      }
-      return board;
-    });
-    setBoards(updatedBoards);
+    // Обновляем цвет колонки в состоянии boards
+    setBoards((prevBoards) =>
+      prevBoards.map((board) => ({
+        ...board,
+        teams: board.teams.map((team) => ({
+          ...team,
+          columns: team.columns.map((col) =>
+            col.id === column.id ? { ...col, color } : col,
+          ),
+        })),
+      })),
+    );
+
+    setShowColorPicker(false);
   };
 
   return (
@@ -74,7 +73,6 @@ const ColorPicker = ({
               className={color_picker_styles.colorSelect}
               onClick={() => {
                 handleColorSelect(color);
-                setShowColorPicker(false);
               }}
             />
           ))}

@@ -80,6 +80,7 @@ const NavBar = ({
                     }
               }
               disabled={false}
+              style={{ marginRight: "0" }}
             >
               {boards.length === 0
                 ? "Присоединиться к проекту"
