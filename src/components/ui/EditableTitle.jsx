@@ -41,6 +41,7 @@ const EditableTitle = ({
         }
       }}
       className={`${input_styles.defaultInput} ${level === 2 ? input_styles.boardInput : input_styles.teamInput} ${isPastelColor ? input_styles.pastel : ""}`}
+      maxLength={item.content ? 500 : 20}
     />
   ) : (
     <HeadingTag

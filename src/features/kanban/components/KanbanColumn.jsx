@@ -24,9 +24,9 @@ const KanbanColumn = ({
   const isPastelColor =
     column.color && column.color !== "var(--background-color)";
 
-  /*useEffect(() => {
-    console.log(boards);
-  }, [boards]);*/
+  // useEffect(() => {
+  //   console.log(boards);
+  // }, [boards]);
 
   const handleColumnTitleChange = (columnId, newTitle) => {
     if (newColumnTitle.trim()) {

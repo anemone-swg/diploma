@@ -5,7 +5,7 @@ import btn_styles from "../../../components/ui/DefaultBtn.module.css";
 import { IoIosColorWand } from "react-icons/io";
 
 const ColorPicker = ({ setBoards, column, isPastelColor }) => {
-  const colors = [
+  /*const columnColors = [
     "var(--background-color)", // основной цвет (темный, не изменен)
     "#FFDFDF", // светлый пастельный розовый
     "#D4FFDB", // светлый пастельный зеленый
@@ -16,6 +16,18 @@ const ColorPicker = ({ setBoards, column, isPastelColor }) => {
     "#F2F2F2", // светлый пастельный серый
     "#FFD9B3", // светлый пастельный персиковый
     "#B3BFFF", // светлый пастельный синий
+  ];*/
+  const columnColors = [
+    "var(--background-color)", // основной цвет без изменений
+    "#B08080",
+    "#709570",
+    "#8095B0",
+    "#936c93",
+    "#B0A880",
+    "#889870",
+    "#A0A0A0",
+    "#B09080",
+    "#8080B0",
   ];
   const divRef = useRef(null);
   const buttonRef = useRef(null);
@@ -66,7 +78,7 @@ const ColorPicker = ({ setBoards, column, isPastelColor }) => {
 
       {showColorPicker && (
         <div ref={divRef} className={color_picker_styles.colorPicker}>
-          {colors.map((color) => (
+          {columnColors.map((color) => (
             <DefaultBtn
               key={color}
               style={{ backgroundColor: color }}

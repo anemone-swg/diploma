@@ -3,6 +3,10 @@
   display: flex;
 }
 
+.colorPickerContainer button svg {
+  margin: 0;
+}
+
 .colorPicker {
   position: absolute;
   right: 50px;
