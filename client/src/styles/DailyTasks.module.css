@@ -1,0 +1,168 @@
+.gradientHr {
+    margin-bottom: 10px;
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right top, #0300ae, #004dd2, #007fe9, #4fadf6, #9fd9ff);
+}
+
+.taskInput {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.myInput {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+    margin-right: 10px;
+}
+
+.myInput:focus {
+    outline: none;
+    border: 1px solid grey;
+}
+
+.taskInput button {
+    padding: 10px 15px;
+    cursor: pointer;
+    height: 50px;
+    margin-top: 18px;
+    transition: 0.5s;
+    background-color: #007fe9;
+}
+
+.taskInput button:hover {
+    background-color: #0056b3;
+}
+
+.taskList {
+    list-style-type: none;
+    padding: 0;
+}
+
+.taskItem {
+    border: 1px solid #505050;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #202020;
+}
+
+.taskSeparator {
+    margin: 10px 0;
+    border: 0;
+    border-top: 1px solid #ddd;
+}
+
+.taskDates {
+    font-size: 14px;
+    color: #555;
+}
+
+.completed {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.taskSections {
+    display: flex;
+    flex-direction: column;
+}
+
+.taskSectionsWrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.taskSection {
+    flex: 1;
+}
+
+.descriptionBlock {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.descriptionBlock button {
+    padding: 5px;
+}
+
+.descriptionBlock label span {
+    margin-right: 10px;
+}
+
+.descriptionArea {
+    min-height: 50px;
+    background: #191919;
+    padding: 10px;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.descriptionArea:focus {
+    outline: none;
+    border: 1px solid grey;
+}
+
+.deleteButton {
+    max-width: 129px;
+}
+
+.noTasks {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 670px;
+}
+
+.noTasks p {
+    text-align: center;
+    font-size: 20px;
+}
+
+.taskTitleWithButton {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.taskTitleWithButton span {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.completeButton {
+    margin-left: 1rem;
+    padding: 4px 10px;
+    background-color: transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease;
+    border: #505050 1px solid;
+}
+
+.completeButton:hover {
+    background-color: #333333;
+}
+
+.completeTaskBody {
+    margin: 10px 0 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.completeTaskBody .deleteButtonBody {
+    margin-left: auto; /* Это выталкивает кнопку к правому краю */
+}
+
+.completeTaskBody button {
+    padding: 5px 10px 5px 10px;
+}

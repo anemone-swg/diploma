@@ -1,0 +1,61 @@
+.sidebar {
+    background-color: #202020;
+    padding: 10px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    height: 100vh;
+    overflow: hidden;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding-left: 0;
+    font-size: 15px;
+}
+
+.sidebar ul li {
+    margin: 0 0 4px;
+    transition: background-color 0.2s ease;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #888888;
+    padding: 2px 8px 2px 8px;
+    transition: all 0.2s ease;
+    border-radius: 5px;
+    display: flex; /* Выстраиваем элементы в строку */
+    align-items: center; /* Выравниваем иконку и текст */
+    gap: 8px; /* Отступ между иконкой и текстом */
+    width: 100%; /* Растягиваем ссылку на всю ширину */
+    box-sizing: border-box; /* Учитываем padding в размере */
+}
+
+.sidebar ul li a:hover {
+    background-color: #3b3d42;
+}
+
+.resizer {
+    width: 1px;
+    background-color: #505050;
+    cursor: ew-resize;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+}
+
+.resizer:hover {
+    background-color: #888888;
+}
+
+.icon {
+    min-width: 15px;
+    font-size: 15px; /* Размер иконки */
+    vertical-align: middle;
+}

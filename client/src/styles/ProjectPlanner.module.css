@@ -1,0 +1,30 @@
+
+/*body {*/
+/*  margin: 10px 20px 10px 20px;*/
+/*  background-color: var(--background-color);*/
+/*  color: var(--text-color);*/
+/*}*/
+
+.contentContainer {
+  margin-top: 122px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.icon {
+  margin-right: 4px;
+  vertical-align: middle;
+  font-size: 20px;
+}
+
+.smallIcon {
+  margin-right: 4px;
+  vertical-align: middle;
+  font-size: 12px;
+}
+
+hr {
+  margin: 0 0 20px 0;
+  border: none; /* Убираем стандартную границу */
+  border-top: 2px solid var(--text-color); /* Новая граница (цвет: красный) */
+}

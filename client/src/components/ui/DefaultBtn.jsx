@@ -1,0 +1,43 @@
+import React from "react";
+import classNames from "classnames";
+import main_styles from "../../styles/ProjectPlanner.module.css";
+import btn_styles from "./DefaultBtn.module.css";
+
+const DefaultBtn = React.forwardRef(
+  (
+    {
+      variant = "",
+      icon: Icon,
+      active,
+      disabled,
+      onClick,
+      children,
+      className,
+      ...props
+    },
+    ref, // второй аргумент для рефа
+  ) => {
+    return (
+      <button
+        ref={ref} // передаем ref в кнопку
+        className={classNames(
+          btn_styles.defaultBtn,
+          btn_styles[variant],
+          {
+            [btn_styles.activeDefaultBtn]: active,
+            [btn_styles.disable]: disabled,
+          },
+          className,
+        )}
+        onClick={onClick}
+        disabled={disabled}
+        {...props}
+      >
+        {Icon && <Icon className={main_styles.icon} />}
+        {children}
+      </button>
+    );
+  },
+);
+
+export default DefaultBtn;

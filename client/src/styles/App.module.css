@@ -1,0 +1,106 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+:root {
+    --background-color: #232323;
+    --light-background-color: #303030;
+    --text-color: #b3b3b3;
+    --text-color-dark: black;
+    --default-btn-hover: #3c3c3c;
+}
+
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #424242;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #707070;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body, #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+.app {
+    display: flex;
+}
+
+.content {
+    flex: 1;
+    width: 100%;
+    padding: 20px;
+}
+
+.page h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.defaultButton {
+    background-color: #007fe9;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.defaultButton:hover {
+    background-color: #0056b3;
+}
+
+.exitDeleteButton {
+    background-color: rgb(251, 73, 73) !important;
+}
+
+.exitDeleteButton:hover {
+    background-color: rgb(255, 30, 30) !important;;
+}
+
+.moduleSection {
+    background-color:#202020;
+    padding: 10px 20px 20px 20px;
+    border-radius: 10px;
+    max-width: 670px;
+    z-index: 2;
+    min-width: 350px;
+    margin-bottom: 20px;
+    border: #505050 1px solid;
+}
+
+.moduleSection h2 {
+    margin-bottom: 10px;
+}
+
+.spinner {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+}
+
+
