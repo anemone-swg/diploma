@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import main_styles from "../styles/App.module.css";
 import styles from "../styles/DailyTasks.module.css";
 import {
-  fetchTasks,
   addTask,
+  deleteTask,
+  fetchTasks,
+  toggleTaskStatus,
   updateDueDate,
   updateTaskDescription,
-  deleteTask,
-  toggleTaskStatus,
 } from "../services/DailyTaskService.js";
+import { FaTasks } from "react-icons/fa";
 
 const DailyTasks = () => {
   const [tasks, setTasks] = useState([]);
@@ -100,7 +101,10 @@ const DailyTasks = () => {
       <div className={styles.taskSectionsWrapper}>
         {/* ЗАДАЧИ В ПРОЦЕССЕ */}
         <div className={styles.taskSection}>
-          <h1>Список задач</h1>
+          <h1>
+            <FaTasks className={main_styles.titleIcon} />
+            Список задач
+          </h1>
           <hr className={styles.gradientHr} />
 
           <div className={`${styles.taskInput} ${main_styles.moduleSection}`}>
@@ -187,7 +191,12 @@ const DailyTasks = () => {
 
                     <div className={styles.descriptionBlock}>
                       <textarea
-                        className={styles.descriptionArea}
+                        className={`${styles.descriptionArea} ${
+                          (task.description || "") !==
+                          (taskDescriptionMap[task.id_task] || "")
+                            ? styles.unsaved
+                            : ""
+                        }`}
                         placeholder="Введите описание..."
                         value={taskDescriptionMap[task.id_task] || ""}
                         onClick={(e) => e.stopPropagation()}
@@ -224,7 +233,11 @@ const DailyTasks = () => {
                                   : t,
                               ),
                             );
+
                             updateDueDate(task.id_task, updatedDueDate);
+                          }}
+                          onBlur={(e) => {
+                            e.target.reportValidity();
                           }}
                         />
                       </label>

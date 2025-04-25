@@ -62,7 +62,7 @@ const Login = ({ onLogin }) => {
               required
             />
           </div>
-          <button className={styles.logbutton} type="submit">
+          <button className={styles.logButton} type="submit">
             Войти
           </button>
           <Link to="/register" className={styles.reg}>

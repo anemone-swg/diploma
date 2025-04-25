@@ -115,7 +115,7 @@ const Registration = () => {
               required
             />
           </div>
-          <button className={styles.logbutton} type="submit">
+          <button className={styles.logButton} type="submit">
             Зарегистрироваться
           </button>
           {error && <p className={styles.failReg}>{error}</p>}

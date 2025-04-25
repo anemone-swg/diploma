@@ -1,6 +1,6 @@
 import React from "react";
 import classNames from "classnames";
-import main_styles from "../../styles/ProjectPlanner.module.css";
+import main_styles from "../../styles/App.module.css";
 import btn_styles from "./DefaultBtn.module.css";
 
 const DefaultBtn = React.forwardRef(

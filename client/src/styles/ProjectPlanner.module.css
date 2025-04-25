@@ -1,26 +1,8 @@
-
-/*body {*/
-/*  margin: 10px 20px 10px 20px;*/
-/*  background-color: var(--background-color);*/
-/*  color: var(--text-color);*/
-/*}*/
-
 .contentContainer {
-  margin-top: 122px;
+  margin-top: 112px;
   display: flex;
   flex-wrap: wrap;
-}
-
-.icon {
-  margin-right: 4px;
-  vertical-align: middle;
-  font-size: 20px;
-}
-
-.smallIcon {
-  margin-right: 4px;
-  vertical-align: middle;
-  font-size: 12px;
+  padding: 20px;
 }
 
 hr {

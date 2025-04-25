@@ -15,6 +15,7 @@ const KanbanBoardSection = ({
   setDeletingTeam,
   setDeletingColumn,
   setShowDeleteColumnModal,
+  sidebarWidth,
 }) => {
   // Добавление новой команды
   const handleAddTeam = (boardId) => {
@@ -54,6 +55,9 @@ const KanbanBoardSection = ({
             <div
               key={team.id}
               className={kanban_board_section_styles.boardContainer}
+              style={{
+                maxWidth: `calc(95vw - ${sidebarWidth}px)`,
+              }}
             >
               <BoardContainer
                 team={team}

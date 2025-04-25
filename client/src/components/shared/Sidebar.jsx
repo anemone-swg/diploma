@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FaHome, FaTasks, FaProjectDiagram } from "react-icons/fa";
+import { FaHome, FaProjectDiagram, FaTasks } from "react-icons/fa";
 import styles from "./Sidebar.module.css";
 
-const Sidebar = ({ onResize }) => {
-  const [width, setWidth] = useState(250); // Начальная ширина
+const Sidebar = ({ onResize, sidebarWidth, setSidebarWidth }) => {
+  // const [width, setWidth] = useState(200); // Начальная ширина
 
   useEffect(() => {
     const savedWidth = localStorage.getItem("sidebarWidth");
     if (savedWidth) {
-      setWidth(parseInt(savedWidth, 10));
+      setSidebarWidth(parseInt(savedWidth, 10));
       onResize(parseInt(savedWidth, 10));
     } else {
-      onResize(width);
+      onResize(sidebarWidth);
     }
   }, []);
 
@@ -25,8 +25,8 @@ const Sidebar = ({ onResize }) => {
 
   // Изменение ширины
   const onResizing = (e) => {
-    const newWidth = Math.max(155, Math.min(e.clientX, 350));
-    setWidth(newWidth);
+    const newWidth = Math.max(155, Math.min(e.clientX, 240));
+    setSidebarWidth(newWidth);
     onResize(newWidth); // <- вот тут
     localStorage.setItem("sidebarWidth", newWidth);
   };
@@ -38,7 +38,9 @@ const Sidebar = ({ onResize }) => {
   };
 
   return (
-    <div className={styles.sidebar} style={{ width: `${width}px` }}>
+    <div className={styles.sidebar} style={{ width: `${sidebarWidth}px` }}>
+      <h1 className={styles.nameProject}>TASKLY</h1>
+      <hr className={styles.hrNameProject} />
       <ul>
         <li>
           <Link to="/">

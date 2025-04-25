@@ -29,6 +29,7 @@
 input.boardInput {
   width: 321px;
   height: 39px;
+  margin: 0 0 21px 0;
 }
 
 input.teamInput {

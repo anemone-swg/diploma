@@ -11,7 +11,7 @@ section {
 }
 
 .loginContainer {
-    background-color: #1f1f1f;
+    background-color: var(--light-background-color);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -45,8 +45,8 @@ input {
     width: 100%;
     padding: 10px;
     border-radius: 5px;
-    background-color: #333;
-    color: #fff;
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 
 .username:focus,
@@ -54,16 +54,16 @@ input {
 .email:focus,
 .confirmPassword:focus {
     outline: none;
-    border: 1px solid grey;
+    border: 1px solid var(--text-color);
 }
 
-.logbutton {
+.logButton {
     width: 100%;
     padding: 10px;
     border: none;
     border-radius: 5px !important;
-    background-color: grey;
-    color: #fff;
+    background-color: var(--background-color);
+    color: var(--text-color);
     font-size: 16px;
     cursor: pointer;
     transition: 0.5s;
@@ -71,22 +71,22 @@ input {
     margin-bottom: 10px;
 }
 
-.logbutton:hover {
-    background-color: rgb(75, 75, 75);
+.logButton:hover {
+    background-color: var(--default-btn-hover);
 }
 
 a.reg {
     text-decoration: none;
-    color: white;
+    color: var(--text-color);
     transition: 0.5s;
 }
 
 a.reg:hover {
-    color: grey;
+    color: var(--default-btn-hover);
 }
 
 .registerContainer {
-    background-color: #1f1f1f;
+    background-color: var(--light-background-color);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -104,7 +104,7 @@ a.reg:hover {
     position: absolute;
     top: 10px;
     left: 10px;
-    background-color: grey;
+    background-color: var(--light-background-color);
     border: none;
     color: white;
     padding: 10px 15px;
@@ -149,7 +149,7 @@ a.reg:hover {
 
 .failLogin p {
     text-align: justify;
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .inputError {

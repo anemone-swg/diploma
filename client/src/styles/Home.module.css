@@ -1,111 +1,119 @@
 .prettyHr {
-    margin-bottom: 10px;
-    border: 0;
-    height: 1px;
-    background-color: #505050;
+  margin-bottom: 10px;
+  border: 0;
+  height: 1px;
+  background-color: var(--default-btn-hover);
 }
 
 .profileInfo {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .avatar {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    margin-right: 20px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-right: 20px;
 }
 
 .details p {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .avatarUpload {
-    display: none;
+  display: none;
 }
 
 .avatarUpload + label {
-    cursor: pointer;
-    display: inline-block;
-    background-color: #007fe9;
-    color: white;
-    padding: 10px 15px;
-    border-radius: 5px;
-    text-align: center;
-    transition: background-color 0.5s ease;
-    font-size: 16px;
-    margin-bottom: 0;
+  cursor: pointer;
+  display: inline-block;
+  background-color: #007fe9;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  text-align: center;
+  transition: background-color 0.5s ease;
+  font-size: 16px;
+  margin-bottom: 0;
 }
 
 .avatarUpload + label:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
 
 .buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-    gap: 10px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  gap: 10px;
 }
 
 .inputField {
-    width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #333;
-    color: #fff;
-    margin-bottom: 15px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.1);;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--text-color);
+  transition: all 0.3s;
+  margin: 5px 0 15px 0;
 }
 
 .inputField:focus {
-    outline: none;
-    border: 1px solid grey;
+  border-color: rgba(255, 255, 255, 0.4);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.unsaved {
+  border: 1px solid #0056b3;
+  box-shadow: 0 0 5px rgba(33, 50, 152, 0.4);
 }
 
 .errorMessage {
-    color: rgb(251, 73, 73);
-    padding: 5px;
-    margin-top: 10px;
-    opacity: 1;
-    transition: opacity 0.5s linear, visibility 0.5s;
-    animation: fadeOut 3s ease-in-out forwards;
+  color: rgb(251, 73, 73);
+  padding: 5px;
+  margin-top: 10px;
+  opacity: 1;
+  transition: opacity 0.5s linear, visibility 0.5s;
+  animation: fadeOut 3s ease-in-out forwards;
 }
 
 .successMessage {
-    color: rgb(34, 197, 94); /* Зеленый цвет успеха */
-    padding: 5px;
-    margin-top: 10px;
-    opacity: 1;
-    transition: opacity 0.5s linear, visibility 0.5s;
-    animation: fadeOut 3s ease-in-out forwards;
+  color: rgb(34, 197, 94); /* Зеленый цвет успеха */
+  padding: 5px;
+  margin-top: 10px;
+  opacity: 1;
+  transition: opacity 0.5s linear, visibility 0.5s;
+  animation: fadeOut 3s ease-in-out forwards;
 }
 
 /* Анимация исчезновения через 3 секунды */
 @keyframes fadeOut {
-    0% {
-        opacity: 1;
-        visibility: visible;
-    }
-    70% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-        visibility: hidden;
-    }
+  0% {
+    opacity: 1;
+    visibility: visible;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
 
 .messageContainer {
-    max-height: 100px; /* Максимальная высота контейнера */
-    overflow: hidden;
-    transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
-    max-width: 365px;
+  max-height: 100px; /* Максимальная высота контейнера */
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  max-width: 365px;
 }
 
 .hidden {
-    max-height: 0;
-    opacity: 0;
+  max-height: 0;
+  opacity: 0;
 }
 
 

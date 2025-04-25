@@ -1,6 +1,6 @@
 import React from "react";
-import DefaultInput from "./DefaultInput";
-import DefaultBtn from "./DefaultBtn";
+import DefaultInput from "./DefaultInput.jsx";
+import DefaultBtn from "./DefaultBtn.jsx";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
 import inputWithActions_styles from "./InputWithActions.module.css";

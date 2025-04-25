@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import main_styles from "../../../../styles/ProjectPlanner.module.css";
+import main_styles from "../../../../styles/App.module.css";
 import dropdownMenu_styles from "./DropdownMenu.module.css";
 import btn_styles from "../../../../components/ui/DefaultBtn.module.css";
 import DefaultBtn from "../../../../components/ui/DefaultBtn.jsx";

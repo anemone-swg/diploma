@@ -2,20 +2,42 @@
   background-color: var(--light-background-color);
   position: fixed;
   top: 0;
-  left: 0;
   right: 0;
   z-index: 100;
-  padding: 0 20px;
+  padding: 20px 20px 0 20px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.4);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+  height: 92px;
+  box-sizing: content-box;
 }
 
 .title {
-  font-size: 28px;
+  font-size: 24px;
   margin-bottom: 10px;
 }
 
 .menu {
   display: flex;
   justify-content: space-between;
+}
+
+@media (max-width: 722px) {
+  .title {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .title {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 520px) {
+  .title {
+    font-size: 12px;
+    margin-bottom: 22px;
+  }
 }

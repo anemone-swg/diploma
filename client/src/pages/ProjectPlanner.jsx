@@ -7,7 +7,7 @@ import NavBar from "../components/shared/NavBar.jsx";
 import JoinSection from "../features/ProjectPlanner/join/components/JoinSection.jsx";
 import MainSection from "../features/ProjectPlanner/main/components/MainSection.jsx";
 
-function ProjectPlanner() {
+function ProjectPlanner({ sidebarWidth }) {
   const [boards, setBoards] = useState([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -31,6 +31,7 @@ function ProjectPlanner() {
             setDeletingTeam={setDeletingTeam}
             setDeletingColumn={setDeletingColumn}
             setShowDeleteColumnModal={setShowDeleteColumnModal}
+            sidebarWidth={sidebarWidth}
           />
         );
 
@@ -59,6 +60,7 @@ function ProjectPlanner() {
         setActiveSection={setActiveSection}
         setShowCreateModal={setShowCreateModal}
         setShowDeleteModal={setShowDeleteModal}
+        sidebarWidth={sidebarWidth}
       />
 
       {/*Модальное окно для создания канбан-доски*/}

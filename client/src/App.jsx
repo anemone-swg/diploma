@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import DailyTasks from "./pages/DailyTasks.jsx";
@@ -11,7 +11,7 @@ import { ClipLoader } from "react-spinners";
 import main_styles from "./styles/App.module.css";
 
 function App() {
-  const [sidebarWidth, setSidebarWidth] = useState(250);
+  const [sidebarWidth, setSidebarWidth] = useState(200);
   const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   // Проверка авторизации при монтировании компонента
@@ -39,13 +39,20 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className={main_styles.app}>
+      <div
+        className={main_styles.app}
+        style={{ paddingLeft: `${isAuthenticated ? sidebarWidth : 0}px` }}
+      >
         {isAuthenticated && (
-          <Sidebar onResize={(width) => setSidebarWidth(width)} />
+          <Sidebar
+            onResize={(width) => setSidebarWidth(width)}
+            sidebarWidth={sidebarWidth}
+            setSidebarWidth={setSidebarWidth}
+          />
         )}
         <div
           className={main_styles.content}
-          style={{ marginLeft: `${isAuthenticated ? sidebarWidth : 0}px` }}
+          // style={{ marginLeft: `${isAuthenticated ? sidebarWidth : 0}px` }}
         >
           <Routes>
             {!isAuthenticated ? (
@@ -64,7 +71,10 @@ function App() {
                   element={<Home onLogout={() => setIsAuthenticated(false)} />}
                 />
                 <Route path="/daily-tasks" element={<DailyTasks />} />
-                <Route path="/project-planner" element={<ProjectPlanner />} />
+                <Route
+                  path="/project-planner"
+                  element={<ProjectPlanner sidebarWidth={sidebarWidth} />}
+                />
                 <Route path="*" element={<Navigate to="/home" />} />
               </>
             )}

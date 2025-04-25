@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import main_styles from "../../styles/App.module.css";
 import navbar_styles from "./NavBar.module.css";
 import btn_styles from "../ui/DefaultBtn.module.css";
@@ -15,15 +15,23 @@ const NavBar = ({
   setActiveSection,
   setShowCreateModal,
   setShowDeleteModal,
+  sidebarWidth,
 }) => {
+  const [isCompact, setIsCompact] = useState(window.innerWidth < 900);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsCompact(window.innerWidth < 900);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
-    <div className={navbar_styles.navbar}>
+    <div className={navbar_styles.navbar} style={{ left: `${sidebarWidth}px` }}>
       <nav>
         <h1 className={navbar_styles.title}>
-          <FaProjectDiagram
-            style={{ marginRight: "15px" }}
-            className={main_styles.icon}
-          />
+          <FaProjectDiagram className={main_styles.titleIcon} />
           Планировщик проектов / Kanban-доска
         </h1>
         <div className={navbar_styles.menu}>
@@ -36,7 +44,7 @@ const NavBar = ({
                 setActiveSection("main");
               }}
             >
-              Домашняя страница
+              {!isCompact && "Домашняя страница"}
             </DefaultBtn>
             <DefaultBtn
               icon={boards.length === 0 ? FaPlus : PiKanban}
@@ -50,7 +58,8 @@ const NavBar = ({
                 activeSection === "kanban" ? btn_styles.activeDefaultBtn : ""
               }
             >
-              {boards.length === 0 ? "Создать kanban-доску" : "Kanban-доска"}
+              {!isCompact &&
+                (boards.length === 0 ? "Создать kanban-доску" : "Kanban-доска")}
             </DefaultBtn>
 
             <DefaultBtn
@@ -63,7 +72,7 @@ const NavBar = ({
                 { [btn_styles.activeDefaultBtn]: activeSection === "team" },
               )}
             >
-              Команда
+              {!isCompact && "Команда"}
             </DefaultBtn>
           </div>
           <div>
@@ -82,9 +91,10 @@ const NavBar = ({
               disabled={false}
               style={{ marginRight: "0" }}
             >
-              {boards.length === 0
-                ? "Присоединиться к проекту"
-                : "Удалить kanban-доску"}
+              {!isCompact &&
+                (boards.length === 0
+                  ? "Присоединиться к проекту"
+                  : "Удалить kanban-доску")}
             </DefaultBtn>
           </div>
         </div>

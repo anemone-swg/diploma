@@ -2,15 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { logoutUser } from "../services/AuthAndRegService";
 import {
-  uploadAvatar,
+  deleteUserAccount,
   fetchUserData,
   updateUserData,
-  deleteUserAccount,
+  uploadAvatar,
 } from "../services/AccountService.js";
 import main_styles from "../styles/App.module.css";
 import styles from "../styles/Home.module.css";
 import defaultAvatar from "../assets/default_avatar.jpg";
 import { ClipLoader } from "react-spinners";
+import { FaHome } from "react-icons/fa";
 
 const Home = ({ onLogout }) => {
   const navigate = useNavigate();
@@ -109,7 +110,10 @@ const Home = ({ onLogout }) => {
 
   return (
     <div className={main_styles.page}>
-      <h1>Ваш аккаунт</h1>
+      <h1>
+        <FaHome className={main_styles.titleIcon} />
+        Ваш аккаунт
+      </h1>
 
       {user ? (
         <div>
