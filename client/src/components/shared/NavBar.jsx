@@ -17,11 +17,11 @@ const NavBar = ({
   setShowDeleteModal,
   sidebarWidth,
 }) => {
-  const [isCompact, setIsCompact] = useState(window.innerWidth < 900);
+  const [isCompact, setIsCompact] = useState(window.innerWidth < 980);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsCompact(window.innerWidth < 900);
+      setIsCompact(window.innerWidth < 980);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);

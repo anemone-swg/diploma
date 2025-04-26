@@ -13,7 +13,6 @@ const KanbanColumn = ({
   newColumnTitle,
   setNewColumnTitle,
   setBoards,
-  boards,
   setDeletingColumn,
   setShowDeleteColumnModal,
   team,
@@ -30,8 +29,8 @@ const KanbanColumn = ({
 
   const handleColumnTitleChange = (columnId, newTitle) => {
     if (newColumnTitle.trim()) {
-      setBoards(
-        boards.map((board) => ({
+      setBoards((prevBoards) =>
+        prevBoards.map((board) => ({
           ...board,
           teams: board.teams.map((team) => ({
             ...team,
@@ -50,8 +49,8 @@ const KanbanColumn = ({
       const now = new Date();
       const defaultDeadline = new Date();
       defaultDeadline.setDate(now.getDate() + 7); // Дефолтный срок - через неделю
-      setBoards(
-        boards.map((board) => ({
+      setBoards((prevBoards) =>
+        prevBoards.map((board) => ({
           ...board,
           teams: board.teams.map((team) => {
             if (team.id === teamId) {
@@ -176,7 +175,6 @@ const KanbanColumn = ({
                 newTaskContent={newTaskContent}
                 setNewTaskContent={setNewTaskContent}
                 setBoards={setBoards}
-                boards={boards}
               />
             ))}
             {provided.placeholder}

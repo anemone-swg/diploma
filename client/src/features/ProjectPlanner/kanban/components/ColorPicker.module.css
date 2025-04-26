@@ -38,5 +38,6 @@
   border: 1px solid var(--text-color);
   cursor: pointer;
   border-radius: 0;
-  margin: 3px;
+  margin: 2px;
+  padding: 0;
 }

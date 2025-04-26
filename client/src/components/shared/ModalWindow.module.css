@@ -14,9 +14,8 @@
   box-sizing: border-box;
   opacity: 0; /* Начальная прозрачность */
   visibility: hidden; /* Скрыть элемент из DOM-потока */
-  transition:
-    opacity 0.3s ease-in-out,
-    visibility 0.3s ease-in-out; /* Плавное изменение */
+  transition: opacity 0.3s ease-in-out,
+  visibility 0.3s ease-in-out; /* Плавное изменение */
 }
 
 .modal.activeModal {
@@ -34,7 +33,13 @@
 }
 
 .modalContent h3 {
-  margin-top: 0;
+  margin: 0 0 20px 0;
+  user-select: none;
+}
+
+.modalContent p {
+  margin: 0 0 20px 0;
+  user-select: none;
 }
 
 .modalActions {

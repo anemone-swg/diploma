@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import main_styles from "../../styles/App.module.css";
-import navbar_styles from "./ModalWindow.module.css";
+import modal_styles from "./ModalWindow.module.css";
 import DefaultBtn from "../ui/DefaultBtn.jsx";
 import DefaultInput from "../ui/DefaultInput.jsx";
 import { PiKanban } from "react-icons/pi";
@@ -33,7 +33,7 @@ const ModalWindow = ({
   // Эффект для закрытия модалки
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (e.target.classList.contains(navbar_styles.modal)) {
+      if (e.target.classList.contains(modal_styles.modal)) {
         setShowModal(false);
         setNewBoardTitle("");
       }
@@ -115,10 +115,10 @@ const ModalWindow = ({
 
   return (
     <div
-      className={`${navbar_styles.modal} ${showModal ? navbar_styles.activeModal : ""}`}
+      className={`${modal_styles.modal} ${showModal ? modal_styles.activeModal : ""}`}
     >
       {showModal && (
-        <div className={navbar_styles.modalContent}>
+        <div className={modal_styles.modalContent}>
           {(() => {
             switch (modalType) {
               case ModalTypes.CREATE:
@@ -137,7 +137,7 @@ const ModalWindow = ({
                       placeholder="Название проекта..."
                       autoFocus
                     />
-                    <div className={navbar_styles.modalActions}>
+                    <div className={modal_styles.modalActions}>
                       <DefaultBtn
                         variant="confirmBtn"
                         icon={IoCheckmarkDoneOutline}
@@ -170,7 +170,7 @@ const ModalWindow = ({
                       Вы уверены, что хотите полностью удалить доску? Все данные
                       будут потеряны.
                     </p>
-                    <div className={navbar_styles.modalActions}>
+                    <div className={modal_styles.modalActions}>
                       <DefaultBtn
                         variant="cancelBtn"
                         icon={FaTrash}
@@ -200,7 +200,7 @@ const ModalWindow = ({
                       Вы уверены, что хотите удалить команду? Все данные будут
                       потеряны.
                     </p>
-                    <div className={navbar_styles.modalActions}>
+                    <div className={modal_styles.modalActions}>
                       <DefaultBtn
                         variant="cancelBtn"
                         icon={FaTrash}
@@ -233,7 +233,7 @@ const ModalWindow = ({
                       Вы уверены, что хотите удалить столбец? Все данные будут
                       потеряны.
                     </p>
-                    <div className={navbar_styles.modalActions}>
+                    <div className={modal_styles.modalActions}>
                       <DefaultBtn
                         variant="cancelBtn"
                         icon={FaTrash}

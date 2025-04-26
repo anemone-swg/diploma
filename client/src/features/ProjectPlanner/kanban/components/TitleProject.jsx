@@ -7,14 +7,15 @@ const TitleProject = ({
   newBoardTitle,
   setNewBoardTitle,
   setBoards,
-  boards,
 }) => {
   const [editingBoardId, setEditingBoardId] = useState(null);
 
   const handleBoardTitleChange = (boardId, newTitle) => {
     if (newTitle.trim()) {
-      setBoards(
-        boards.map((b) => (b.id === boardId ? { ...b, title: newTitle } : b)),
+      setBoards((prevBoards) =>
+        prevBoards.map((b) =>
+          b.id === boardId ? { ...b, title: newTitle } : b,
+        ),
       );
     }
   };

@@ -34,6 +34,14 @@
   border-radius: 4px;
 }
 
+.taskBody button {
+  border: 1px solid var(--background-color);
+}
+
+.taskBody button:hover {
+  border: 1px solid var(--text-color);
+}
+
 .taskHeader {
   display: flex;
   justify-content: space-between;
@@ -58,14 +66,6 @@
   border: 1px solid var(--background-color);
 }
 
-.taskHeader button {
-  border: 1px solid var(--background-color);
-}
-
-.taskHeader button:hover {
-  border: 1px solid var(--text-color);
-}
-
 .taskHeader button svg {
   margin: 0;
 }
@@ -83,12 +83,13 @@
   border: 1px solid var(--text-color);
 }
 
-.taskDeadline {
+.taskDeadlineAndCompletedStatus {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.taskDeadline div {
+.taskDeadlineAndCompletedStatus div {
   width: fit-content;
 }
 

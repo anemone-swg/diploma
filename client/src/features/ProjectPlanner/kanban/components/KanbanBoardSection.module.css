@@ -3,3 +3,7 @@
   margin: 0 20px 20px 0;
   width: max-content; /* Ширина по содержимому */
 }
+
+.boardContainer * {
+  box-sizing: content-box;
+}

@@ -96,6 +96,23 @@ const KanbanTask = ({
     );
   };
 
+  const handleTaskStatusChange = (taskId) => {
+    setBoards((prevBoards) =>
+      prevBoards.map((board) => ({
+        ...board,
+        teams: board.teams.map((team) => ({
+          ...team,
+          columns: team.columns.map((column) => ({
+            ...column,
+            tasks: column.tasks.map((t) =>
+              t.id === taskId ? { ...t, completed: !t.completed } : t,
+            ),
+          })),
+        })),
+      })),
+    );
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Draggable draggableId={task.id} index={index}>
@@ -139,7 +156,7 @@ const KanbanTask = ({
               <div className={task_styles.taskUser}>{task.user}</div>
 
               {/* Календарь с использованием Material UI DatePicker */}
-              <div className={task_styles.taskDeadline}>
+              <div className={task_styles.taskDeadlineAndCompletedStatus}>
                 {!selectedDate && (
                   <span className={task_styles.noTimeMessage}>
                     Задача без срока
@@ -205,6 +222,12 @@ const KanbanTask = ({
                     }}
                   />
                 </LocalizationProvider>
+                <DefaultBtn
+                  className={btn_styles.roundCornersBtn}
+                  onClick={() => handleTaskStatusChange(task.id)}
+                >
+                  {task.completed ? "Выполнено" : "Выполнить"}
+                </DefaultBtn>
               </div>
             </div>
           </div>

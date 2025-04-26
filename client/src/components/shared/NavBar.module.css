@@ -9,6 +9,7 @@
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
   height: 92px;
   box-sizing: content-box;
+  min-width: 280px;
 }
 
 .title {
@@ -21,21 +22,21 @@
   justify-content: space-between;
 }
 
-@media (max-width: 722px) {
+@media (max-width: 804px) {
   .title {
     font-size: 18px;
     margin-bottom: 16px;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 684px) {
   .title {
     font-size: 14px;
     margin-bottom: 20px;
   }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 602px) {
   .title {
     font-size: 12px;
     margin-bottom: 22px;
