@@ -87,6 +87,32 @@ export const updateTaskDescription = async (id_task, description) => {
   }
 };
 
+export const updateTaskTitle = async (id_task, newTitle) => {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/tasks/save_title/${id_task}`,
+      {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title: newTitle }),
+      },
+    );
+
+    if (await handleUnauthorizedError(response)) {
+      return false;
+    }
+
+    const data = await response.json();
+    return data.success;
+  } catch (error) {
+    console.error("Ошибка при обновлении названия задачи:", error);
+    return false;
+  }
+};
+
 export const deleteTask = async (id_task) => {
   try {
     const response = await fetch(

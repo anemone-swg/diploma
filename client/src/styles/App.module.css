@@ -97,11 +97,11 @@ body {
 }
 
 .exitDeleteButton {
-  background-color: rgb(251, 73, 73) !important;
+  background-color: #6a11cb !important;
 }
 
 .exitDeleteButton:hover {
-  background-color: rgb(255, 30, 30) !important;;
+  background-color: #4a1388 !important;;
 }
 
 .moduleSection {

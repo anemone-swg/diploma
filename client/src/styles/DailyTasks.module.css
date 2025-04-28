@@ -9,6 +9,21 @@
   margin-bottom: 20px;
   display: flex;
   align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.taskInputButton {
+  padding: 10px 15px;
+  cursor: pointer;
+  height: 50px;
+  margin-top: 18px;
+  transition: 0.5s;
+  background-color: #007fe9;
+}
+
+.taskInputButton:hover {
+  background-color: #0056b3;
 }
 
 .myInput {
@@ -18,7 +33,7 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: var(--text-color);
   transition: all 0.3s;
-  margin: 5px 10px 0 0;
+  margin: 5px 0 0 0;
 }
 
 .myInput:focus {
@@ -27,17 +42,8 @@
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
 }
 
-.taskInput button {
-  padding: 10px 15px;
-  cursor: pointer;
-  height: 50px;
-  margin-top: 18px;
-  transition: 0.5s;
-  background-color: #007fe9;
-}
-
-.taskInput button:hover {
-  background-color: #0056b3;
+.myLabel {
+  max-width: 184px;
 }
 
 .taskList {
@@ -170,6 +176,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 5px;
+}
+
+.completeTaskBody div p {
+  word-break: break-word;
 }
 
 .completeTaskBody .deleteButtonBody {
@@ -182,4 +193,30 @@
 
 .completeTaskBody h3 {
   font-size: 16px;
+}
+
+.deadlineBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.deadlineBlock label span {
+  margin: 0 !important;
+}
+
+.titleTask {
+  transition: 0.4s background-color;
+  border-radius: 4px;
+  padding: 2px 5px;
+  cursor: pointer;
+  word-break: break-word;
+}
+
+.titleCompleteTask {
+  word-break: break-word;
+}
+
+.titleTask:hover {
+  background-color: var(--default-btn-hover);
 }

@@ -105,6 +105,31 @@ router.put("/tasks/save_desc/:id_task", async (req, res) => {
   }
 });
 
+router.put("/tasks/save_title/:id_task", async (req, res) => {
+  const { id_task } = req.params;
+  let { title } = req.body;
+
+  if (title === "") title = null;
+
+  try {
+    const updated = await DailyTask.update(
+      { title },
+      { where: { id_task: id_task } },
+    );
+
+    if (updated[0] === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Задача не найдена" });
+    }
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Ошибка при обновлении описания:", error);
+    res.status(500).json({ success: false, message: "Ошибка сервера" });
+  }
+});
+
 router.delete("/tasks/delete/:id_task", async (req, res) => {
   const { id_task } = req.params;
 

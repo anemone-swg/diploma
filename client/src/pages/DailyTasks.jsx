@@ -9,23 +9,30 @@ import {
   toggleTaskStatus,
   updateDueDate,
   updateTaskDescription,
+  updateTaskTitle,
 } from "../services/DailyTaskService.js";
-import { FaTasks } from "react-icons/fa";
+import { FaEdit, FaTasks } from "react-icons/fa";
+import DeadlineDateTimePicker from "../components/ui/DeadlineDateTimePicker.jsx";
 
 const DailyTasks = () => {
   const [tasks, setTasks] = useState([]);
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [taskDescriptionMap, setTaskDescriptionMap] = useState({});
   const [dueDate, setDueDate] = useState("");
+  const [editingTaskId, setEditingTaskId] = useState(null); // Хранит id редактируемой задачи
+  const [taskTitleMap, setTaskTitleMap] = useState({});
 
   useEffect(() => {
     fetchTasks().then((data) => {
       setTasks(data);
       const initialDescriptions = {};
+      const initialTitles = {};
       data.forEach((task) => {
         initialDescriptions[task.id_task] = task.description || "";
+        initialTitles[task.id_task] = task.title || "";
       });
       setTaskDescriptionMap(initialDescriptions);
+      setTaskTitleMap(initialTitles);
     });
   }, []);
 
@@ -83,15 +90,23 @@ const DailyTasks = () => {
     updateTaskDescription(id_task, newDescription);
   };
 
-  const formatLocalDateTime = (dateString) => {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  const handleTitleChange = (id_task, newTitle) => {
+    const updatedTasks = tasks.map((task) =>
+      task.id_task === id_task ? { ...task, title: newTitle } : task,
+    );
+    setTasks(updatedTasks);
+    updateTaskTitle(id_task, newTitle); // Обновляем на сервере
   };
+
+  // const formatLocalDateTime = (dateString) => {
+  //   const date = new Date(dateString);
+  //   const year = date.getFullYear();
+  //   const month = String(date.getMonth() + 1).padStart(2, "0");
+  //   const day = String(date.getDate()).padStart(2, "0");
+  //   const hours = String(date.getHours()).padStart(2, "0");
+  //   const minutes = String(date.getMinutes()).padStart(2, "0");
+  //   return `${year}-${month}-${day}T${hours}:${minutes}`;
+  // };
 
   const inProgressTasks = tasks.filter((task) => !task.completed);
   const completedTasks = tasks.filter((task) => task.completed);
@@ -108,7 +123,7 @@ const DailyTasks = () => {
           <hr className={styles.gradientHr} />
 
           <div className={`${styles.taskInput} ${main_styles.moduleSection}`}>
-            <label>
+            <label className={styles.myLabel}>
               Название задачи:
               <input
                 type="text"
@@ -120,16 +135,27 @@ const DailyTasks = () => {
 
             <label>
               Дата выполнения:
-              <input
-                type="datetime-local"
-                className={styles.myInput}
-                value={dueDate}
-                onChange={(e) => setDueDate(e.target.value)}
+              {/*<input*/}
+              {/*  type="datetime-local"*/}
+              {/*  className={styles.myInput}*/}
+              {/*  value={dueDate}*/}
+              {/*  onChange={(e) => setDueDate(e.target.value)}*/}
+              {/*/>*/}
+              <DeadlineDateTimePicker
+                value={dueDate ? new Date(dueDate) : null}
+                onChange={(newDate) => {
+                  if (newDate) {
+                    setDueDate(newDate.toISOString()); // сохраняем как строку в формате ISO
+                  } else {
+                    setDueDate(null);
+                  }
+                }}
+                mode={"choose"}
               />
             </label>
 
             <button
-              className={main_styles.defaultButton}
+              className={`${main_styles.defaultButton} ${styles.taskInputButton}`}
               onClick={handleAddTask}
             >
               Добавить
@@ -153,7 +179,42 @@ const DailyTasks = () => {
                     transition={{ duration: 0.4 }}
                   >
                     <div className={styles.taskTitleWithButton}>
-                      <span>{task.title}</span>
+                      {editingTaskId === task.id_task ? (
+                        <input
+                          maxLength={100}
+                          autoFocus
+                          type="text"
+                          className={styles.myInput}
+                          value={taskTitleMap[task.id_task] || ""}
+                          onChange={(e) => {
+                            if (e.target.value.trim()) {
+                              setTaskTitleMap({
+                                ...taskTitleMap,
+                                [task.id_task]: e.target.value,
+                              });
+                              handleTitleChange(task.id_task, e.target.value); // Сразу обновляем данные
+                            }
+                          }}
+                          onBlur={() => setEditingTaskId(null)} // Закрытие инпута при потере фокуса
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              setEditingTaskId(null); // Выход из режима редактирования по Enter
+                            }
+                            if (e.key === "Escape") {
+                              setEditingTaskId(null);
+                            }
+                          }}
+                        />
+                      ) : (
+                        <span
+                          className={styles.titleTask}
+                          onClick={() => setEditingTaskId(task.id_task)} // Включаем режим редактирования при клике
+                        >
+                          <FaEdit style={{ verticalAlign: "top" }} />{" "}
+                          {taskTitleMap[task.id_task] || task.title}
+                        </span>
+                      )}
+
                       <button
                         className={styles.completeButton}
                         onClick={() => handleToggleCompleted(task.id_task)}
@@ -213,34 +274,32 @@ const DailyTasks = () => {
                     </div>
 
                     <div className={styles.descriptionBlock}>
-                      <label>
-                        <span>Изменить дату выполнения:</span>
-                        <input
-                          type="datetime-local"
-                          className={styles.myInput}
-                          value={
-                            task.due_date
-                              ? formatLocalDateTime(task.due_date)
-                              : ""
-                          }
-                          onClick={(e) => e.stopPropagation()}
-                          onChange={(e) => {
-                            const updatedDueDate = e.target.value;
-                            setTasks((prevTasks) =>
-                              prevTasks.map((t) =>
-                                t.id_task === task.id_task
-                                  ? { ...t, due_date: updatedDueDate }
-                                  : t,
-                              ),
-                            );
-
-                            updateDueDate(task.id_task, updatedDueDate);
-                          }}
-                          onBlur={(e) => {
-                            e.target.reportValidity();
-                          }}
-                        />
-                      </label>
+                      <div className={styles.deadlineBlock}>
+                        <label>
+                          <div>
+                            <span>Изменить дату выполнения:</span>
+                          </div>
+                          <DeadlineDateTimePicker
+                            value={
+                              task.due_date ? new Date(task.due_date) : null
+                            }
+                            onChange={(newDate) => {
+                              const updatedDueDate = newDate
+                                ? newDate.toISOString()
+                                : null;
+                              setTasks((prevTasks) =>
+                                prevTasks.map((t) =>
+                                  t.id_task === task.id_task
+                                    ? { ...t, due_date: updatedDueDate }
+                                    : t,
+                                ),
+                              );
+                              updateDueDate(task.id_task, updatedDueDate);
+                            }}
+                            mode={"change"}
+                          />
+                        </label>
+                      </div>
                       <button
                         className={`${main_styles.defaultButton} ${main_styles.exitDeleteButton} ${styles.deleteButton}`}
                         onClick={() => handleDeleteTask(task.id_task)}
@@ -257,7 +316,10 @@ const DailyTasks = () => {
 
         {/* ВЫПОЛНЕННЫЕ ЗАДАЧИ */}
         <div className={styles.taskSection}>
-          <h1>Выполненные задачи</h1>
+          <h1 style={{ whiteSpace: "nowrap" }}>
+            <FaTasks className={main_styles.titleIcon} />
+            Выполненные задачи
+          </h1>
           <hr className={styles.gradientHr} />
 
           {completedTasks.length === 0 ? (
@@ -277,7 +339,9 @@ const DailyTasks = () => {
                     transition={{ duration: 0.4 }}
                   >
                     <div className={styles.taskTitleWithButton}>
-                      <span>{task.title}</span>
+                      <span className={styles.titleCompleteTask}>
+                        {task.title}
+                      </span>
                       <button
                         className={styles.completeButton}
                         onClick={() => handleToggleCompleted(task.id_task)}
