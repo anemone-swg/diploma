@@ -1,10 +1,8 @@
 import User from "./User.js";
 import DailyTask from "./DailyTask.js";
+import Project from "./Project.js";
+import Team from "./Team.js";
+import Column from "./Column.js";
+import Task from "./Task.js";
 
-// Один пользователь может иметь много задач
-User.hasMany(DailyTask, { foreignKey: "id_user", onDelete: "CASCADE" });
-
-// Одна задача принадлежит одному пользователю
-DailyTask.belongsTo(User, { foreignKey: "id_user" });
-
-export { User, DailyTask };
+export { User, DailyTask, Project, Team, Column, Task };

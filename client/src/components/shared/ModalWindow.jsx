@@ -7,6 +7,10 @@ import { PiKanban } from "react-icons/pi";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
 import { FaTrash } from "react-icons/fa";
+import {
+  createProject,
+  deleteProject,
+} from "../../services/ProjectPlannerService.js";
 
 // Типы модальных окон
 export const ModalTypes = {
@@ -43,32 +47,43 @@ const ModalWindow = ({
     return () => document.removeEventListener("click", handleClickOutside);
   }, [showModal]);
 
-  // Создание доски
-  const handleCreateBoard = () => {
+  // Создание доски (проекта)
+  const handleCreateBoard = async () => {
     if (newBoardTitle.trim() && boards.length === 0) {
-      const newBoard = {
-        id: crypto.randomUUID(),
-        title: newBoardTitle,
-        teams: [
-          // Теперь доска содержит массив команд
-          {
-            id: crypto.randomUUID(),
-            title: "Новая команда", // Изначальное название команды
-            columns: [], // Колонки для этой команды
-          },
-        ],
-      };
-      setBoards([newBoard]);
-      setNewBoardTitle("");
-      setShowModal(false);
-      setActiveSection("kanban");
+      try {
+        const createdProject = await createProject({
+          title: newBoardTitle,
+        });
+
+        const newBoard = {
+          id: createdProject.id_project,
+          title: createdProject.title,
+          teams: [],
+          createdAt: createdProject.createdAt,
+        };
+
+        setBoards([newBoard]);
+        setNewBoardTitle("");
+        setShowModal(false);
+        setActiveSection("kanban");
+      } catch (error) {
+        console.error(error);
+        alert("Ошибка при создании доски");
+      }
     }
   };
 
-  const handleDeleteBoard = () => {
-    setBoards([]);
-    setActiveSection("main");
-    setShowModal(false);
+  const handleDeleteBoard = async () => {
+    try {
+      await deleteProject();
+
+      setBoards([]);
+      setActiveSection("main");
+      setShowModal(false);
+    } catch (error) {
+      console.error(error);
+      alert("Ошибка при создании доски");
+    }
   };
 
   const handleDeleteTeamBoard = ({ boardId, teamId }) => {

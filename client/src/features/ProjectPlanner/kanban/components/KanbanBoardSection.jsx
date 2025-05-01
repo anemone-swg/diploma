@@ -1,10 +1,11 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useEffect } from "react";
 import { FaPlus } from "react-icons/fa";
 import kanban_board_section_styles from "./KanbanBoardSection.module.css";
 import btn_styles from "../../../../components/ui/DefaultBtn.module.css";
 import DefaultBtn from "../../../../components/ui/DefaultBtn.jsx";
 import TitleProject from "./TitleProject.jsx";
 import BoardContainer from "./BoardContainer.jsx";
+import { createTeam } from "../../../../services/ProjectPlannerService.js";
 
 const KanbanBoardSection = memo(
   ({
@@ -18,26 +19,37 @@ const KanbanBoardSection = memo(
     setShowDeleteColumnModal,
     sidebarWidth,
   }) => {
+    useEffect(() => {
+      console.log(boards);
+    }, [boards]);
+
     const handleAddTeam = useCallback(
-      (boardId) => {
-        setBoards((prevBoards) =>
-          prevBoards.map((board) => {
-            if (board.id === boardId) {
-              return {
-                ...board,
-                teams: [
-                  ...board.teams,
-                  {
-                    id: crypto.randomUUID(),
-                    title: "Новая команда",
-                    columns: [],
-                  },
-                ],
-              };
-            }
-            return board;
-          }),
-        );
+      async (boardId) => {
+        try {
+          const createdTeam = await createTeam("Новая команда", boardId);
+
+          setBoards((prevBoards) =>
+            prevBoards.map((board) => {
+              if (board.id === boardId) {
+                return {
+                  ...board,
+                  teams: [
+                    ...board.teams,
+                    {
+                      id: createdTeam.id_team,
+                      title: createdTeam.title,
+                      columns: [],
+                    },
+                  ],
+                };
+              }
+              return board;
+            }),
+          );
+        } catch (error) {
+          console.log(error);
+          alert("Ошибка при создании доски команды");
+        }
       },
       [setBoards],
     );
@@ -52,26 +64,26 @@ const KanbanBoardSection = memo(
               setNewBoardTitle={setNewBoardTitle}
               setBoards={setBoards}
             />
-
-            {board.teams.map((team) => (
-              <div
-                key={team.id}
-                className={kanban_board_section_styles.boardContainer}
-                style={{
-                  maxWidth: `calc(95vw - ${sidebarWidth}px)`,
-                }}
-              >
-                <BoardContainer
-                  team={team}
-                  setDeletingTeam={setDeletingTeam}
-                  setShowDeleteTeamModal={setShowDeleteTeamModal}
-                  setBoards={setBoards}
-                  board={board}
-                  setDeletingColumn={setDeletingColumn}
-                  setShowDeleteColumnModal={setShowDeleteColumnModal}
-                />
-              </div>
-            ))}
+            {board.teams &&
+              board.teams.map((team) => (
+                <div
+                  key={team.id}
+                  className={kanban_board_section_styles.boardContainer}
+                  style={{
+                    maxWidth: `calc(95vw - ${sidebarWidth}px)`,
+                  }}
+                >
+                  <BoardContainer
+                    team={team}
+                    setDeletingTeam={setDeletingTeam}
+                    setShowDeleteTeamModal={setShowDeleteTeamModal}
+                    setBoards={setBoards}
+                    board={board}
+                    setDeletingColumn={setDeletingColumn}
+                    setShowDeleteColumnModal={setShowDeleteColumnModal}
+                  />
+                </div>
+              ))}
 
             <div>
               <DefaultBtn

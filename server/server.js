@@ -7,7 +7,9 @@ import bodyParser from "body-parser";
 import regAndAuthRoutes from "./controllers/routeAuthAndReg.js";
 import accountRoutes from "./controllers/routeAccount.js";
 import dailyTaskRoutes from "./controllers/routeDailyTask.js";
+import projectPlannerRoutes from "./controllers/routeProjectPlanner.js";
 import { fileURLToPath } from "url";
+import "./models/Associations.js";
 
 const app = express();
 const PORT = 5000;
@@ -48,6 +50,7 @@ app.get("/", (req, res) => {
 app.use(regAndAuthRoutes);
 app.use(accountRoutes);
 app.use(dailyTaskRoutes);
+app.use(projectPlannerRoutes);
 
 sequelize.sync({ alter: true }).then(() => {
   app.listen(PORT, () => console.log("Server started on port " + PORT));

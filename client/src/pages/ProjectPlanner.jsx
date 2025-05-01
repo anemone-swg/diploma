@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../styles/ProjectPlanner.module.css";
 import KanbanBoardSection from "../features/ProjectPlanner/kanban/components/KanbanBoardSection.jsx";
 import TeamSection from "../features/ProjectPlanner/team/components/TeamSection.jsx";
@@ -6,6 +6,7 @@ import ModalWindow, { ModalTypes } from "../components/shared/ModalWindow.jsx";
 import NavBar from "../components/shared/NavBar.jsx";
 import JoinSection from "../features/ProjectPlanner/join/components/JoinSection.jsx";
 import MainSection from "../features/ProjectPlanner/main/components/MainSection.jsx";
+import { fetchProjects } from "../services/ProjectPlannerService.js";
 
 function ProjectPlanner({ sidebarWidth }) {
   const [boards, setBoards] = useState([]);
@@ -17,6 +18,32 @@ function ProjectPlanner({ sidebarWidth }) {
   const [deletingTeam, setDeletingTeam] = useState(null);
   const [deletingColumn, setDeletingColumn] = useState(null);
   const [showDeleteColumnModal, setShowDeleteColumnModal] = useState(false);
+
+  useEffect(() => {
+    fetchProjects().then((data) => {
+      const normalizedData = data.map((project) => ({
+        ...project,
+        id: project.id_project,
+        teams:
+          project.teams?.map((team) => ({
+            ...team,
+            id: team.id_team,
+            columns:
+              team.columns?.map((column) => ({
+                ...column,
+                id: column.id_column,
+                tasks:
+                  column.tasks?.map((task) => ({
+                    ...task,
+                    id: task.id_task,
+                  })) || [],
+              })) || [],
+          })) || [],
+      }));
+
+      setBoards(normalizedData);
+    });
+  }, []);
 
   const renderContent = () => {
     switch (activeSection) {

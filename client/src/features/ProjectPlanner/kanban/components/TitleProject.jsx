@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import titleProject_styles from "./TitleProject.module.css";
 import EditableTitle from "../../../../components/ui/EditableTitle.jsx";
+import { renameProject } from "../../../../services/ProjectPlannerService.js";
 
 const TitleProject = ({
   board,
@@ -10,13 +11,20 @@ const TitleProject = ({
 }) => {
   const [editingBoardId, setEditingBoardId] = useState(null);
 
-  const handleBoardTitleChange = (boardId, newTitle) => {
+  const handleBoardTitleChange = async (boardId, newTitle) => {
     if (newTitle.trim()) {
-      setBoards((prevBoards) =>
-        prevBoards.map((b) =>
-          b.id === boardId ? { ...b, title: newTitle } : b,
-        ),
-      );
+      try {
+        await renameProject(boardId, newTitle);
+
+        setBoards((prevBoards) =>
+          prevBoards.map((b) =>
+            b.id === boardId ? { ...b, title: newTitle } : b,
+          ),
+        );
+      } catch (error) {
+        console.error(error);
+        alert("Ошибка при переименовании доски (проекта)");
+      }
     }
   };
 

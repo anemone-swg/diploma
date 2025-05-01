@@ -9,6 +9,7 @@ import { DragDropContext } from "react-beautiful-dnd";
 import DefaultBtn from "../../../../components/ui/DefaultBtn.jsx";
 import btn_styles from "../../../../components/ui/DefaultBtn.module.css";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { renameTeam } from "../../../../services/ProjectPlannerService.js";
 
 const BoardContainer = memo(
   ({
@@ -43,27 +44,34 @@ const BoardContainer = memo(
     }, [isCollapsed, team.id]);
 
     // Редактирование названия команды
-    const handleTeamTitleChange = (boardId, teamId, newTitle) => {
+    const handleTeamTitleChange = async (boardId, teamId, newTitle) => {
       if (newTitle.trim()) {
-        setBoards((prevBoards) =>
-          prevBoards.map((board) => {
-            if (board.id === boardId) {
-              return {
-                ...board,
-                teams: board.teams.map((team) => {
-                  if (team.id === teamId) {
-                    return {
-                      ...team,
-                      title: newTitle,
-                    };
-                  }
-                  return team;
-                }),
-              };
-            }
-            return board;
-          }),
-        );
+        try {
+          await renameTeam(boardId, teamId, newTitle);
+
+          setBoards((prevBoards) =>
+            prevBoards.map((board) => {
+              if (board.id === boardId) {
+                return {
+                  ...board,
+                  teams: board.teams.map((team) => {
+                    if (team.id === teamId) {
+                      return {
+                        ...team,
+                        title: newTitle,
+                      };
+                    }
+                    return team;
+                  }),
+                };
+              }
+              return board;
+            }),
+          );
+        } catch (e) {
+          console.error(e);
+          alert("Ошибка при переименовании доски команды");
+        }
       }
     };
 
