@@ -5,7 +5,7 @@ import btn_styles from "../../../../components/ui/DefaultBtn.module.css";
 import DefaultBtn from "../../../../components/ui/DefaultBtn.jsx";
 import TitleProject from "./TitleProject.jsx";
 import BoardContainer from "./BoardContainer.jsx";
-import { createTeam } from "../../../../services/ProjectPlannerService.js";
+import { createTeam } from "@/services/ProjectPlannerService.js";
 
 const KanbanBoardSection = memo(
   ({

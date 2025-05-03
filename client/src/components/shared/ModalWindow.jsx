@@ -9,8 +9,10 @@ import { RxCross1 } from "react-icons/rx";
 import { FaTrash } from "react-icons/fa";
 import {
   createProject,
+  deleteColumn,
   deleteProject,
-} from "../../services/ProjectPlannerService.js";
+  deleteTeam,
+} from "@/services/ProjectPlannerService.js";
 
 // Типы модальных окон
 export const ModalTypes = {
@@ -82,50 +84,66 @@ const ModalWindow = ({
       setShowModal(false);
     } catch (error) {
       console.error(error);
-      alert("Ошибка при создании доски");
+      alert("Ошибка при удалении доски (проекта)");
     }
   };
 
-  const handleDeleteTeamBoard = ({ boardId, teamId }) => {
-    setBoards(
-      boards.map((board) => {
-        if (board.id === boardId) {
-          // Фильтруем массив команд, удаляя нужную команду
-          const updatedTeams = board.teams.filter((team) => team.id !== teamId);
+  const handleDeleteTeamBoard = async ({ boardId, teamId }) => {
+    try {
+      await deleteTeam(teamId);
 
-          // Возвращаем доску с обновленным списком команд (даже если он пустой)
-          return {
-            ...board,
-            teams: updatedTeams,
-          };
-        }
-        return board;
-      }),
-    );
-    setShowModal(false);
-  };
-
-  const handleDeleteColumnBoard = ({ teamId, columnId }) => {
-    setBoards(
-      boards.map((board) => ({
-        ...board,
-        teams: board.teams.map((team) => {
-          if (team.id === teamId) {
-            // Фильтруем массив колонок, удаляя нужную колонку
-            const updatedColumns = team.columns.filter(
-              (column) => column.id !== columnId,
+      setBoards(
+        boards.map((board) => {
+          if (board.id === boardId) {
+            // Фильтруем массив команд, удаляя нужную команду
+            const updatedTeams = board.teams.filter(
+              (team) => team.id !== teamId,
             );
 
+            // Возвращаем доску с обновленным списком команд (даже если он пустой)
             return {
-              ...team,
-              columns: updatedColumns,
+              ...board,
+              teams: updatedTeams,
             };
           }
-          return team;
+          return board;
         }),
-      })),
-    );
-    setShowModal(false);
+      );
+      setShowModal(false);
+    } catch (error) {
+      console.error(error);
+      alert("Ошибка при удалении команды");
+    }
+  };
+
+  const handleDeleteColumnBoard = async ({ teamId, columnId }) => {
+    try {
+      await deleteColumn(columnId);
+
+      setBoards(
+        boards.map((board) => ({
+          ...board,
+          teams: board.teams.map((team) => {
+            if (team.id === teamId) {
+              // Фильтруем массив колонок, удаляя нужную колонку
+              const updatedColumns = team.columns.filter(
+                (column) => column.id !== columnId,
+              );
+
+              return {
+                ...team,
+                columns: updatedColumns,
+              };
+            }
+            return team;
+          }),
+        })),
+      );
+      setShowModal(false);
+    } catch (error) {
+      console.error(error);
+      alert("Ошибка при удалении столбца");
+    }
   };
 
   return (

@@ -7,6 +7,7 @@ import InputWithActions from "../../../../components/ui/InputWithActions.jsx";
 import KanbanTask from "./KanbanTask.jsx";
 import { StrictModeDroppable } from "./StrictModeDroppable.jsx";
 import ColorPicker from "./ColorPicker.jsx";
+import { createTask, renameColumn } from "@/services/ProjectPlannerService.js";
 
 const KanbanColumn = ({
   column,
@@ -23,68 +24,75 @@ const KanbanColumn = ({
   const isPastelColor =
     column.color && column.color !== "var(--background-color)";
 
-  // useEffect(() => {
-  //   console.log(boards);
-  // }, [boards]);
-
-  const handleColumnTitleChange = (columnId, newTitle) => {
+  const handleColumnTitleChange = async (columnId, newTitle) => {
     if (newColumnTitle.trim()) {
-      setBoards((prevBoards) =>
-        prevBoards.map((board) => ({
-          ...board,
-          teams: board.teams.map((team) => ({
-            ...team,
-            columns: team.columns.map((col) =>
-              col.id === columnId ? { ...col, title: newTitle } : col,
-            ),
+      try {
+        await renameColumn(columnId, newTitle);
+
+        setBoards((prevBoards) =>
+          prevBoards.map((board) => ({
+            ...board,
+            teams: board.teams.map((team) => ({
+              ...team,
+              columns: team.columns.map((col) =>
+                col.id === columnId ? { ...col, title: newTitle } : col,
+              ),
+            })),
           })),
-        })),
-      );
+        );
+        setNewColumnTitle("");
+      } catch (e) {
+        console.error(e);
+        alert("Ошибка при переименовании столбца команды");
+      }
     }
-    setNewColumnTitle("");
   };
 
-  const handleCreateTask = (teamId, columnId) => {
+  const handleCreateTask = async (teamId, columnId) => {
     if (newTaskContent.trim()) {
-      const now = new Date();
-      const defaultDeadline = new Date();
-      defaultDeadline.setDate(now.getDate() + 7); // Дефолтный срок - через неделю
-      setBoards((prevBoards) =>
-        prevBoards.map((board) => ({
-          ...board,
-          teams: board.teams.map((team) => {
-            if (team.id === teamId) {
-              return {
-                ...team,
-                columns: team.columns.map((column) => {
-                  if (column.id === columnId) {
-                    return {
-                      ...column,
-                      tasks: [
-                        ...column.tasks,
-                        {
-                          id: crypto.randomUUID(),
-                          content: newTaskContent,
-                          completed: false,
-                          user: "Исполнитель не назначен",
-                          deadline: defaultDeadline.toISOString(), // Дефолтный срок
-                          createdAt: now.toISOString(), // Дата создания
-                        },
-                      ],
-                    };
-                  }
-                  return column;
-                }),
-              };
-            }
-            return team;
-          }),
-        })),
-      );
+      try {
+        const createdTask = await createTask(newTaskContent, columnId);
 
-      // Очищаем поле ввода после создания
-      setNewTaskContent("");
-      setShowTaskInput(false);
+        setBoards((prevBoards) =>
+          prevBoards.map((board) => ({
+            ...board,
+            teams: board.teams.map((team) => {
+              if (team.id === teamId) {
+                return {
+                  ...team,
+                  columns: team.columns.map((column) => {
+                    if (column.id === columnId) {
+                      return {
+                        ...column,
+                        tasks: [
+                          ...column.tasks,
+                          {
+                            id: createdTask.id_task,
+                            content: createdTask.content,
+                            completed: createdTask.completed,
+                            user: createdTask.user,
+                            deadline: createdTask.deadline,
+                            createdAt: createdTask.createdAt,
+                          },
+                        ],
+                      };
+                    }
+                    return column;
+                  }),
+                };
+              }
+              return team;
+            }),
+          })),
+        );
+
+        // Очищаем поле ввода после создания
+        setNewTaskContent("");
+        setShowTaskInput(false);
+      } catch (e) {
+        console.error(e);
+        alert("Ошибка при создании задачи");
+      }
     }
   };
 

@@ -31,7 +31,7 @@ Task.init(
     },
     deadline: {
       type: DataTypes.DATE,
-      allowNull: false,
+      defaultValue: DataTypes.NOW,
     },
     createdAt: {
       type: DataTypes.DATE,

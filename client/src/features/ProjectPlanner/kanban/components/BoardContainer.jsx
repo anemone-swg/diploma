@@ -9,7 +9,11 @@ import { DragDropContext } from "react-beautiful-dnd";
 import DefaultBtn from "../../../../components/ui/DefaultBtn.jsx";
 import btn_styles from "../../../../components/ui/DefaultBtn.module.css";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
-import { renameTeam } from "../../../../services/ProjectPlannerService.js";
+import {
+  createColumn,
+  renameTeam,
+  updateTaskMove,
+} from "@/services/ProjectPlannerService.js";
 
 const BoardContainer = memo(
   ({
@@ -76,37 +80,44 @@ const BoardContainer = memo(
     };
 
     // Создание колонки для конкретной команды
-    const handleCreateColumn = (boardId, teamId) => {
+    const handleCreateColumn = async (boardId, teamId) => {
       if (newColumnTitle.trim()) {
-        setBoards((prevBoards) =>
-          prevBoards.map((board) => {
-            if (board.id === boardId) {
-              return {
-                ...board,
-                teams: board.teams.map((team) => {
-                  if (team.id === teamId) {
-                    return {
-                      ...team,
-                      columns: [
-                        ...team.columns,
-                        {
-                          id: crypto.randomUUID(),
-                          title: newColumnTitle,
-                          color: "var(--background-color)",
-                          tasks: [],
-                        },
-                      ],
-                    };
-                  }
-                  return team;
-                }),
-              };
-            }
-            return board;
-          }),
-        );
-        setNewColumnTitle("");
-        setShowColumnInput(false);
+        try {
+          const createdColumn = await createColumn(newColumnTitle, teamId);
+
+          setBoards((prevBoards) =>
+            prevBoards.map((board) => {
+              if (board.id === boardId) {
+                return {
+                  ...board,
+                  teams: board.teams.map((team) => {
+                    if (team.id === teamId) {
+                      return {
+                        ...team,
+                        columns: [
+                          ...team.columns,
+                          {
+                            id: createdColumn.id_column,
+                            title: createdColumn.title,
+                            color: createdColumn.color,
+                            tasks: [],
+                          },
+                        ],
+                      };
+                    }
+                    return team;
+                  }),
+                };
+              }
+              return board;
+            }),
+          );
+          setNewColumnTitle("");
+          setShowColumnInput(false);
+        } catch (e) {
+          console.error(e);
+          alert("Ошибка при создании столбца команды");
+        }
       }
     };
 
@@ -161,6 +172,8 @@ const BoardContainer = memo(
             const newDestTasks = [...destColumn.tasks];
             const [movedTask] = newSourceTasks.splice(source.index, 1);
             newDestTasks.splice(destination.index, 0, movedTask);
+
+            updateTaskMove(movedTask.id_task, destination.droppableId);
 
             return {
               ...team,

@@ -3,20 +3,9 @@ import color_picker_styles from "./ColorPicker.module.css";
 import DefaultBtn from "../../../../components/ui/DefaultBtn.jsx";
 import btn_styles from "../../../../components/ui/DefaultBtn.module.css";
 import { IoIosColorWand } from "react-icons/io";
+import { changeColorColumn } from "@/services/ProjectPlannerService.js";
 
 const ColorPicker = ({ setBoards, column, isPastelColor }) => {
-  /*const columnColors = [
-    "var(--background-color)", // основной цвет (темный, не изменен)
-    "#FFDFDF", // светлый пастельный розовый
-    "#D4FFDB", // светлый пастельный зеленый
-    "#D0E4FF", // светлый пастельный голубой
-    "#FFDBFF", // светлый пастельный фиолетовый
-    "#FFF1A1", // светлый пастельный желтый
-    "#D3FFB3", // светлый пастельный лаймовый
-    "#F2F2F2", // светлый пастельный серый
-    "#FFD9B3", // светлый пастельный персиковый
-    "#B3BFFF", // светлый пастельный синий
-  ];*/
   const columnColors = [
     "var(--background-color)", // основной цвет без изменений
     "#B08080",
@@ -49,21 +38,27 @@ const ColorPicker = ({ setBoards, column, isPastelColor }) => {
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
-  const handleColorSelect = (color) => {
-    // Обновляем цвет колонки в состоянии boards
-    setBoards((prevBoards) =>
-      prevBoards.map((board) => ({
-        ...board,
-        teams: board.teams.map((team) => ({
-          ...team,
-          columns: team.columns.map((col) =>
-            col.id === column.id ? { ...col, color } : col,
-          ),
-        })),
-      })),
-    );
+  const handleColorSelect = async (color, columnId) => {
+    try {
+      await changeColorColumn(color, columnId);
 
-    setShowColorPicker(false);
+      setBoards((prevBoards) =>
+        prevBoards.map((board) => ({
+          ...board,
+          teams: board.teams.map((team) => ({
+            ...team,
+            columns: team.columns.map((col) =>
+              col.id === column.id ? { ...col, color } : col,
+            ),
+          })),
+        })),
+      );
+
+      setShowColorPicker(false);
+    } catch (e) {
+      console.error(e);
+      alert("Ошибка при изменении цвета столбца");
+    }
   };
 
   return (
@@ -84,7 +79,7 @@ const ColorPicker = ({ setBoards, column, isPastelColor }) => {
               style={{ backgroundColor: color }}
               className={color_picker_styles.colorSelect}
               onClick={() => {
-                handleColorSelect(color);
+                handleColorSelect(color, column.id);
               }}
             />
           ))}
