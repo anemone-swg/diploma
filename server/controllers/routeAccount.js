@@ -86,12 +86,12 @@ router.put("/account/update", async (req, res) => {
     //   return res.status(400).json({ message: "Имя и фамилия обязательны" });
     // }
     if (
-      !/^[a-zA-Zа-яА-ЯёЁ]{2,50}$/u.test(finishedFirstName) ||
-      !/^[a-zA-Zа-яА-ЯёЁ]{2,50}$/u.test(finishedLastName)
+      !/^[a-zA-Zа-яА-ЯёЁ]{2,20}$/u.test(finishedFirstName) ||
+      !/^[a-zA-Zа-яА-ЯёЁ]{2,20}$/u.test(finishedLastName)
     ) {
       return res.status(400).json({
         message:
-          "Имя и фамилия должны содержать только буквы и быть длиной 2-50 символов",
+          "Имя и фамилия должны содержать только буквы и быть длиной 2-20 символов",
       });
     }
 

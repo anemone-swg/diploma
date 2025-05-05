@@ -1,0 +1,46 @@
+.joinSection {
+  word-break: break-word;
+  padding: 20px;
+  max-width: 100%;
+  min-width: 400px;
+}
+
+.invitedUser {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px;
+  border-radius: 10px;
+  border: var(--default-btn-hover) 1px solid;
+  width: fit-content;
+}
+
+.invitedUser:not(:last-child) {
+  margin: 0 0 20px 0;
+}
+
+.inviteBtn {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 5px;
+}
+
+.inviteBtn button {
+  display: flex;
+  flex-direction: row;
+  word-break: keep-all;
+  align-items: center;
+  justify-content: center;
+}
+
+.inviteStatus {
+  margin: 10px 10px 10px 30px;
+  font-size: 20px;
+}
+
+.completedInvite {
+  transition: 0.4s background-color;
+  background-color: var(--default-btn-hover);
+}
+

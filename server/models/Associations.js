@@ -1,4 +1,12 @@
-import { Column, DailyTask, Project, Task, Team, User } from "./Export.js";
+import {
+  Column,
+  DailyTask,
+  Invitation,
+  Project,
+  Task,
+  Team,
+  User,
+} from "./Export.js";
 
 // Один пользователь может иметь много задач
 User.hasMany(DailyTask, { foreignKey: "id_user", onDelete: "CASCADE" });
@@ -28,3 +36,28 @@ Column.hasMany(Task, {
   onDelete: "CASCADE",
 });
 Task.belongsTo(Column, { foreignKey: "id_column" });
+
+// Один пользователь может отправить много приглашений
+User.hasMany(Invitation, {
+  foreignKey: "fromUserId",
+  as: "sentInvitations",
+  onDelete: "CASCADE",
+});
+// Один пользователь может получить много приглашений
+User.hasMany(Invitation, {
+  foreignKey: "toUserId",
+  as: "receivedInvitations",
+  onDelete: "CASCADE",
+});
+
+// Каждое приглашение связано с отправителем
+Invitation.belongsTo(User, { foreignKey: "fromUserId", as: "fromUser" });
+// Каждое приглашение связано с получателем
+Invitation.belongsTo(User, { foreignKey: "toUserId", as: "toUser" });
+
+Project.hasMany(Invitation, {
+  foreignKey: "id_project",
+  as: "invitations",
+  onDelete: "CASCADE",
+});
+Invitation.belongsTo(Project, { foreignKey: "id_project", as: "project" });

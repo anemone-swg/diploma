@@ -1,0 +1,47 @@
+.helpText {
+  margin: 0 0 20px 0;
+}
+
+.searchSection {
+  word-break: break-word;
+  padding: 20px;
+}
+
+.resultItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px;
+  border-radius: 10px;
+  border: var(--default-btn-hover) 1px solid;
+  width: fit-content;
+}
+
+.resultItem:not(:last-child) {
+  margin: 0 0 20px 0;
+}
+
+.resultItem svg {
+  margin: 0;
+}
+
+svg.invitedIcon {
+  margin: 0 10px 0 5px;
+}
+
+.noResults {
+  font-size: 14px;
+  user-select: none;
+}
+
+.userNameInfo {
+  font-size: 10px;
+}
+
+.userAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+

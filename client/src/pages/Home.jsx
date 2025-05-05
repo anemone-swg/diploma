@@ -149,6 +149,7 @@ const Home = ({ onLogout }) => {
               <label>
                 Имя:
                 <input
+                  maxLength={20}
                   type="text"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
@@ -158,6 +159,7 @@ const Home = ({ onLogout }) => {
               <label>
                 Фамилия:
                 <input
+                  maxLength={20}
                   type="text"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
