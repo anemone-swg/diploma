@@ -63,7 +63,7 @@ function ProjectPlanner({ sidebarWidth }) {
         );
 
       case "team":
-        return <TeamSection projectId={boards[0].id_project} />;
+        return <TeamSection projectId={boards[0].id} />;
 
       case "join":
         return <JoinSection />;

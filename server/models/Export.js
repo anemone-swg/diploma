@@ -5,5 +5,17 @@ import Team from "./Team.js";
 import Column from "./Column.js";
 import Task from "./Task.js";
 import Invitation from "./Invitation.js";
+import TeamOfProject from "./TeamOfProject.js";
+import TeamMembers from "./TeamMembers.js";
 
-export { User, DailyTask, Project, Team, Column, Task, Invitation };
+export {
+  User,
+  DailyTask,
+  Project,
+  Team,
+  Column,
+  Task,
+  Invitation,
+  TeamOfProject,
+  TeamMembers,
+};

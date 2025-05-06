@@ -138,3 +138,50 @@ export const declineInvite = async (id_invite) => {
     return [];
   }
 };
+
+export const showTeam = async (projectId) => {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/team/show_team/${projectId}`,
+      {
+        credentials: "include",
+      },
+    );
+
+    if (await handleUnauthorizedError(response)) {
+      return [];
+    }
+
+    if (response.status === 404) {
+      // Команда не найдена, возвращаем пустой массив
+      return [];
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Ошибка поиска приглашений:", error);
+    return [];
+  }
+};
+
+export const deleteFromTeam = async (user) => {
+  try {
+    const response = await fetch(
+      "http://localhost:5000/team/delete_from_team",
+      {
+        method: "DELETE",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user }),
+      },
+    );
+
+    if (await handleUnauthorizedError(response)) {
+      return [];
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Ошибка при удалении участника команды из нее:", error);
+  }
+};

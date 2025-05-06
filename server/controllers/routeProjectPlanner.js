@@ -1,6 +1,12 @@
 import { Router } from "express";
 import { isAuthenticated } from "../middlewares.js";
-import { Column, Project, Task, Team } from "../models/Export.js";
+import {
+  Column,
+  Project,
+  Task,
+  Team,
+  TeamOfProject,
+} from "../models/Export.js";
 
 const router = Router();
 router.use("/projects", isAuthenticated);
@@ -41,6 +47,7 @@ router.post("/projects/add", async (req, res) => {
     const { title } = req.body;
     const id_user = req.session.user.id;
     const newProject = await Project.create({ title, id_user });
+    await TeamOfProject.create({ id_project: newProject.id_project });
 
     res.status(201).json(newProject);
   } catch (error) {
@@ -83,11 +90,19 @@ router.put("/projects/rename/:projectId", async (req, res) => {
 
 router.delete("/projects/delete", async (req, res) => {
   try {
-    const deleted = await Project.destroy({
+    const project = await Project.findOne({
       where: { id_user: req.session.user.id },
     });
 
-    if (deleted) {
+    if (project) {
+      await TeamOfProject.destroy({
+        where: { id_project: project.id_project },
+      });
+
+      await Project.destroy({
+        where: { id_project: project.id_project },
+      });
+
       res.json({ success: true });
     } else {
       res.status(404).json({ success: false, message: "Проект не найден" });

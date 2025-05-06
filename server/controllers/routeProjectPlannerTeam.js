@@ -1,7 +1,13 @@
 import { Router } from "express";
 import { isAuthenticated } from "../middlewares.js";
 import { Op } from "sequelize";
-import { Invitation, Project, User } from "../models/Export.js";
+import {
+  Invitation,
+  Project,
+  TeamMembers,
+  TeamOfProject,
+  User,
+} from "../models/Export.js";
 
 const router = Router();
 router.use("/team", isAuthenticated);
@@ -48,6 +54,15 @@ router.post("/team/invite", async (req, res) => {
   }
 
   try {
+    // Удаляем предыдущее приглашение, если есть
+    await Invitation.destroy({
+      where: {
+        fromUserId: req.session.user.id,
+        toUserId: toUserId,
+        id_project: projectId,
+      },
+    });
+
     await Invitation.create({
       fromUserId: req.session.user.id,
       toUserId: toUserId,
@@ -64,14 +79,11 @@ router.post("/team/invite", async (req, res) => {
 
 router.get("/team/get_sent_invites", async (req, res) => {
   try {
-    const invited_users = await Invitation.findAll({
+    const invitations = await Invitation.findAll({
       where: { fromUserId: req.session.user.id },
-      attributes: ["toUserId"],
     });
 
-    const invitedIds = invited_users.map((inv) => inv.toUserId);
-
-    res.json(invitedIds);
+    res.json(invitations);
   } catch (error) {
     console.error("Ошибка при поиске приглашенных пользователей:", error);
     res
@@ -165,6 +177,21 @@ router.put("/team/accept_invite", async (req, res) => {
     inv.status = "accepted";
     await inv.save();
 
+    const teamOfProject = await TeamOfProject.findOne({
+      where: { id_project: inv.id_project },
+    });
+
+    if (!teamOfProject) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Команда проекта не найдена" });
+    }
+
+    await TeamMembers.create({
+      id_user: req.session.user.id,
+      id_teamOfProject: teamOfProject.id_teamOfProject,
+    });
+
     res.json({ success: true });
   } catch (error) {
     console.error("Ошибка при принятии приглашения:", error);
@@ -199,6 +226,70 @@ router.put("/team/decline_invite", async (req, res) => {
   } catch (error) {
     console.error("Ошибка при отмене приглашения:", error);
     res.status(500).json({ error: "Ошибка при отмене приглашения" });
+  }
+});
+
+router.get("/team/show_team/:projectId", async (req, res) => {
+  const id_project = req.params.projectId;
+
+  try {
+    const teamOfProject = await TeamOfProject.findOne({
+      where: { id_project },
+      include: [
+        {
+          model: TeamMembers,
+          as: "teamMembers",
+          include: [
+            {
+              model: User,
+              as: "user",
+              attributes: { exclude: ["password", "email", "role"] },
+            },
+          ],
+        },
+      ],
+    });
+
+    if (!teamOfProject) {
+      return res.status(404).json({ error: "Команда не найдена" });
+    }
+
+    const users = (teamOfProject.teamMembers || []).map((member) => {
+      const user = member.user;
+      return {
+        ...user.dataValues,
+        avatar: user.avatar
+          ? `http://localhost:5000/uploads/${user.avatar}`
+          : null,
+      };
+    });
+
+    res.json(users);
+  } catch (error) {
+    console.error("Ошибка при получении команды проекта:", error);
+    res.status(500).json({ error: "Ошибка при получении команды проекта" });
+  }
+});
+
+router.delete("/team/delete_from_team", async (req, res) => {
+  try {
+    const { user } = req.body;
+    await TeamMembers.destroy({
+      where: {
+        id_user: user.id_user,
+      },
+    });
+    await Invitation.destroy({
+      where: {
+        toUserId: user.id_user,
+      },
+    });
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Ошибка при удалении участника команды из нее:", error);
+    res
+      .status(500)
+      .json({ error: "Ошибка при удалении участника команды из нее:" });
   }
 });
 

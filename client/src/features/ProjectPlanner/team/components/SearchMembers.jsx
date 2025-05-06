@@ -6,7 +6,6 @@ import input_styles from "@/components/ui/DefaultInput.module.css";
 import btn_styles from "@/components/ui/DefaultBtn.module.css";
 import {
   cancelInvite,
-  getSentInvites,
   handleInvite,
   searchUsersByLogin,
 } from "@/services/ProjectPlannerTeamService.js";
@@ -15,20 +14,11 @@ import DefaultBtn from "@/components/ui/DefaultBtn.jsx";
 import { FcInvite } from "react-icons/fc";
 import { FaHourglassHalf } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
+import { ImCheckmark2 } from "react-icons/im";
 
-const SearchMembers = ({ projectId }) => {
+const SearchMembers = ({ projectId, invitations, refreshInvitations }) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
-  const [invitedIds, setInvitedIds] = useState([]);
-
-  useEffect(() => {
-    // Получаем список отправленных приглашений при загрузке
-    getSentInvites()
-      .then(setInvitedIds)
-      .catch((err) => {
-        console.error("Ошибка при загрузке отправленных приглашений:", err);
-      });
-  }, []);
 
   useEffect(() => {
     if (query.trim() === "") {
@@ -48,19 +38,19 @@ const SearchMembers = ({ projectId }) => {
     return () => clearTimeout(timeout);
   }, [query]);
 
-  const handleInviteClick = async (toUserId) => {
+  const handleInviteClick = async (user) => {
     try {
-      await handleInvite(toUserId, projectId);
-      setInvitedIds((prev) => [...prev, toUserId]); // добавляем без запроса
+      await handleInvite(user.id_user, projectId);
+      await refreshInvitations();
     } catch (error) {
       console.error("Ошибка при отправке приглашения:", error);
     }
   };
 
-  const handleCancelInvite = async (toUserId) => {
+  const handleCancelInvite = async (user) => {
     try {
-      await cancelInvite(toUserId);
-      setInvitedIds((prev) => prev.filter((id) => id !== toUserId));
+      await cancelInvite(user.id_user);
+      await refreshInvitations();
     } catch (err) {
       console.error("Ошибка при отмене приглашения:", err);
     }
@@ -81,7 +71,10 @@ const SearchMembers = ({ projectId }) => {
       >
         {results.length > 0 ? (
           results.map((user) => {
-            const isInvited = invitedIds.includes(user.id_user);
+            const invited = invitations.find(
+              (inv) => inv.toUserId === user.id_user,
+            );
+            const isInvited = Boolean(invited);
             return (
               <div key={user.login} className={search_members.resultItem}>
                 <img
@@ -97,7 +90,7 @@ const SearchMembers = ({ projectId }) => {
                     {user.firstName} {user.lastName}
                   </p>
                 </div>
-                {isInvited ? (
+                {isInvited && invited.status === "pending" ? (
                   <div>
                     <FaHourglassHalf
                       className={`${main_styles.icon} ${search_members.invitedIcon}`}
@@ -106,15 +99,30 @@ const SearchMembers = ({ projectId }) => {
                       className={btn_styles.roundCornersBtn}
                       icon={MdCancel}
                       disabled={false}
-                      onClick={() => handleCancelInvite(user.id_user)}
+                      onClick={() => handleCancelInvite(user)}
                     />
                   </div>
-                ) : (
+                ) : !isInvited ? (
                   <DefaultBtn
                     className={btn_styles.roundCornersBtn}
                     icon={isInvited ? FaHourglassHalf : FcInvite}
-                    onClick={() => handleInviteClick(user.id_user)}
+                    onClick={() => handleInviteClick(user)}
                   />
+                ) : isInvited && invited.status === "accepted" ? (
+                  <ImCheckmark2
+                    className={`${main_styles.icon} ${search_members.invitedIcon}`}
+                  />
+                ) : (
+                  <div className={search_members.declinedItem}>
+                    <span className={search_members.declinedMessage}>
+                      Отменил ваше приглашение
+                    </span>
+                    <DefaultBtn
+                      className={btn_styles.roundCornersBtn}
+                      icon={FcInvite}
+                      onClick={() => handleInviteClick(user)}
+                    />
+                  </div>
                 )}
               </div>
             );

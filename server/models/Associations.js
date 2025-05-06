@@ -5,6 +5,8 @@ import {
   Project,
   Task,
   Team,
+  TeamMembers,
+  TeamOfProject,
   User,
 } from "./Export.js";
 
@@ -61,3 +63,30 @@ Project.hasMany(Invitation, {
   onDelete: "CASCADE",
 });
 Invitation.belongsTo(Project, { foreignKey: "id_project", as: "project" });
+
+Project.hasOne(TeamOfProject, {
+  foreignKey: "id_project",
+  as: "teamOfProject",
+  onDelete: "CASCADE",
+});
+TeamOfProject.belongsTo(Project, { foreignKey: "id_project", as: "project" });
+
+TeamOfProject.hasMany(TeamMembers, {
+  foreignKey: "id_teamOfProject",
+  as: "teamMembers",
+  onDelete: "CASCADE",
+});
+TeamMembers.belongsTo(TeamOfProject, {
+  foreignKey: "id_teamOfProject",
+  as: "teamOfProject",
+});
+
+User.hasMany(TeamMembers, {
+  foreignKey: "id_user",
+  as: "teamMembers",
+  onDelete: "CASCADE",
+});
+TeamMembers.belongsTo(User, {
+  foreignKey: "id_user",
+  as: "user",
+});

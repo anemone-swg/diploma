@@ -13,6 +13,7 @@
 .teamPart {
   position: relative;
   width: 100%;
+  min-width: 391px;
   padding: 20px;
   background-color: var(--light-background-color);
   border-radius: 6px 6px 12px 12px;
@@ -23,6 +24,7 @@
 .searchPart {
   position: relative;
   width: 100%;
+  min-width: 391px;
   padding: 20px;
   border-radius: 6px 6px 12px 12px;
   border: 1px solid rgba(0, 0, 0, 0.1);

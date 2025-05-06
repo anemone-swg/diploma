@@ -123,6 +123,7 @@ body {
 .spinner {
   display: flex;
   height: 100vh;
+  margin: 20% 0 0 0;
   justify-content: center;
 }
 

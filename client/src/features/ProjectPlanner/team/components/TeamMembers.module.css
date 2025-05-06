@@ -2,3 +2,21 @@
   word-break: break-word;
   padding: 20px;
 }
+
+.memberOfTeam {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px;
+  border-radius: 10px;
+  border: var(--default-btn-hover) 1px solid;
+  width: fit-content;
+}
+
+.memberOfTeam:not(:last-child) {
+  margin: 0 0 20px 0;
+}
+
+.memberOfTeam svg {
+  margin: 0;
+}
