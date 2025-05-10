@@ -4,10 +4,12 @@ import { Op } from "sequelize";
 import {
   Invitation,
   Project,
+  Task,
   TeamMembers,
   TeamOfProject,
   User,
 } from "../models/Export.js";
+import sequelize from "../db.js";
 
 const router = Router();
 router.use("/team", isAuthenticated);
@@ -284,12 +286,110 @@ router.delete("/team/delete_from_team", async (req, res) => {
         toUserId: user.id_user,
       },
     });
+    await sequelize.models.taskUsers.destroy({
+      where: {
+        id_user: user.id_user,
+      },
+    });
     res.json({ success: true });
   } catch (error) {
     console.error("Ошибка при удалении участника команды из нее:", error);
     res
       .status(500)
       .json({ error: "Ошибка при удалении участника команды из нее:" });
+  }
+});
+
+router.post("/team/assign_to_task", async (req, res) => {
+  const { user, task } = req.body;
+
+  try {
+    const loadedTask = await Task.findByPk(task.id_task);
+    const loadedUser = await User.findByPk(user.id_user);
+
+    if (!loadedTask || !loadedUser) {
+      return res
+        .status(404)
+        .json({ message: "Задача или пользователь не найдены" });
+    }
+
+    await loadedTask.addAssignedUser(loadedUser);
+
+    res.json({
+      id_user: loadedUser.id_user,
+      login: loadedUser.login,
+      firstName: loadedUser.firstName,
+      lastName: loadedUser.lastName,
+      avatar: loadedUser.avatar
+        ? `http://localhost:5000/uploads/${loadedUser.avatar}`
+        : null,
+    });
+  } catch (err) {
+    console.error("Ошибка при назначении пользователя на задачу:", err);
+    res.status(500).json({ message: "Ошибка сервера" });
+  }
+});
+
+router.delete("/team/unassign_from_task", async (req, res) => {
+  const { user, task } = req.body;
+
+  try {
+    const loadedTask = await Task.findByPk(task.id_task);
+    const loadedUser = await User.findByPk(user.id_user);
+
+    if (!loadedTask || !loadedUser) {
+      return res
+        .status(404)
+        .json({ message: "Задача или пользователь не найдены" });
+    }
+
+    await loadedTask.removeAssignedUser(loadedUser);
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Ошибка при удалении пользователя из задачи:", err);
+    res.status(500).json({ message: "Ошибка сервера" });
+  }
+});
+
+router.get("/open_project/:projectId", async (req, res) => {
+  const userId = req.session.user.id;
+  const projectId = req.params.projectId;
+
+  try {
+    const project = await Project.findOne({
+      where: {
+        id_project: projectId,
+      },
+      include: [
+        {
+          model: TeamOfProject,
+          as: "teamOfProject",
+          include: [
+            {
+              model: TeamMembers,
+              as: "teamMembers",
+              where: { id_user: userId },
+              required: false, // важно!
+            },
+          ],
+        },
+      ],
+    });
+
+    // Проверка: если пользователь не владелец и не в команде — отказ
+    if (
+      !project ||
+      (project.id_user !== userId &&
+        project.teamOfProject?.teamMembers?.length === 0)
+    ) {
+      return res.status(403).json({ error: "Нет доступа к проекту." });
+    }
+
+    res.json(project);
+  } catch (error) {
+    console.error("Ошибка при получении проекта:", error);
+    res.status(500).json({ error: "Ошибка при получении проекта" });
   }
 });
 

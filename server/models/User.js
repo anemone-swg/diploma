@@ -1,4 +1,4 @@
-import { Model, DataTypes } from "sequelize";
+import { DataTypes, Model } from "sequelize";
 import sequelize from "../db.js";
 
 class User extends Model {}
@@ -11,21 +11,21 @@ User.init(
       autoIncrement: true,
     },
     firstName: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(20),
       allowNull: true,
       validate: {
-        is: /^[a-zA-Zа-яА-ЯёЁ]{2,50}$/u, // Поддержка кириллицы и латиницы
+        is: /^[a-zA-Zа-яА-ЯёЁ]{2,20}$/u, // Поддержка кириллицы и латиницы
       },
     },
     lastName: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(20),
       allowNull: true,
       validate: {
-        is: /^[a-zA-Zа-яА-ЯёЁ]{2,50}$/u,
+        is: /^[a-zA-Zа-яА-ЯёЁ]{2,20}$/u,
       },
     },
     login: {
-      type: DataTypes.STRING(55),
+      type: DataTypes.STRING(20),
       allowNull: false,
     },
     password: {

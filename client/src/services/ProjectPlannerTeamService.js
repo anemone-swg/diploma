@@ -185,3 +185,57 @@ export const deleteFromTeam = async (user) => {
     console.error("Ошибка при удалении участника команды из нее:", error);
   }
 };
+
+export const selectUserForTask = async (user, task) => {
+  try {
+    const response = await fetch("http://localhost:5000/team/assign_to_task", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user, task }),
+    });
+
+    if (await handleUnauthorizedError(response)) {
+      return [];
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Ошибка при удалении участника команды из нее:", error);
+  }
+};
+
+export const removeUserFromTask = async (user, task) => {
+  try {
+    const res = await fetch("http://localhost:5000/team/unassign_from_task", {
+      method: "DELETE",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user, task }),
+    });
+
+    return await res.json();
+  } catch (e) {
+    console.error("Ошибка при удалении пользователя из задачи:", e);
+  }
+};
+
+export async function fetchProjectById(projectId) {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/open_project/${projectId}`,
+      {
+        credentials: "include",
+      },
+    );
+
+    if (await handleUnauthorizedError(response)) {
+      return [];
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Ошибка при получении проекта:", error);
+    throw error;
+  }
+}

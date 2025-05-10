@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { logoutUser } from "../services/AuthAndRegService";
 import {
+  changeUserLogin,
   deleteUserAccount,
   fetchUserData,
   updateUserData,
@@ -9,9 +10,15 @@ import {
 } from "../services/AccountService.js";
 import main_styles from "../styles/App.module.css";
 import styles from "../styles/Home.module.css";
+import btn_styles from "@/components/ui/DefaultBtn.module.css";
+import modal_styles from "@/components/shared/ModalWindow.module.css";
 import defaultAvatar from "../assets/default_avatar.jpg";
 import { ClipLoader } from "react-spinners";
 import { FaHome } from "react-icons/fa";
+import DefaultBtn from "@/components/ui/DefaultBtn.jsx";
+import { IoCheckmarkDoneOutline } from "react-icons/io5";
+import { RxCross1 } from "react-icons/rx";
+import { GoPencil } from "react-icons/go";
 
 const Home = ({ onLogout }) => {
   const navigate = useNavigate();
@@ -20,23 +27,72 @@ const Home = ({ onLogout }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [error, setError] = useState("");
+  const [errorLogin, setErrorLogin] = useState("");
   const [message, setMessage] = useState("");
+  const [messageLogin, setMessageLogin] = useState("");
   const [messageVisible, setMessageVisible] = useState(false);
+  const [messageLoginVisible, setMessageLoginVisible] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [isOpenChangeLoginModal, setIsOpenChangeLoginModal] = useState(false);
+  const [newLogin, setNewLogin] = useState("");
 
   useEffect(() => {
-    const loadUserData = async () => {
-      const data = await fetchUserData();
-      if (data && data.user) {
-        setUser(data.user);
-        setAvatar(data.user.avatar || defaultAvatar);
-        setFirstName(data.user.firstName || "");
-        setLastName(data.user.lastName || "");
+    const handleClickOutside = (e) => {
+      if (e.target.classList.contains(modal_styles.modal)) {
+        setIsOpenChangeLoginModal(false);
+        setNewLogin("");
       }
     };
 
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [setIsOpenChangeLoginModal]);
+
+  useEffect(() => {
     loadUserData();
   }, []);
+
+  const loadUserData = async () => {
+    const data = await fetchUserData();
+    if (data && data.user) {
+      setUser(data.user);
+      setAvatar(data.user.avatar || defaultAvatar);
+      setFirstName(data.user.firstName || "");
+      setLastName(data.user.lastName || "");
+    }
+  };
+
+  const handleCloseChangeLoginModal = () => {
+    setIsOpenChangeLoginModal(false);
+    setNewLogin("");
+  };
+
+  const handleChangeLogin = async () => {
+    try {
+      if (isDisabled) return;
+      setIsDisabled(true);
+      await changeUserLogin(newLogin);
+      await loadUserData();
+      setErrorLogin(""); // Если успешно, очищаем ошибку
+      setMessageLogin("Данные успешно сохранены!");
+      setMessageLoginVisible(true);
+      setTimeout(() => {
+        setMessageLoginVisible(false);
+        setTimeout(() => setMessageLogin(""), 500);
+      }, 3000);
+    } catch (error) {
+      console.error("Ошибка изменения логина:", error);
+      setMessageLoginVisible(true);
+      setTimeout(() => {
+        setMessageLoginVisible(false);
+        setTimeout(() => setErrorLogin(""), 500);
+      }, 3000);
+      setErrorLogin(error.message);
+    }
+    setTimeout(() => {
+      setIsDisabled(false); // Через 5 секунд снова активируем кнопку
+    }, 5000);
+  };
 
   const handleAvatarChange = async (event) => {
     const file = event.target.files[0];
@@ -191,6 +247,12 @@ const Home = ({ onLogout }) => {
                 Удалить аккаунт
               </button>
               <button
+                onClick={() => setIsOpenChangeLoginModal(true)}
+                className={main_styles.defaultButton}
+              >
+                Изменить логин
+              </button>
+              <button
                 onClick={handleLogout}
                 className={`${main_styles.defaultButton} ${main_styles.exitDeleteButton}`}
               >
@@ -204,6 +266,54 @@ const Home = ({ onLogout }) => {
           <ClipLoader size={50} color="#3498db" />
         </div>
       )}
+      <div
+        className={`${modal_styles.modal} ${isOpenChangeLoginModal ? modal_styles.activeModal : ""}`}
+      >
+        {isOpenChangeLoginModal && (
+          <div className={modal_styles.modalContent}>
+            <h3>
+              <GoPencil className={main_styles.icon} />
+              Введите новый логин
+            </h3>
+            <input
+              maxLength={21}
+              type="text"
+              value={newLogin}
+              onChange={(e) => setNewLogin(e.target.value)}
+              placeholder="Новый логин..."
+              className={styles.inputField}
+            />
+            <div
+              className={`${styles.messageContainer} ${!messageLoginVisible ? styles.hidden : ""}`}
+            >
+              {errorLogin && (
+                <p className={styles.errorMessage}>{errorLogin}</p>
+              )}
+              {messageLogin && (
+                <p className={styles.successMessage}>{messageLogin}</p>
+              )}
+            </div>
+            <div className={modal_styles.modalActions}>
+              <DefaultBtn
+                variant="confirmBtn"
+                onClick={handleChangeLogin}
+                icon={IoCheckmarkDoneOutline}
+                className={btn_styles.roundCornersBtn}
+              >
+                Сохранить
+              </DefaultBtn>
+              <DefaultBtn
+                variant="cancelBtn"
+                onClick={handleCloseChangeLoginModal}
+                icon={RxCross1}
+                className={btn_styles.roundCornersBtn}
+              >
+                Отмена
+              </DefaultBtn>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

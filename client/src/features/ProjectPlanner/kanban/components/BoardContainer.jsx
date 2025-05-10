@@ -30,6 +30,7 @@ const BoardContainer = memo(
     const [showColumnInput, setShowColumnInput] = useState(false);
     const [newColumnTitle, setNewColumnTitle] = useState("");
     const LOCAL_STORAGE_KEY = "collapsedTeams";
+    const projectId = board.id;
 
     const [isCollapsed, setIsCollapsed] = useState(() => {
       const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -259,6 +260,7 @@ const BoardContainer = memo(
                 setDeletingColumn={setDeletingColumn}
                 setShowDeleteColumnModal={setShowDeleteColumnModal}
                 team={team}
+                projectId={projectId}
               />
             ))}
           </div>

@@ -16,6 +16,7 @@ const EditableTitle = ({
   onTitleChange,
   level = 2, // h2 по умолчанию, можно передать 3 для h3
   isPastelColor,
+  maxLength = 20,
 }) => {
   const HeadingTag = `h${level}`;
 
@@ -41,7 +42,7 @@ const EditableTitle = ({
         }
       }}
       className={`${input_styles.defaultInput} ${level === 2 ? input_styles.boardInput : input_styles.teamInput} ${isPastelColor ? input_styles.pastel : ""}`}
-      maxLength={item.content ? 500 : 20}
+      maxLength={maxLength}
     />
   ) : (
     <HeadingTag

@@ -17,6 +17,7 @@ const KanbanColumn = ({
   setDeletingColumn,
   setShowDeleteColumnModal,
   team,
+  projectId,
 }) => {
   const [editingColumnId, setEditingColumnId] = useState(null);
   const [showTaskInput, setShowTaskInput] = useState(null);
@@ -70,7 +71,6 @@ const KanbanColumn = ({
                             id: createdTask.id_task,
                             content: createdTask.content,
                             completed: createdTask.completed,
-                            user: createdTask.user,
                             deadline: createdTask.deadline,
                             createdAt: createdTask.createdAt,
                           },
@@ -158,6 +158,7 @@ const KanbanColumn = ({
             setNewTaskContent("");
           }}
           placeholder="Ваша задача..."
+          maxLength={500}
         />
       )}
       <StrictModeDroppable
@@ -183,6 +184,7 @@ const KanbanColumn = ({
                 newTaskContent={newTaskContent}
                 setNewTaskContent={setNewTaskContent}
                 setBoards={setBoards}
+                projectId={projectId}
               />
             ))}
             {provided.placeholder}

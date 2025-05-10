@@ -11,7 +11,7 @@ import DefaultBtn from "@/components/ui/DefaultBtn.jsx";
 import btn_styles from "@/components/ui/DefaultBtn.module.css";
 import { MdCancel } from "react-icons/md";
 
-const TeamMembers = ({ projectId, refreshInvitations }) => {
+const TeamMembers = ({ setBoards, projectId, refreshInvitations }) => {
   const [team, setTeam] = useState([]);
 
   useEffect(() => {
@@ -26,6 +26,24 @@ const TeamMembers = ({ projectId, refreshInvitations }) => {
     try {
       await deleteFromTeam(member);
       setTeam((prev) => prev.filter((user) => user.id_user !== member.id_user));
+
+      setBoards((prevBoards) =>
+        prevBoards.map((board) => ({
+          ...board,
+          teams: board.teams.map((team) => ({
+            ...team,
+            columns: team.columns.map((column) => ({
+              ...column,
+              tasks: column.tasks.map((task) => ({
+                ...task,
+                assignedUsers: task.assignedUsers?.filter(
+                  (user) => user.id_user !== member.id_user,
+                ),
+              })),
+            })),
+          })),
+        })),
+      );
       if (refreshInvitations) {
         await refreshInvitations(); // обновить приглашения
       }

@@ -12,6 +12,7 @@ const InputWithActions = ({
   onSubmit,
   onCancel,
   placeholder,
+  maxLength = 20,
 }) => {
   return (
     <div
@@ -27,6 +28,7 @@ const InputWithActions = ({
         onKeyPress={(e) => e.key === "Enter" && onSubmit()}
         placeholder={placeholder}
         autoFocus
+        maxLength={maxLength}
       />
       <div className={inputWithActions_styles.inputActions}>
         <DefaultBtn

@@ -6,6 +6,7 @@ import {
   Task,
   Team,
   TeamOfProject,
+  User,
 } from "../models/Export.js";
 
 const router = Router();
@@ -27,6 +28,20 @@ router.get("/projects", async (req, res) => {
                 {
                   model: Task,
                   as: "tasks",
+                  include: [
+                    {
+                      model: User,
+                      as: "assignedUsers",
+                      attributes: [
+                        "id_user",
+                        "login",
+                        "firstName",
+                        "lastName",
+                        "avatar",
+                      ],
+                      through: { attributes: [] }, // убираем данные из промежуточной таблицы
+                    },
+                  ],
                 },
               ],
             },
@@ -35,7 +50,24 @@ router.get("/projects", async (req, res) => {
       ],
     });
 
-    res.json({ success: true, projects });
+    // Добавим полный путь к аватарам
+    const normalizedProjects = projects.map((project) => {
+      const p = project.toJSON();
+      p.teams?.forEach((team) => {
+        team.columns?.forEach((column) => {
+          column.tasks?.forEach((task) => {
+            task.assignedUsers?.forEach((user) => {
+              user.avatar = user.avatar
+                ? `http://localhost:5000/uploads/${user.avatar}`
+                : null;
+            });
+          });
+        });
+      });
+      return p;
+    });
+
+    res.json({ success: true, projects: normalizedProjects });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false });

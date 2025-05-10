@@ -13,9 +13,11 @@ import defaultAvatar from "@/assets/default_avatar.jpg";
 import DefaultBtn from "@/components/ui/DefaultBtn.jsx";
 import { ImCheckmark2 } from "react-icons/im";
 import { RxCross2 } from "react-icons/rx";
+import { useNavigate } from "react-router-dom";
 
 const JoinSection = () => {
   const [invitations, setInvitations] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     showInvitations()
@@ -53,6 +55,10 @@ const JoinSection = () => {
     }
   };
 
+  const handleOpenProject = (projectId) => {
+    navigate(`/open_project/${projectId}`);
+  };
+
   return (
     <div>
       <h2 className={team_section.teamPageTitle}>Ваши приглашения</h2>
@@ -75,13 +81,22 @@ const JoinSection = () => {
                   alt="Аватар"
                 />
                 <div>
-                  <p>
-                    Пользователь <strong>{user.login}</strong> приглашает вас в
-                    проект: <strong>{inv.projectTitle}</strong>
+                  <p className={join_section.inviteMessage}>
+                    Пользователь{" "}
+                    <strong>
+                      {user.login} ({user.firstName} {user.lastName})
+                    </strong>{" "}
+                    приглашает вас в проект: <strong>{inv.projectTitle}</strong>
                   </p>
-                  <p className={search_members.userNameInfo}>
-                    {user.firstName} {user.lastName}
-                  </p>
+                  {inv.status === "accepted" && (
+                    <DefaultBtn
+                      variant="confirmBtn"
+                      className={btn_styles.openProjectBtn}
+                      onClick={() => handleOpenProject(inv.id_project)}
+                    >
+                      Перейти к проекту
+                    </DefaultBtn>
+                  )}
                 </div>
                 {inv.status === "pending" ? (
                   <div className={join_section.inviteBtn}>

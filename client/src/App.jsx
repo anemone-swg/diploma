@@ -9,6 +9,7 @@ import Registration from "./pages/Registration.jsx";
 import { checkAuth } from "./services/AuthAndRegService.js";
 import { ClipLoader } from "react-spinners";
 import main_styles from "./styles/App.module.css";
+import ProjectPage from "@/pages/ProjectPage.jsx";
 
 function App() {
   const [sidebarWidth, setSidebarWidth] = useState(200);
@@ -74,6 +75,10 @@ function App() {
                 <Route
                   path="/project-planner"
                   element={<ProjectPlanner sidebarWidth={sidebarWidth} />}
+                />
+                <Route
+                  path="/open_project/:projectId"
+                  element={<ProjectPage sidebarWidth={sidebarWidth} />}
                 />
                 <Route path="*" element={<Navigate to="/home" />} />
               </>

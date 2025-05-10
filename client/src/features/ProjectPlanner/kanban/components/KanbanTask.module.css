@@ -70,19 +70,6 @@
   margin: 0;
 }
 
-.taskUser {
-  width: fit-content;
-  margin: 0 0 15px 0;
-  padding: 8px;
-  border: 1px solid var(--background-color);
-}
-
-.taskUser:hover {
-  transition: 0.4s;
-  background-color: var(--default-btn-hover);
-  border: 1px solid var(--text-color);
-}
-
 .taskDeadlineAndCompletedStatus {
   display: flex;
   justify-content: space-between;

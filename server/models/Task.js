@@ -24,11 +24,11 @@ Task.init(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
-    user: {
-      type: DataTypes.STRING(100),
-      allowNull: false,
-      defaultValue: "Исполнитель не назначен",
-    },
+    // user: {
+    //   type: DataTypes.STRING(100),
+    //   allowNull: false,
+    //   defaultValue: "Исполнитель не назначен",
+    // },
     deadline: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,

@@ -34,9 +34,9 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false, // `true` только для HTTPS
-      httpOnly: true, // Чтобы JS на клиенте не мог изменять куки
-      maxAge: 1000 * 60 * 60 * 5, // Сессия на 5 часов
+      secure: false,
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 5,
     },
   }),
 );

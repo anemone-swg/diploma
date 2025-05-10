@@ -77,25 +77,44 @@ const NavBar = ({
           </div>
           <div>
             <DefaultBtn
-              icon={boards.length === 0 ? MdEmojiPeople : FaTrash}
+              icon={MdEmojiPeople}
               active={activeSection === "join"}
-              onClick={
-                boards.length === 0
-                  ? () => {
-                      setActiveSection("join");
-                    }
-                  : () => {
-                      setShowDeleteModal(true);
-                    }
-              }
-              disabled={false}
-              style={{ marginRight: "0" }}
+              onClick={() => {
+                setActiveSection("join");
+              }}
+              style={boards.length === 0 ? { marginRight: "0" } : undefined}
             >
-              {!isCompact &&
-                (boards.length === 0
-                  ? "Присоединиться к проекту"
-                  : "Удалить kanban-доску")}
+              {!isCompact && "Присоединиться к проекту"}
             </DefaultBtn>
+            {boards.length !== 0 && (
+              <DefaultBtn
+                icon={FaTrash}
+                onClick={() => setShowDeleteModal(true)}
+                style={{ marginRight: "0" }}
+              >
+                {!isCompact && "Удалить kanban-доску"}
+              </DefaultBtn>
+            )}
+            {/*<DefaultBtn*/}
+            {/*  icon={boards.length === 0 ? MdEmojiPeople : FaTrash}*/}
+            {/*  active={activeSection === "join"}*/}
+            {/*  onClick={*/}
+            {/*    boards.length === 0*/}
+            {/*      ? () => {*/}
+            {/*          setActiveSection("join");*/}
+            {/*        }*/}
+            {/*      : () => {*/}
+            {/*          setShowDeleteModal(true);*/}
+            {/*        }*/}
+            {/*  }*/}
+            {/*  disabled={false}*/}
+            {/*  style={{ marginRight: "0" }}*/}
+            {/*>*/}
+            {/*  {!isCompact &&*/}
+            {/*    (boards.length === 0*/}
+            {/*      ? "Присоединиться к проекту"*/}
+            {/*      : "Удалить kanban-доску")}*/}
+            {/*</DefaultBtn>*/}
           </div>
         </div>
       </nav>

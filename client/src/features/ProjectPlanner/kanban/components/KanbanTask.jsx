@@ -12,6 +12,7 @@ import {
   taskDeadlineChange,
   taskStatusChange,
 } from "@/services/ProjectPlannerService.js";
+import SelectedUser from "@/features/ProjectPlanner/kanban/components/SelectedUser.jsx";
 
 const KanbanTask = ({
   task,
@@ -19,6 +20,7 @@ const KanbanTask = ({
   newTaskContent,
   setNewTaskContent,
   setBoards,
+  projectId,
 }) => {
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [selectedDate, setSelectedDate] = useState(
@@ -151,6 +153,7 @@ const KanbanTask = ({
           <div className={task_styles.taskBody}>
             <div className={task_styles.taskHeader}>
               <EditableTitle
+                maxLength={500}
                 item={task}
                 isEditing={editingTaskId === task.id}
                 title={newTaskContent}
@@ -171,7 +174,12 @@ const KanbanTask = ({
                 onClick={() => handleDeleteTaskBoard(task.id)}
               ></DefaultBtn>
             </div>
-            <div className={task_styles.taskUser}>{task.user}</div>
+
+            <SelectedUser
+              task={task}
+              projectId={projectId}
+              setBoards={setBoards}
+            />
 
             {/* Календарь с использованием Material UI DatePicker */}
             <div className={task_styles.taskDeadlineAndCompletedStatus}>

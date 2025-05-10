@@ -4,7 +4,7 @@ import team_section from "./TeamSection.module.css";
 import SearchMembers from "@/features/ProjectPlanner/team/components/SearchMembers.jsx";
 import { getSentInvites } from "@/services/ProjectPlannerTeamService.js";
 
-const TeamSection = ({ projectId }) => {
+const TeamSection = ({ projectId, setBoards }) => {
   const [invitations, setInvitations] = useState([]);
 
   const refreshInvitations = async () => {
@@ -25,6 +25,7 @@ const TeamSection = ({ projectId }) => {
       <div className={team_section.teamPart}>
         <h2 className={team_section.teamPageTitle}>Команда проекта</h2>
         <TeamMembers
+          setBoards={setBoards}
           projectId={projectId}
           refreshInvitations={refreshInvitations}
         />

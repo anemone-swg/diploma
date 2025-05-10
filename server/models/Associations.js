@@ -90,3 +90,25 @@ TeamMembers.belongsTo(User, {
   foreignKey: "id_user",
   as: "user",
 });
+
+Task.belongsToMany(User, {
+  through: {
+    model: "taskUsers",
+    unique: false,
+  },
+  as: "assignedUsers",
+  foreignKey: "id_task",
+  otherKey: "id_user",
+  onDelete: "CASCADE", // <== ДОБАВЬ ЭТО
+});
+
+User.belongsToMany(Task, {
+  through: {
+    model: "taskUsers",
+    unique: false,
+  },
+  as: "tasks",
+  foreignKey: "id_user",
+  otherKey: "id_task",
+  onDelete: "CASCADE", // <== И ТУТ
+});

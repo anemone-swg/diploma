@@ -18,10 +18,7 @@ export const uploadAvatar = async (file) => {
       return [];
     }
 
-    const data = await response.json();
-    if (!data.success) throw new Error("Ошибка загрузки аватара");
-
-    return data;
+    return await response.json();
   } catch (error) {
     console.error("Ошибка при загрузке аватара:", error);
     throw error;
@@ -38,8 +35,6 @@ export const fetchUserData = async () => {
     if (await handleUnauthorizedError(response)) {
       return null;
     }
-
-    if (!response.ok) throw new Error("Ошибка загрузки данных пользователя");
 
     return await response.json();
   } catch (error) {
@@ -85,6 +80,29 @@ export const deleteUserAccount = async () => {
 
   if (!response.ok) {
     throw new Error(result.message || "Ошибка удаления аккаунта");
+  }
+
+  return result;
+};
+
+export const changeUserLogin = async (newLogin) => {
+  const response = await fetch("http://localhost:5000/account/change_login", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ newLogin }),
+    credentials: "include",
+  });
+
+  if (await handleUnauthorizedError(response)) {
+    return [];
+  }
+
+  const result = await response.json(); // Разбираем JSON-ответ
+
+  if (!response.ok) {
+    throw new Error(result.message || "Ошибка обновления данных"); // Показываем сообщение сервера
   }
 
   return result;
