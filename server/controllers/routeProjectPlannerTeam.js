@@ -2,9 +2,11 @@ import { Router } from "express";
 import { isAuthenticated } from "../middlewares.js";
 import { Op } from "sequelize";
 import {
+  Column,
   Invitation,
   Project,
   Task,
+  Team,
   TeamMembers,
   TeamOfProject,
   User,
@@ -358,9 +360,7 @@ router.get("/open_project/:projectId", async (req, res) => {
 
   try {
     const project = await Project.findOne({
-      where: {
-        id_project: projectId,
-      },
+      where: { id_project: projectId },
       include: [
         {
           model: TeamOfProject,
@@ -370,7 +370,37 @@ router.get("/open_project/:projectId", async (req, res) => {
               model: TeamMembers,
               as: "teamMembers",
               where: { id_user: userId },
-              required: false, // важно!
+              required: false,
+            },
+          ],
+        },
+        {
+          model: Team,
+          as: "teams",
+          include: [
+            {
+              model: Column,
+              as: "columns",
+              include: [
+                {
+                  model: Task,
+                  as: "tasks",
+                  include: [
+                    {
+                      model: User,
+                      as: "assignedUsers",
+                      attributes: [
+                        "id_user",
+                        "login",
+                        "firstName",
+                        "lastName",
+                        "avatar",
+                      ],
+                      through: { attributes: [] },
+                    },
+                  ],
+                },
+              ],
             },
           ],
         },
@@ -384,6 +414,20 @@ router.get("/open_project/:projectId", async (req, res) => {
         project.teamOfProject?.teamMembers?.length === 0)
     ) {
       return res.status(403).json({ error: "Нет доступа к проекту." });
+    }
+
+    if (project) {
+      project.teams?.forEach((team) => {
+        team.columns?.forEach((column) => {
+          column.tasks?.forEach((task) => {
+            task.assignedUsers?.forEach((user) => {
+              if (user.avatar && !user.avatar.startsWith("http")) {
+                user.avatar = `http://localhost:5000/uploads/${user.avatar}`;
+              }
+            });
+          });
+        });
+      });
     }
 
     res.json(project);

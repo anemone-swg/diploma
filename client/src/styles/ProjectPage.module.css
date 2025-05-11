@@ -1,0 +1,37 @@
+.title {
+  margin: 0 0 20px 0;
+}
+
+.titleInSection {
+  margin: 0 0 0 0;
+  padding: 8px;
+  border-radius: 4px;
+  word-break: break-all;
+}
+
+.pastel {
+  color: var(--text-color-dark);
+}
+
+.taskUser {
+  position: relative;
+  display: flex;
+  width: fit-content;
+  margin: 0 0 15px 0;
+  padding: 8px;
+  border: 1px solid var(--background-color);
+}
+
+.taskHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: self-start;
+  margin: 0 0 15px 0;
+  gap: 4px;
+}
+
+.taskHeader h3 {
+  font-size: 16px;
+  width: fit-content;
+  border: 1px solid var(--background-color);
+}

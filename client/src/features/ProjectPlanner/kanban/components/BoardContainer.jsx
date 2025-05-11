@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useState } from "react";
 import boards_container from "./BoardContainer.module.css";
 import kanban_styles from "../styles/Kanban.module.css";
 import KanbanColumn from "./KanbanColumn.jsx";
@@ -14,6 +14,7 @@ import {
   renameTeam,
   updateTaskMove,
 } from "@/services/ProjectPlannerService.js";
+import { useCollapsedState } from "@/hooks/useCollapsedState.js";
 
 const BoardContainer = memo(
   ({
@@ -29,24 +30,9 @@ const BoardContainer = memo(
     const [teamTitle, setTeamTitle] = useState("");
     const [showColumnInput, setShowColumnInput] = useState(false);
     const [newColumnTitle, setNewColumnTitle] = useState("");
-    const LOCAL_STORAGE_KEY = "collapsedTeams";
     const projectId = board.id;
 
-    const [isCollapsed, setIsCollapsed] = useState(() => {
-      const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        return parsed[team.id] ?? false;
-      }
-      return false;
-    });
-
-    useEffect(() => {
-      const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
-      const parsed = stored ? JSON.parse(stored) : {};
-      parsed[team.id] = isCollapsed;
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(parsed));
-    }, [isCollapsed, team.id]);
+    const [isCollapsed, setIsCollapsed] = useCollapsedState(team.id_team);
 
     // Редактирование названия команды
     const handleTeamTitleChange = async (boardId, teamId, newTitle) => {
@@ -196,7 +182,6 @@ const BoardContainer = memo(
     return (
       <DragDropContext onDragEnd={handleDragEnd} key={board.id}>
         <div className={boards_container.board}>
-          {/*{console.log("Render BoardContainer", team.id)}*/}
           <div className={kanban_styles.elementHeader}>
             <EditableTitle
               item={team}
