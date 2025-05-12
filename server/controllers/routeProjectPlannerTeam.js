@@ -277,22 +277,64 @@ router.get("/team/show_team/:projectId", async (req, res) => {
 
 router.delete("/team/delete_from_team", async (req, res) => {
   try {
-    const { user } = req.body;
+    const { userId, projectId } = req.body;
+
+    const team = await TeamOfProject.findOne({
+      where: { id_project: projectId },
+    });
+
+    if (!team) {
+      return res.status(404).json({ error: "Команда проекта не найдена" });
+    }
+
+    const teamId = team.id_teamOfProject;
+
     await TeamMembers.destroy({
       where: {
-        id_user: user.id_user,
+        id_user: userId,
+        id_teamOfProject: teamId,
       },
     });
+
     await Invitation.destroy({
       where: {
-        toUserId: user.id_user,
+        toUserId: userId,
+        id_project: projectId,
       },
     });
-    await sequelize.models.taskUsers.destroy({
-      where: {
-        id_user: user.id_user,
-      },
+
+    const tasks = await Task.findAll({
+      attributes: ["id_task"],
+      include: [
+        {
+          model: Column,
+          attributes: [],
+          required: true,
+          include: [
+            {
+              model: Team,
+              attributes: [],
+              required: true,
+              where: {
+                id_project: projectId,
+              },
+            },
+          ],
+        },
+      ],
+      raw: true,
     });
+
+    const taskIds = tasks.map((t) => t.id_task);
+
+    if (taskIds.length > 0) {
+      await sequelize.models.taskUsers.destroy({
+        where: {
+          id_user: userId,
+          id_task: taskIds,
+        },
+      });
+    }
     res.json({ success: true });
   } catch (error) {
     console.error("Ошибка при удалении участника команды из нее:", error);
@@ -354,7 +396,7 @@ router.delete("/team/unassign_from_task", async (req, res) => {
   }
 });
 
-router.get("/open_project/:projectId", async (req, res) => {
+router.get("/team/open_project/:projectId", async (req, res) => {
   const userId = req.session.user.id;
   const projectId = req.params.projectId;
 
@@ -430,10 +472,22 @@ router.get("/open_project/:projectId", async (req, res) => {
       });
     }
 
-    res.json(project);
+    res.json({
+      project,
+      currentUserId: req.session.user.id,
+    });
   } catch (error) {
     console.error("Ошибка при получении проекта:", error);
     res.status(500).json({ error: "Ошибка при получении проекта" });
+  }
+});
+
+router.get("/team/me", async (req, res) => {
+  try {
+    res.json(req.session.user.id);
+  } catch (error) {
+    console.error("Ошибка при поиске пользователя:", error);
+    res.status(500).json({ error: "Ошибка при поиске пользователя" });
   }
 });
 

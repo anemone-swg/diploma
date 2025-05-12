@@ -5,7 +5,12 @@ import main_styles from "@/styles/App.module.css";
 import kanban_board_section_styles from "@/features/ProjectPlanner/kanban/components/KanbanBoardSection.module.css";
 import ProjectPageTeam from "@/features/ProjectPage/components/ProjectPageTeam.jsx";
 
-const ProjectPageSection = ({ project, setProject, sidebarWidth }) => {
+const ProjectPageSection = ({
+  project,
+  setProject,
+  sidebarWidth,
+  currentUserId,
+}) => {
   return (
     <div>
       <h1 className={project_page_styles.title}>
@@ -22,7 +27,11 @@ const ProjectPageSection = ({ project, setProject, sidebarWidth }) => {
                 maxWidth: `calc(95vw - ${sidebarWidth}px)`,
               }}
             >
-              <ProjectPageTeam project={project} team={team} />
+              <ProjectPageTeam
+                setProject={setProject}
+                team={team}
+                currentUserId={currentUserId}
+              />
             </div>
           ))}
       </div>

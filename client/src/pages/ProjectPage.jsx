@@ -8,13 +8,15 @@ import ProjectPageSection from "@/features/ProjectPage/components/ProjectPageSec
 const ProjectPage = ({ sidebarWidth }) => {
   const { projectId } = useParams();
   const [project, setProject] = useState(null);
+  const [currentUserId, setCurrentUserId] = useState(null);
 
   useEffect(() => {
     const getProject = async () => {
       try {
-        const data = await fetchProjectById(projectId);
-        setProject(data);
-        console.log(data);
+        const { project, currentUserId } = await fetchProjectById(projectId);
+        setProject(project);
+        setCurrentUserId(currentUserId);
+        console.log(project);
       } catch (err) {
         console.error("Ошибка при загрузки проекта:", err);
       }
@@ -30,6 +32,7 @@ const ProjectPage = ({ sidebarWidth }) => {
           project={project}
           setProject={setProject}
           sidebarWidth={sidebarWidth}
+          currentUserId={currentUserId}
         />
       ) : (
         <div className={main_styles.spinner}>

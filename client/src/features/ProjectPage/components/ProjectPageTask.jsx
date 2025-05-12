@@ -5,8 +5,39 @@ import search_members from "@/features/ProjectPlanner/team/components/SearchMemb
 import defaultAvatar from "@/assets/default_avatar.jpg";
 import project_page_styles from "@/styles/ProjectPage.module.css";
 import ReadOnlyDeadlineDatePicker from "@/components/ui/ReadOnlyDeadlineDatePicker.jsx";
+import btn_styles from "@/components/ui/DefaultBtn.module.css";
+import { taskStatusChange } from "@/services/ProjectPlannerService.js";
+import DefaultBtn from "@/components/ui/DefaultBtn.jsx";
 
-const ProjectPageTask = ({ task }) => {
+const ProjectPageTask = ({ setProject, task, currentUserId }) => {
+  const isUserAssigned = task.assignedUsers?.some(
+    (user) => user.id_user === currentUserId,
+  );
+
+  const handleTaskStatusChange = async (taskId) => {
+    try {
+      await taskStatusChange(taskId);
+
+      setProject((prevProject) => ({
+        ...prevProject,
+        teams: prevProject.teams.map((team) => ({
+          ...team,
+          columns: team.columns.map((column) => ({
+            ...column,
+            tasks: column.tasks.map((task) =>
+              task.id_task === taskId
+                ? { ...task, completed: !task.completed }
+                : task,
+            ),
+          })),
+        })),
+      }));
+    } catch (error) {
+      console.error(error);
+      alert("Ошибка при изменении статуса задачи");
+    }
+  };
+
   return (
     <div className={`${task_styles.task} ${task_styles.taskBody}`}>
       <div className={project_page_styles.taskHeader}>
@@ -48,12 +79,14 @@ const ProjectPageTask = ({ task }) => {
             <ReadOnlyDeadlineDatePicker value={task.deadline} />
           )}
         </div>
-        {/*<DefaultBtn*/}
-        {/*  className={btn_styles.roundCornersBtn}*/}
-        {/*  onClick={() => handleTaskStatusChange(task.id)}*/}
-        {/*>*/}
-        {/*  {task.completed ? "Выполнено" : "Выполнить"}*/}
-        {/*</DefaultBtn>*/}
+        {isUserAssigned && (
+          <DefaultBtn
+            className={btn_styles.roundCornersBtn}
+            onClick={() => handleTaskStatusChange(task.id_task)}
+          >
+            {task.completed ? "Выполнено" : "Выполнить"}
+          </DefaultBtn>
+        )}
       </div>
     </div>
   );

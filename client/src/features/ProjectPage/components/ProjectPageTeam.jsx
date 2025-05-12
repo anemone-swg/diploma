@@ -8,7 +8,7 @@ import DefaultBtn from "@/components/ui/DefaultBtn.jsx";
 import ProjectPageColumn from "@/features/ProjectPage/components/ProjectPageColumn.jsx";
 import { useCollapsedState } from "@/hooks/useCollapsedState.js";
 
-const ProjectPageTeam = ({ project, team }) => {
+const ProjectPageTeam = ({ setProject, team, currentUserId }) => {
   const [isCollapsed, setIsCollapsed] = useCollapsedState(team.id_team);
 
   return (
@@ -31,7 +31,12 @@ const ProjectPageTeam = ({ project, team }) => {
           className={`${boards_container.columnsContainer} ${isCollapsed ? boards_container.collapsed : ""}`}
         >
           {team.columns.map((column) => (
-            <ProjectPageColumn column={column} key={column.id_column} />
+            <ProjectPageColumn
+              setProject={setProject}
+              column={column}
+              key={column.id_column}
+              currentUserId={currentUserId}
+            />
           ))}
         </div>
       </div>

@@ -164,7 +164,7 @@ export const showTeam = async (projectId) => {
   }
 };
 
-export const deleteFromTeam = async (user) => {
+export const deleteFromTeam = async (userId, projectId) => {
   try {
     const response = await fetch(
       "http://localhost:5000/team/delete_from_team",
@@ -172,7 +172,7 @@ export const deleteFromTeam = async (user) => {
         method: "DELETE",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user }),
+        body: JSON.stringify({ userId, projectId }),
       },
     );
 
@@ -223,7 +223,7 @@ export const removeUserFromTask = async (user, task) => {
 export async function fetchProjectById(projectId) {
   try {
     const response = await fetch(
-      `http://localhost:5000/open_project/${projectId}`,
+      `http://localhost:5000/team/open_project/${projectId}`,
       {
         credentials: "include",
       },
@@ -239,3 +239,20 @@ export async function fetchProjectById(projectId) {
     throw error;
   }
 }
+
+export const fetchCurrentUser = async () => {
+  try {
+    const response = await fetch(`http://localhost:5000/team/me`, {
+      credentials: "include",
+    });
+
+    if (await handleUnauthorizedError(response)) {
+      return [];
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Ошибка поиска пользователя:", error);
+    return [];
+  }
+};

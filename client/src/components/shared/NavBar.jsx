@@ -17,11 +17,11 @@ const NavBar = ({
   setShowDeleteModal,
   sidebarWidth,
 }) => {
-  const [isCompact, setIsCompact] = useState(window.innerWidth < 980);
+  const [isCompact, setIsCompact] = useState(window.innerWidth < 1200);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsCompact(window.innerWidth < 980);
+      setIsCompact(window.innerWidth < 1200);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -95,26 +95,6 @@ const NavBar = ({
                 {!isCompact && "Удалить kanban-доску"}
               </DefaultBtn>
             )}
-            {/*<DefaultBtn*/}
-            {/*  icon={boards.length === 0 ? MdEmojiPeople : FaTrash}*/}
-            {/*  active={activeSection === "join"}*/}
-            {/*  onClick={*/}
-            {/*    boards.length === 0*/}
-            {/*      ? () => {*/}
-            {/*          setActiveSection("join");*/}
-            {/*        }*/}
-            {/*      : () => {*/}
-            {/*          setShowDeleteModal(true);*/}
-            {/*        }*/}
-            {/*  }*/}
-            {/*  disabled={false}*/}
-            {/*  style={{ marginRight: "0" }}*/}
-            {/*>*/}
-            {/*  {!isCompact &&*/}
-            {/*    (boards.length === 0*/}
-            {/*      ? "Присоединиться к проекту"*/}
-            {/*      : "Удалить kanban-доску")}*/}
-            {/*</DefaultBtn>*/}
           </div>
         </div>
       </nav>

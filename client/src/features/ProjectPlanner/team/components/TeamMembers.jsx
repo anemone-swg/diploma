@@ -24,7 +24,7 @@ const TeamMembers = ({ setBoards, projectId, refreshInvitations }) => {
 
   const handleDeleteFromTeam = async (member) => {
     try {
-      await deleteFromTeam(member);
+      await deleteFromTeam(member.id_user, projectId);
       setTeam((prev) => prev.filter((user) => user.id_user !== member.id_user));
 
       setBoards((prevBoards) =>

@@ -6,6 +6,8 @@ import join_section from "@/features/ProjectPlanner/join/components/JoinSection.
 import {
   acceptInvite,
   declineInvite,
+  deleteFromTeam,
+  fetchCurrentUser,
   showInvitations,
 } from "@/services/ProjectPlannerTeamService.js";
 import search_members from "@/features/ProjectPlanner/team/components/SearchMembers.module.css";
@@ -59,6 +61,18 @@ const JoinSection = () => {
     navigate(`/open_project/${projectId}`);
   };
 
+  const handleExitProject = async (projectId, inviteId) => {
+    try {
+      const currentUserId = await fetchCurrentUser();
+      await deleteFromTeam(currentUserId, projectId);
+      setInvitations((prev) =>
+        prev.filter((inv) => inv.id_invite !== inviteId),
+      );
+    } catch (error) {
+      console.error("Ошибка при выходе из проекта:", error);
+    }
+  };
+
   return (
     <div>
       <h2 className={team_section.teamPageTitle}>Ваши приглашения</h2>
@@ -89,13 +103,24 @@ const JoinSection = () => {
                     приглашает вас в проект: <strong>{inv.projectTitle}</strong>
                   </p>
                   {inv.status === "accepted" && (
-                    <DefaultBtn
-                      variant="confirmBtn"
-                      className={btn_styles.openProjectBtn}
-                      onClick={() => handleOpenProject(inv.id_project)}
-                    >
-                      Перейти к проекту
-                    </DefaultBtn>
+                    <div className={join_section.btnGroup}>
+                      <DefaultBtn
+                        variant="confirmBtn"
+                        className={btn_styles.openProjectBtn}
+                        onClick={() => handleOpenProject(inv.id_project)}
+                      >
+                        Перейти к проекту
+                      </DefaultBtn>
+                      <DefaultBtn
+                        variant="confirmBtn"
+                        className={btn_styles.openProjectBtn}
+                        onClick={() =>
+                          handleExitProject(inv.id_project, inv.id_invite)
+                        }
+                      >
+                        Выйти из проекта
+                      </DefaultBtn>
+                    </div>
                   )}
                 </div>
                 {inv.status === "pending" ? (

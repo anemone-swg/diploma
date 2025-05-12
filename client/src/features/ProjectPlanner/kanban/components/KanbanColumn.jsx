@@ -69,6 +69,7 @@ const KanbanColumn = ({
                           ...column.tasks,
                           {
                             id: createdTask.id_task,
+                            id_task: createdTask.id_task,
                             content: createdTask.content,
                             completed: createdTask.completed,
                             deadline: createdTask.deadline,
