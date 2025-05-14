@@ -72,6 +72,7 @@ const ProjectPage = ({ sidebarWidth }) => {
       }
     };
 
+    socket.on("userDeleted", handleReloadProject);
     socket.on("userDeletedFromTeam", handleUserDeletedFromTeam);
     socket.on("userUnassignedToTask", handleReloadProject);
     socket.on("userAssignedToTask", handleReloadProject);
@@ -91,6 +92,7 @@ const ProjectPage = ({ sidebarWidth }) => {
     socket.on("projectRenamed", handleProjectRenamed);
 
     return () => {
+      socket.off("userDeleted", handleReloadProject);
       socket.off("userDeletedFromTeam", handleUserDeletedFromTeam);
       socket.off("userUnassignedToTask", handleReloadProject);
       socket.off("userAssignedToTask", handleReloadProject);

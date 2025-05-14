@@ -1,0 +1,125 @@
+import React, { useEffect, useState } from "react";
+import {
+  deleteUserAccountByAdmin,
+  getAllUsers,
+} from "@/services/AccountService.js";
+import main_styles from "@/styles/App.module.css";
+import { RiAdminFill } from "react-icons/ri";
+import admin_styles from "@/styles/AdminPanel.module.css";
+import DefaultBtn from "@/components/ui/DefaultBtn.jsx";
+import styles from "@/styles/Home.module.css";
+import { logoutUser } from "@/services/AuthAndRegService.js";
+import { useNavigate } from "react-router-dom";
+import team_members from "@/features/ProjectPlanner/team/components/TeamMembers.module.css";
+import search_members from "@/features/ProjectPlanner/team/components/SearchMembers.module.css";
+import defaultAvatar from "@/assets/default_avatar.jpg";
+import btn_styles from "@/components/ui/DefaultBtn.module.css";
+import { MdCancel } from "react-icons/md";
+import { toast } from "react-toastify";
+import socket from "@/services/socket.js";
+
+const AdminPanel = ({ onLogout }) => {
+  const navigate = useNavigate();
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const data = await getAllUsers();
+        setUsers(data);
+      } catch (error) {
+        console.error("Ошибка загрузки пользователей:", error);
+      }
+    };
+
+    fetchUsers();
+
+    socket.on("userDeleted", fetchUsers);
+    socket.on("userRegistered", fetchUsers);
+
+    return () => {
+      socket.off("userDeleted", fetchUsers);
+      socket.off("userRegistered", fetchUsers);
+    };
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      onLogout();
+      navigate("/login");
+    } catch (error) {
+      console.error("Ошибка выхода:", error);
+      toast.error("Не удалось выйти.");
+    }
+  };
+
+  const handleDeleteUser = async (user) => {
+    if (
+      !window.confirm(
+        "Вы уверены, что хотите удалить аккаунт данного пользователя?",
+      )
+    ) {
+      return;
+    }
+
+    try {
+      await deleteUserAccountByAdmin(user.id_user);
+      setUsers((prevUsers) =>
+        prevUsers.filter((u) => u.id_user !== user.id_user),
+      );
+      toast.success("Пользователь успешно удален");
+    } catch (error) {
+      console.error("Ошибка удаления аккаунта:", error);
+      toast.error(error.message);
+    }
+  };
+
+  return (
+    <div className={main_styles.page}>
+      <div className={admin_styles.headerAdmin}>
+        <h1>
+          <RiAdminFill className={main_styles.titleIcon} />
+          Панель администратора
+        </h1>
+        <DefaultBtn onClick={handleLogout} variant="confirmBtn">
+          Выйти
+        </DefaultBtn>
+      </div>
+
+      <hr className={styles.prettyHr} />
+
+      <div className={admin_styles.userList}>
+        <h2>Список пользователей</h2>
+        {users.map((user) => (
+          <div key={user.id_user} className={team_members.memberOfTeam}>
+            <img
+              className={search_members.userAvatar}
+              src={user.avatar || defaultAvatar}
+              alt="Аватар"
+            />
+            <div>
+              <p>
+                <strong>{user.login}</strong>
+              </p>
+              <p className={search_members.userNameInfo}>
+                {user.firstName} {user.lastName}
+              </p>
+            </div>
+            <div className={admin_styles.deleteBtn}>
+              <DefaultBtn
+                className={btn_styles.roundCornersBtn}
+                icon={MdCancel}
+                onClick={() => handleDeleteUser(user)}
+              >
+                Удалить пользователя
+              </DefaultBtn>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default AdminPanel;

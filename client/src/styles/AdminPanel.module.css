@@ -1,0 +1,18 @@
+.headerAdmin {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.headerAdmin button {
+  margin: 0 0 20px 0;
+}
+
+.userList h2 {
+  font-size: 1.2rem;
+  margin: 20px 0 20px 0;
+}
+
+.deleteBtn button svg {
+  margin: 0 5px 0 0;
+}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../services/AuthAndRegService.js"; // Импортируем сервис
 import styles from "../styles/Login.module.css";
@@ -17,8 +17,12 @@ const Login = ({ onLogin }) => {
       const responseData = await loginUser(username, password); // Вызов сервиса
       if (responseData.success) {
         alert("Авторизация успешна!");
-        onLogin();
-        navigate("/home");
+        onLogin(responseData.role);
+        if (responseData.role === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/home");
+        }
       }
     } catch (error) {
       setError(error.message); // Устанавливаем ошибку

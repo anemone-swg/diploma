@@ -30,6 +30,9 @@ router.get("/team/search_users/:login", async (req, res) => {
         id_user: {
           [Op.ne]: req.session.user.id, // исключить текущего пользователя
         },
+        role: {
+          [Op.ne]: "admin",
+        },
       },
       attributes: ["id_user", "login", "firstName", "lastName", "avatar"],
     });

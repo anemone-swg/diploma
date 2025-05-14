@@ -2,6 +2,7 @@ import { Router } from "express";
 import { User } from "../models/Export.js";
 import bcrypt from "bcrypt";
 import { isAuthenticated } from "../middlewares.js";
+import { io } from "../server.js";
 
 const router = Router();
 router.use("/logout", isAuthenticated);
@@ -33,6 +34,7 @@ router.post("/register", async (req, res) => {
 
     await User.create({ login: username, email, password: hashedPassword });
 
+    io.emit("userRegistered");
     res.json({ success: true });
   } catch (err) {
     console.error(err);
@@ -66,7 +68,7 @@ router.post("/login", async (req, res) => {
       role: user.role,
     };
 
-    res.json({ success: true });
+    res.json({ success: true, role: req.session.user.role });
   } catch (error) {
     console.error("Database error:", error);
     res.status(500).json({ error: "Внутренняя ошибка сервера" });
@@ -74,7 +76,12 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/check-auth", (req, res) => {
-  res.json({ isAuthenticated: !!req.session.user });
+  const user = req.session.user;
+
+  res.json({
+    isAuthenticated: !!user,
+    role: user ? user.role : null,
+  });
 });
 
 router.post("/logout", (req, res) => {

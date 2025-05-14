@@ -110,30 +110,6 @@ const KanbanTask = ({
     }
   };
 
-  // const handleTaskStatusChange = async (taskId) => {
-  //   try {
-  //     await taskStatusChange(taskId);
-  //
-  //     setBoards((prevBoards) =>
-  //       prevBoards.map((board) => ({
-  //         ...board,
-  //         teams: board.teams.map((team) => ({
-  //           ...team,
-  //           columns: team.columns.map((column) => ({
-  //             ...column,
-  //             tasks: column.tasks.map((t) =>
-  //               t.id === taskId ? { ...t, completed: !t.completed } : t,
-  //             ),
-  //           })),
-  //         })),
-  //       })),
-  //     );
-  //   } catch (error) {
-  //     console.error(error);
-  //     alert("Ошибка при изменении статуса задачи");
-  //   }
-  // };
-
   const handleTaskStatusChange = async (taskId) => {
     try {
       await taskStatusChange(taskId);

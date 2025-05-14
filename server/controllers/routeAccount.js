@@ -6,6 +6,7 @@ import { fileURLToPath } from "url";
 import { User } from "../models/export.js";
 import { isAuthenticated } from "../middlewares.js";
 import { Op } from "sequelize";
+import { io } from "../server.js";
 
 const router = Router();
 router.use("/account", isAuthenticated);
@@ -131,6 +132,7 @@ router.delete("/account/delete", async (req, res) => {
           .json({ message: "Ошибка при выходе из системы" });
       }
       res.clearCookie("connect.sid");
+      io.emit("userDeleted");
       res.json({ message: "Аккаунт удалён успешно" });
     });
   } catch (error) {
@@ -184,6 +186,71 @@ router.put("/account/change_login", async (req, res) => {
     res.json({ message: "Логин успешно обновлён", user });
   } catch (error) {
     console.error("Ошибка обновления логина:", error);
+    res.status(500).json({ message: "Ошибка сервера" });
+  }
+});
+
+router.get("/account/get_users_for_admin", async (req, res) => {
+  try {
+    if (req.session.user?.role !== "admin") {
+      return res.status(403).json({ error: "Доступ запрещён" });
+    }
+
+    const users = await User.findAll({
+      where: {
+        id_user: {
+          [Op.ne]: req.session.user.id,
+        },
+      },
+      attributes: [
+        "id_user",
+        "firstName",
+        "lastName",
+        "login",
+        "email",
+        "role",
+        "avatar",
+      ],
+    });
+
+    // Обработка путей к аватарам
+    users.forEach((user) => {
+      if (user.avatar && !user.avatar.startsWith("http")) {
+        user.avatar = `http://localhost:5000/uploads/${user.avatar}`;
+      }
+    });
+
+    res.json(users);
+  } catch (err) {
+    console.error("Ошибка при получении пользователей:", err);
+    res.status(500).json({ error: "Ошибка сервера" });
+  }
+});
+
+router.delete("/account/delete_by_admin", async (req, res) => {
+  try {
+    if (req.session.user?.role !== "admin") {
+      return res.status(403).json({ error: "Доступ запрещён" });
+    }
+
+    const { userId } = req.body;
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "Пользователь не найден" });
+    }
+
+    if (user.avatar) {
+      fs.unlink(path.join(__dirname, "..", user.avatar), (err) => {
+        if (err) console.error("Ошибка удаления старого аватара:", err);
+      });
+    }
+
+    io.emit("userDeleted");
+    await user.destroy();
+    return res.json({ message: "Пользователь удалён" });
+  } catch (error) {
+    console.error("Ошибка при удалении аккаунта админом:", error);
     res.status(500).json({ message: "Ошибка сервера" });
   }
 });

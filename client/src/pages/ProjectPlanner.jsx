@@ -76,10 +76,12 @@ function ProjectPlanner({ sidebarWidth }) {
       }
     };
 
+    socket.on("userDeleted", handleReloadProject);
     socket.on("userDeletedFromTeam", handleReloadProject);
     socket.on("taskStatusChanged", handleTaskStatusChanged);
 
     return () => {
+      socket.off("userDeleted", handleReloadProject);
       socket.off("userDeletedFromTeam", handleReloadProject);
       socket.off("taskStatusChanged", handleTaskStatusChanged);
     };

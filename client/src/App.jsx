@@ -12,10 +12,12 @@ import main_styles from "./styles/App.module.css";
 import ProjectPage from "@/pages/ProjectPage.jsx";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import AdminPanel from "@/pages/AdminPanel.jsx";
 
 function App() {
   const [sidebarWidth, setSidebarWidth] = useState(200);
   const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [userRole, setUserRole] = useState(null);
 
   // Проверка авторизации при монтировании компонента
   useEffect(() => {
@@ -23,9 +25,11 @@ function App() {
       try {
         const response = await checkAuth(); // Отправка запроса на сервер
         setIsAuthenticated(response.isAuthenticated); // Обновляем состояние авторизации
+        setUserRole(response.role);
       } catch (error) {
         console.error("Ошибка при проверке авторизации:", error);
         setIsAuthenticated(false); // Если ошибка, считаем, что не авторизован
+        setUserRole(null);
       }
     };
 
@@ -44,35 +48,66 @@ function App() {
     <BrowserRouter>
       <div
         className={main_styles.app}
-        style={{ paddingLeft: `${isAuthenticated ? sidebarWidth : 0}px` }}
+        style={{
+          paddingLeft:
+            isAuthenticated && userRole !== "admin" ? `${sidebarWidth}px` : 0,
+        }}
       >
         <ToastContainer position="top-right" autoClose={3000} theme="dark" />
-        {isAuthenticated && (
+        {isAuthenticated && userRole !== "admin" && (
           <Sidebar
             onResize={(width) => setSidebarWidth(width)}
             sidebarWidth={sidebarWidth}
             setSidebarWidth={setSidebarWidth}
           />
         )}
-        <div
-          className={main_styles.content}
-          // style={{ marginLeft: `${isAuthenticated ? sidebarWidth : 0}px` }}
-        >
+        <div className={main_styles.content}>
           <Routes>
             {!isAuthenticated ? (
               <>
                 <Route
                   path="/login"
-                  element={<Login onLogin={() => setIsAuthenticated(true)} />}
+                  element={
+                    <Login
+                      onLogin={(role) => {
+                        setIsAuthenticated(true);
+                        setUserRole(role);
+                      }}
+                    />
+                  }
                 />
                 <Route path="/register" element={<Registration />} />
                 <Route path="*" element={<Navigate to="/login" />} />
+              </>
+            ) : userRole === "admin" ? (
+              <>
+                <Route
+                  path="/admin"
+                  element={
+                    <div>
+                      <AdminPanel
+                        onLogout={() => {
+                          setIsAuthenticated(false);
+                          setUserRole(null);
+                        }}
+                      />
+                    </div>
+                  }
+                />
+                <Route path="*" element={<Navigate to="/admin" />} />
               </>
             ) : (
               <>
                 <Route
                   path="/home"
-                  element={<Home onLogout={() => setIsAuthenticated(false)} />}
+                  element={
+                    <Home
+                      onLogout={() => {
+                        setIsAuthenticated(false);
+                        setUserRole(null);
+                      }}
+                    />
+                  }
                 />
                 <Route path="/daily-tasks" element={<DailyTasks />} />
                 <Route

@@ -107,3 +107,50 @@ export const changeUserLogin = async (newLogin) => {
 
   return result;
 };
+
+export const getAllUsers = async () => {
+  const response = await fetch(
+    "http://localhost:5000/account/get_users_for_admin",
+    {
+      method: "GET",
+      credentials: "include",
+    },
+  );
+
+  if (await handleUnauthorizedError(response)) {
+    return [];
+  }
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || "Ошибка получения пользователей");
+  }
+
+  return response.json();
+};
+
+export const deleteUserAccountByAdmin = async (userId) => {
+  const response = await fetch(
+    "http://localhost:5000/account/delete_by_admin",
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId }),
+      credentials: "include",
+    },
+  );
+
+  if (await handleUnauthorizedError(response)) {
+    return [];
+  }
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.message || "Ошибка удаления аккаунта");
+  }
+
+  return result;
+};
