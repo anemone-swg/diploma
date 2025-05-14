@@ -8,6 +8,7 @@ import {
   TeamOfProject,
   User,
 } from "../models/Export.js";
+import { io } from "../server.js";
 
 const router = Router();
 router.use("/projects", isAuthenticated);
@@ -113,6 +114,7 @@ router.put("/projects/rename/:projectId", async (req, res) => {
     project.title = title;
     await project.save();
 
+    io.emit("projectRenamed", project);
     res.json({ success: true, project });
   } catch (error) {
     console.error("Ошибка при обновлении проекта:", error);
@@ -150,6 +152,7 @@ router.post("/projects/teams/add", async (req, res) => {
     const { title, id_project } = req.body;
     const newTeam = await Team.create({ title, id_project });
 
+    io.emit("teamAdded");
     res.status(201).json(newTeam);
   } catch (error) {
     console.error(error);
@@ -181,6 +184,7 @@ router.put("/projects/teams/rename/:teamId", async (req, res) => {
     team.title = title;
     await team.save();
 
+    io.emit("teamRenamed");
     res.json({ success: true, team });
   } catch (error) {
     console.error("Ошибка при обновлении команды:", error);
@@ -197,6 +201,7 @@ router.delete("/projects/teams/delete/:teamId", async (req, res) => {
     });
 
     if (deleted) {
+      io.emit("teamDeleted");
       res.json({ success: true });
     } else {
       res.status(404).json({ success: false, message: "Команда не найдена" });
@@ -212,6 +217,7 @@ router.post("/projects/teams/columns/add", async (req, res) => {
     const { title, id_team } = req.body;
     const newColumn = await Column.create({ title, id_team });
 
+    io.emit("columnAdded");
     res.status(201).json(newColumn);
   } catch (error) {
     console.error("Ошибка при создании столбца:", error);
@@ -243,6 +249,7 @@ router.put("/projects/teams/columns/rename/:columnId", async (req, res) => {
     column.title = title;
     await column.save();
 
+    io.emit("columnRenamed");
     res.json({ success: true, column });
   } catch (error) {
     console.error("Ошибка при обновлении столбца:", error);
@@ -259,6 +266,7 @@ router.delete("/projects/teams/columns/delete/:columnId", async (req, res) => {
     });
 
     if (deleted) {
+      io.emit("columnDeleted");
       res.json({ success: true });
     } else {
       res.status(404).json({ success: false, message: "Столбец не найден" });
@@ -295,6 +303,7 @@ router.put(
       column.color = color;
       await column.save();
 
+      io.emit("columnChangedColor");
       res.json({ success: true, column });
     } catch (error) {
       console.error("Ошибка при обновлении столбца:", error);
@@ -309,6 +318,7 @@ router.post("/projects/teams/columns/tasks/add", async (req, res) => {
     const deadline = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
     const newTask = await Task.create({ content, id_column, deadline });
 
+    io.emit("taskAdded");
     res.status(201).json(newTask);
   } catch (error) {
     console.error("Ошибка при создании задачи:", error);
@@ -327,6 +337,7 @@ router.delete(
       });
 
       if (deleted) {
+        io.emit("taskDeleted");
         res.json({ success: true });
       } else {
         res.status(404).json({ success: false, message: "Задача не найдена" });
@@ -363,6 +374,7 @@ router.put(
       task.completed = !task.completed;
       await task.save();
 
+      io.emit("taskStatusChanged", task);
       res.json({ success: true, task });
     } catch (error) {
       console.error("Ошибка при обновлении задачи:", error);
@@ -397,6 +409,7 @@ router.put(
       task.content = content;
       await task.save();
 
+      io.emit("taskContentChanged");
       res.json({ success: true, task });
     } catch (error) {
       console.error("Ошибка при обновлении задачи:", error);
@@ -431,6 +444,7 @@ router.put(
       task.deadline = deadline;
       await task.save();
 
+      io.emit("taskDeadlineChanged");
       res.json({ success: true, task });
     } catch (error) {
       console.error("Ошибка при обновлении задачи:", error);
@@ -452,6 +466,7 @@ router.post("/projects/teams/columns/tasks/move", async (req, res) => {
     task.id_column = newColumnId;
     await task.save();
 
+    io.emit("taskMoved");
     res.json({ success: true, message: "Задача перемещена" });
   } catch (error) {
     console.error("Ошибка при перемещении задачи:", error);

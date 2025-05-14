@@ -8,7 +8,7 @@ import DefaultBtn from "@/components/ui/DefaultBtn.jsx";
 import ProjectPageColumn from "@/features/ProjectPage/components/ProjectPageColumn.jsx";
 import { useCollapsedState } from "@/hooks/useCollapsedState.js";
 
-const ProjectPageTeam = ({ setProject, team, currentUserId }) => {
+const ProjectPageTeam = ({ team, currentUserId }) => {
   const [isCollapsed, setIsCollapsed] = useCollapsedState(team.id_team);
 
   return (
@@ -32,7 +32,6 @@ const ProjectPageTeam = ({ setProject, team, currentUserId }) => {
         >
           {team.columns.map((column) => (
             <ProjectPageColumn
-              setProject={setProject}
               column={column}
               key={column.id_column}
               currentUserId={currentUserId}

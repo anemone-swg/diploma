@@ -16,17 +16,33 @@ import DefaultBtn from "@/components/ui/DefaultBtn.jsx";
 import { ImCheckmark2 } from "react-icons/im";
 import { RxCross2 } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
+import socket from "@/services/socket.js";
 
 const JoinSection = () => {
   const [invitations, setInvitations] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    showInvitations()
-      .then(setInvitations)
-      .catch((err) => {
+    const loadInvitations = async () => {
+      try {
+        const invitations = await showInvitations();
+        setInvitations(invitations);
+      } catch (err) {
         console.error("Ошибка при загрузке приглашений:", err);
-      });
+      }
+    };
+
+    loadInvitations();
+
+    socket.on("userDeletedFromTeam", loadInvitations);
+    socket.on("inviteCanceled", loadInvitations);
+    socket.on("userInvited", loadInvitations);
+
+    return () => {
+      socket.off("userDeletedFromTeam", loadInvitations);
+      socket.off("inviteCanceled", loadInvitations);
+      socket.off("userInvited", loadInvitations);
+    };
   }, []);
 
   const handleAcceptInvite = async (id_invite) => {

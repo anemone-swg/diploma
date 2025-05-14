@@ -10,6 +10,7 @@ import {
 import DefaultBtn from "@/components/ui/DefaultBtn.jsx";
 import btn_styles from "@/components/ui/DefaultBtn.module.css";
 import { MdCancel } from "react-icons/md";
+import socket from "@/services/socket.js";
 
 const TeamMembers = ({ setBoards, projectId, refreshInvitations }) => {
   const [team, setTeam] = useState([]);
@@ -20,6 +21,22 @@ const TeamMembers = ({ setBoards, projectId, refreshInvitations }) => {
       .catch((err) => {
         console.error("Ошибка при загрузке команды:", err);
       });
+
+    const handleShowTeam = () => {
+      showTeam(projectId)
+        .then(setTeam)
+        .catch((err) => {
+          console.error("Ошибка при загрузке команды:", err);
+        });
+    };
+
+    socket.on("inviteAccepted", handleShowTeam);
+    socket.on("userDeletedFromTeam", handleShowTeam);
+
+    return () => {
+      socket.off("inviteAccepted", handleShowTeam);
+      socket.off("userDeletedFromTeam", handleShowTeam);
+    };
   }, []);
 
   const handleDeleteFromTeam = async (member) => {

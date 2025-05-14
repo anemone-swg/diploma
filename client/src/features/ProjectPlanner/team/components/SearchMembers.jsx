@@ -15,6 +15,7 @@ import { FcInvite } from "react-icons/fc";
 import { FaHourglassHalf } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
 import { ImCheckmark2 } from "react-icons/im";
+import socket from "@/services/socket.js";
 
 const SearchMembers = ({ projectId, invitations, refreshInvitations }) => {
   const [query, setQuery] = useState("");
@@ -36,6 +37,30 @@ const SearchMembers = ({ projectId, invitations, refreshInvitations }) => {
     }, 300); // debounce-пауза
 
     return () => clearTimeout(timeout);
+  }, [query]);
+
+  useEffect(() => {
+    const handleInviteCnanged = () => {
+      if (query.trim() !== "") {
+        searchUsersByLogin(query)
+          .then(setResults)
+          .catch((err) => {
+            console.error("Ошибка при обновлении после inviteAccepted:", err);
+            setResults([]);
+          });
+      }
+
+      refreshInvitations();
+    };
+
+    socket.on("userDeletedFromTeam", handleInviteCnanged);
+    socket.on("inviteDeclined", handleInviteCnanged);
+    socket.on("inviteAccepted", handleInviteCnanged);
+
+    return () => {
+      socket.off("inviteDeclined", handleInviteCnanged);
+      socket.off("inviteAccepted", handleInviteCnanged);
+    };
   }, [query]);
 
   const handleInviteClick = async (user) => {

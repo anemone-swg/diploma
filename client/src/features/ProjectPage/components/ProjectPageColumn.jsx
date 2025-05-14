@@ -4,7 +4,7 @@ import kanban_styles from "@/features/ProjectPlanner/kanban/styles/Kanban.module
 import ProjectPageTask from "@/features/ProjectPage/components/ProjectPageTask.jsx";
 import project_page_styles from "@/styles/ProjectPage.module.css";
 
-const ProjectPageColumn = ({ setProject, column, currentUserId }) => {
+const ProjectPageColumn = ({ column, currentUserId }) => {
   const isPastelColor =
     column.color && column.color !== "var(--background-color)";
 
@@ -30,7 +30,6 @@ const ProjectPageColumn = ({ setProject, column, currentUserId }) => {
       <div className={column_styles.taskContainer}>
         {column.tasks.map((task) => (
           <ProjectPageTask
-            setProject={setProject}
             key={task.id_task}
             task={task}
             currentUserId={currentUserId}

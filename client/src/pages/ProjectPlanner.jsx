@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../styles/ProjectPlanner.module.css";
 import KanbanBoardSection from "../features/ProjectPlanner/kanban/components/KanbanBoardSection.jsx";
 import TeamSection from "../features/ProjectPlanner/team/components/TeamSection.jsx";
@@ -7,6 +7,7 @@ import NavBar from "../components/shared/NavBar.jsx";
 import JoinSection from "../features/ProjectPlanner/join/components/JoinSection.jsx";
 import MainSection from "../features/ProjectPlanner/main/components/MainSection.jsx";
 import { fetchProjects } from "../services/ProjectPlannerService.js";
+import socket from "@/services/socket.js";
 
 function ProjectPlanner({ sidebarWidth }) {
   const [boards, setBoards] = useState([]);
@@ -19,30 +20,69 @@ function ProjectPlanner({ sidebarWidth }) {
   const [deletingColumn, setDeletingColumn] = useState(null);
   const [showDeleteColumnModal, setShowDeleteColumnModal] = useState(false);
 
+  const normalizeProjects = (data) =>
+    data.map((project) => ({
+      ...project,
+      id: project.id_project,
+      teams:
+        project.teams?.map((team) => ({
+          ...team,
+          id: team.id_team,
+          columns:
+            team.columns?.map((column) => ({
+              ...column,
+              id: column.id_column,
+              tasks:
+                column.tasks?.map((task) => ({
+                  ...task,
+                  id: task.id_task,
+                })) || [],
+            })) || [],
+        })) || [],
+    }));
+
   useEffect(() => {
     fetchProjects().then((data) => {
-      const normalizedData = data.map((project) => ({
-        ...project,
-        id: project.id_project,
-        teams:
-          project.teams?.map((team) => ({
-            ...team,
-            id: team.id_team,
-            columns:
-              team.columns?.map((column) => ({
-                ...column,
-                id: column.id_column,
-                tasks:
-                  column.tasks?.map((task) => ({
-                    ...task,
-                    id: task.id_task,
-                  })) || [],
-              })) || [],
-          })) || [],
-      }));
-
-      setBoards(normalizedData);
+      setBoards(normalizeProjects(data));
     });
+  }, []);
+
+  useEffect(() => {
+    const handleTaskStatusChanged = (updatedTask) => {
+      setBoards((prevBoards) =>
+        prevBoards.map((board) => ({
+          ...board,
+          teams: board.teams.map((team) => ({
+            ...team,
+            columns: team.columns.map((column) => ({
+              ...column,
+              tasks: column.tasks.map((task) =>
+                task.id_task === updatedTask.id_task
+                  ? { ...task, completed: !task.completed }
+                  : task,
+              ),
+            })),
+          })),
+        })),
+      );
+    };
+
+    const handleReloadProject = async () => {
+      try {
+        const data = await fetchProjects();
+        setBoards(normalizeProjects(data));
+      } catch (err) {
+        console.error("Ошибка при обновлении проекта:", err);
+      }
+    };
+
+    socket.on("userDeletedFromTeam", handleReloadProject);
+    socket.on("taskStatusChanged", handleTaskStatusChanged);
+
+    return () => {
+      socket.off("userDeletedFromTeam", handleReloadProject);
+      socket.off("taskStatusChanged", handleTaskStatusChanged);
+    };
   }, []);
 
   const renderContent = () => {

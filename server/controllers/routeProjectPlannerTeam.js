@@ -12,6 +12,7 @@ import {
   User,
 } from "../models/Export.js";
 import sequelize from "../db.js";
+import { io } from "../server.js";
 
 const router = Router();
 router.use("/team", isAuthenticated);
@@ -74,6 +75,7 @@ router.post("/team/invite", async (req, res) => {
       id_project: projectId,
     });
 
+    io.emit("userInvited");
     res.json({ message: "Приглашение отправлено" });
   } catch (error) {
     console.error("Ошибка отправки приглашения:", error);
@@ -105,6 +107,7 @@ router.delete("/team/cancel_invite", async (req, res) => {
         toUserId,
       },
     });
+    io.emit("inviteCanceled");
     res.json({ success: true });
   } catch (error) {
     console.error("Ошибка при отмене приглашения:", error);
@@ -196,6 +199,7 @@ router.put("/team/accept_invite", async (req, res) => {
       id_teamOfProject: teamOfProject.id_teamOfProject,
     });
 
+    io.emit("inviteAccepted");
     res.json({ success: true });
   } catch (error) {
     console.error("Ошибка при принятии приглашения:", error);
@@ -226,6 +230,7 @@ router.put("/team/decline_invite", async (req, res) => {
     inv.status = "declined";
     await inv.save();
 
+    io.emit("inviteDeclined");
     res.json({ success: true });
   } catch (error) {
     console.error("Ошибка при отмене приглашения:", error);
@@ -335,6 +340,8 @@ router.delete("/team/delete_from_team", async (req, res) => {
         },
       });
     }
+
+    io.emit("userDeletedFromTeam");
     res.json({ success: true });
   } catch (error) {
     console.error("Ошибка при удалении участника команды из нее:", error);
@@ -359,6 +366,7 @@ router.post("/team/assign_to_task", async (req, res) => {
 
     await loadedTask.addAssignedUser(loadedUser);
 
+    io.emit("userAssignedToTask");
     res.json({
       id_user: loadedUser.id_user,
       login: loadedUser.login,
@@ -389,6 +397,7 @@ router.delete("/team/unassign_from_task", async (req, res) => {
 
     await loadedTask.removeAssignedUser(loadedUser);
 
+    io.emit("userUnassignedToTask");
     res.json({ success: true });
   } catch (err) {
     console.error("Ошибка при удалении пользователя из задачи:", err);

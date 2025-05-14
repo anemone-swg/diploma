@@ -6,10 +6,10 @@ import defaultAvatar from "@/assets/default_avatar.jpg";
 import project_page_styles from "@/styles/ProjectPage.module.css";
 import ReadOnlyDeadlineDatePicker from "@/components/ui/ReadOnlyDeadlineDatePicker.jsx";
 import btn_styles from "@/components/ui/DefaultBtn.module.css";
-import { taskStatusChange } from "@/services/ProjectPlannerService.js";
 import DefaultBtn from "@/components/ui/DefaultBtn.jsx";
+import { taskStatusChange } from "@/services/ProjectPlannerService.js";
 
-const ProjectPageTask = ({ setProject, task, currentUserId }) => {
+const ProjectPageTask = ({ task, currentUserId }) => {
   const isUserAssigned = task.assignedUsers?.some(
     (user) => user.id_user === currentUserId,
   );
@@ -17,21 +17,6 @@ const ProjectPageTask = ({ setProject, task, currentUserId }) => {
   const handleTaskStatusChange = async (taskId) => {
     try {
       await taskStatusChange(taskId);
-
-      setProject((prevProject) => ({
-        ...prevProject,
-        teams: prevProject.teams.map((team) => ({
-          ...team,
-          columns: team.columns.map((column) => ({
-            ...column,
-            tasks: column.tasks.map((task) =>
-              task.id_task === taskId
-                ? { ...task, completed: !task.completed }
-                : task,
-            ),
-          })),
-        })),
-      }));
     } catch (error) {
       console.error(error);
       alert("Ошибка при изменении статуса задачи");

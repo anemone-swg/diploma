@@ -10,6 +10,8 @@ import { checkAuth } from "./services/AuthAndRegService.js";
 import { ClipLoader } from "react-spinners";
 import main_styles from "./styles/App.module.css";
 import ProjectPage from "@/pages/ProjectPage.jsx";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const [sidebarWidth, setSidebarWidth] = useState(200);
@@ -44,6 +46,7 @@ function App() {
         className={main_styles.app}
         style={{ paddingLeft: `${isAuthenticated ? sidebarWidth : 0}px` }}
       >
+        <ToastContainer position="top-right" autoClose={3000} theme="dark" />
         {isAuthenticated && (
           <Sidebar
             onResize={(width) => setSidebarWidth(width)}
