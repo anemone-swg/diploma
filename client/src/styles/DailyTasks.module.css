@@ -29,17 +29,17 @@
 .myInput {
   padding: 10px;
   border-radius: 5px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--input-background-color);
+  border: 1px solid var(--input-border-color);
   color: var(--text-color);
   transition: all 0.3s;
   margin: 5px 0 0 0;
 }
 
 .myInput:focus {
-  border-color: rgba(255, 255, 255, 0.4);
+  border-color: var(--input-border-color-focus);
   outline: none;
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 3px var(--input-box-shadow-focus);
 }
 
 .myLabel {
@@ -109,12 +109,12 @@
 
 .descriptionArea {
   min-height: 50px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--input-background-color);
   color: var(--text-color);
   padding: 10px;
   width: 100%;
   border-radius: 5px;
-  border: 1px solid rgba(255, 255, 255, 0.2);;
+  border: 1px solid var(--input-border-color);
   transition: border 0.4s ease;
 }
 

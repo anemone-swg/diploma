@@ -1,169 +1,170 @@
 body.authBody {
-    overflow-y: hidden;
+  overflow-y: hidden;
 }
 
 section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
 }
 
 .loginContainer {
-    background-color: var(--light-background-color);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    text-align: center;
-    width: 300px;
+  background-color: var(--light-background-color);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  width: 300px;
 }
 
 .loginContainer h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
+  font-size: 24px;
+  margin-bottom: 10px;
 }
 
 .inputGroup {
-    margin-bottom: 15px;
-    text-align: left;
+  margin-bottom: 15px;
+  text-align: left;
 }
 
 label {
-    display: block;
-    margin-bottom: 5px;
+  display: block;
+  margin-bottom: 5px;
 }
 
 input {
-    border: none;
+  border: none;
 }
 
 .username,
 .password,
 .email,
 .confirmPassword {
-    width: 100%;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: var(--background-color);
-    color: var(--text-color);
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 .username:focus,
 .password:focus,
 .email:focus,
 .confirmPassword:focus {
-    outline: none;
-    border: 1px solid var(--text-color);
+  outline: none;
+  border: 1px solid var(--text-color);
 }
 
 .logButton {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px !important;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.5s;
-    max-width: 300px;
-    margin-bottom: 10px;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px !important;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.5s;
+  max-width: 300px;
+  margin-bottom: 10px;
 }
 
 .logButton:hover {
-    background-color: var(--default-btn-hover);
+  background-color: var(--default-btn-hover);
 }
 
 a.reg {
-    text-decoration: none;
-    color: var(--text-color);
-    transition: 0.5s;
+  text-decoration: none;
+  color: var(--text-color);
+  transition: 0.5s;
 }
 
 a.reg:hover {
-    color: var(--default-btn-hover);
+  color: var(--default-btn-hover);
 }
 
 .registerContainer {
-    background-color: var(--light-background-color);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    text-align: center;
-    width: 300px;
-    margin-top: 100px;
+  background-color: var(--light-background-color);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  width: 300px;
+  margin-top: 100px;
 }
 
 .registerContainer h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
+  font-size: 24px;
+  margin-bottom: 10px;
 }
 
 .backToPrev {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background-color: var(--light-background-color);
-    border: none;
-    color: white;
-    padding: 10px 15px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 12px;
-    width: 60px;
-    transition: 0.5s;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: var(--light-background-color);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  border: none;
+  color: var(--text-color);
+  padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 12px;
+  width: 60px;
+  transition: 0.5s;
 }
 
 .backToPrev:hover {
-    background-color: rgb(75, 75, 75);
+  background-color: rgb(75, 75, 75);
 }
 
 .notification {
-    display: none;
-    width: 300px;
-    margin-top: 300px;
+  display: none;
+  width: 300px;
+  margin-top: 300px;
 }
 
 .loginForm {
-    margin-top: 100px;
+  margin-top: 100px;
 }
 
 .failLogin {
-    visibility: hidden;
-    opacity: 0;
-    color: rgb(251, 73, 73);
-    padding: 5px;
-    margin-top: 10px;
-    transition: visibility 0s, opacity 0.5s linear;
+  visibility: hidden;
+  opacity: 0;
+  color: rgb(251, 73, 73);
+  padding: 5px;
+  margin-top: 10px;
+  transition: visibility 0s, opacity 0.5s linear;
 }
 
 .failLogin.show {
-    visibility: visible;
-    opacity: 1;
+  visibility: visible;
+  opacity: 1;
 }
 
 .failLogin p {
-    text-align: justify;
-    margin-bottom: 0;
+  text-align: justify;
+  margin-bottom: 0;
 }
 
 .inputError {
-    border: 1px solid rgb(251, 73, 73);
-    transition: border 0.5s ease;
+  border: 1px solid rgb(251, 73, 73);
+  transition: border 0.5s ease;
 }
 
 .failReg {
-    color: rgb(251, 73, 73);
-    padding: 5px;
-    margin-top: 10px;
+  color: rgb(251, 73, 73);
+  padding: 5px;
+  margin-top: 10px;
 }
 
 .failReg p {
-    text-align: justify;
-    margin-bottom: 0;
+  text-align: justify;
+  margin-bottom: 0;
 }

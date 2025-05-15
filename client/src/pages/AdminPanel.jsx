@@ -17,10 +17,13 @@ import btn_styles from "@/components/ui/DefaultBtn.module.css";
 import { MdCancel } from "react-icons/md";
 import { toast } from "react-toastify";
 import socket from "@/services/socket.js";
+import { FaRegMoon, FaRegSun } from "react-icons/fa";
+import { useTheme } from "@/context/ThemeContext.jsx";
 
 const AdminPanel = ({ onLogout }) => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -82,9 +85,16 @@ const AdminPanel = ({ onLogout }) => {
           <RiAdminFill className={main_styles.titleIcon} />
           Панель администратора
         </h1>
-        <DefaultBtn onClick={handleLogout} variant="confirmBtn">
-          Выйти
-        </DefaultBtn>
+        <div className={admin_styles.btnGroup}>
+          <DefaultBtn
+            onClick={toggleTheme}
+            icon={theme === "dark" ? FaRegMoon : FaRegSun}
+            className={btn_styles.roundCornersBtn}
+          />
+          <DefaultBtn onClick={handleLogout} variant="confirmBtn">
+            Выйти
+          </DefaultBtn>
+        </div>
       </div>
 
       <hr className={styles.prettyHr} />

@@ -8,6 +8,8 @@ import KanbanTask from "./KanbanTask.jsx";
 import { StrictModeDroppable } from "./StrictModeDroppable.jsx";
 import ColorPicker from "./ColorPicker.jsx";
 import { createTask, renameColumn } from "@/services/ProjectPlannerService.js";
+import { useTheme } from "@/context/ThemeContext.jsx";
+import { columnColors } from "@/constants/columnColors.js";
 
 const KanbanColumn = ({
   column,
@@ -22,8 +24,12 @@ const KanbanColumn = ({
   const [editingColumnId, setEditingColumnId] = useState(null);
   const [showTaskInput, setShowTaskInput] = useState(null);
   const [newTaskContent, setNewTaskContent] = useState("");
-  const isPastelColor =
-    column.color && column.color !== "var(--background-color)";
+  // const isPastelColor =
+  //   column.color && column.color !== "var(--background-color)";
+  const { theme } = useTheme();
+  const columnColor =
+    columnColors[theme][column.color] || columnColors[theme].default;
+  const isPastelColor = column.color && column.color !== "default";
 
   const handleColumnTitleChange = async (columnId, newTitle) => {
     if (newColumnTitle.trim()) {
@@ -100,7 +106,7 @@ const KanbanColumn = ({
   return (
     <div
       className={column_styles.column}
-      style={{ backgroundColor: column.color }}
+      style={{ backgroundColor: columnColor }}
     >
       <div className={kanban_styles.elementHeader}>
         <EditableTitle

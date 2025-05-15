@@ -1,10 +1,19 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FaHome, FaProjectDiagram, FaTasks } from "react-icons/fa";
+import {
+  FaHome,
+  FaProjectDiagram,
+  FaRegMoon,
+  FaRegSun,
+  FaTasks,
+} from "react-icons/fa";
 import styles from "./Sidebar.module.css";
+import DefaultBtn from "@/components/ui/DefaultBtn.jsx";
+import btn_styles from "@/components/ui/DefaultBtn.module.css";
+import { useTheme } from "@/context/ThemeContext.jsx";
 
 const Sidebar = ({ onResize, sidebarWidth, setSidebarWidth }) => {
-  // const [width, setWidth] = useState(200); // Начальная ширина
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const savedWidth = localStorage.getItem("sidebarWidth");
@@ -41,26 +50,37 @@ const Sidebar = ({ onResize, sidebarWidth, setSidebarWidth }) => {
     <div className={styles.sidebar} style={{ width: `${sidebarWidth}px` }}>
       <h1 className={styles.nameProject}>TASKLY</h1>
       <hr className={styles.hrNameProject} />
-      <ul>
-        <li>
-          <Link to="/">
-            <FaHome className={styles.icon} /> Домашняя страница
-          </Link>
-        </li>
-        <li>
-          <Link to="/daily-tasks">
-            <FaTasks className={styles.icon} />
-            Список задач
-          </Link>
-        </li>
-        <li>
-          <Link to="/project-planner">
-            <FaProjectDiagram className={styles.icon} />
-            Планировщик проектов
-          </Link>
-        </li>
-      </ul>
-      {/* Ползунок для изменения размера */}
+      <div className={styles.sidebarContent}>
+        <div>
+          <ul>
+            <li>
+              <Link to="/">
+                <FaHome className={styles.icon} /> Домашняя страница
+              </Link>
+            </li>
+            <li>
+              <Link to="/daily-tasks">
+                <FaTasks className={styles.icon} />
+                Список задач
+              </Link>
+            </li>
+            <li>
+              <Link to="/project-planner">
+                <FaProjectDiagram className={styles.icon} />
+                Планировщик проектов
+              </Link>
+            </li>
+          </ul>
+        </div>
+        <div className={styles.bottomSection}>
+          <DefaultBtn
+            onClick={toggleTheme}
+            icon={theme === "dark" ? FaRegMoon : FaRegSun}
+            className={btn_styles.roundCornersBtn}
+          />
+        </div>
+      </div>
+
       <div className={styles.resizer} onMouseDown={startResizing}></div>
     </div>
   );

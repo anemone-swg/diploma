@@ -1,20 +1,11 @@
-import { createTheme, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import { format } from "date-fns";
 import { ThemeProvider } from "@mui/material/styles";
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#303030",
-      contrastText: "#3c3c3c",
-    },
-    text: {
-      primary: "#b3b3b3",
-    },
-  },
-});
+import { useMuiTheme } from "@/hooks/useMuiTheme.js";
 
 const ReadOnlyDeadlineDatePicker = ({ value }) => {
+  const theme = useMuiTheme();
+
   return (
     <ThemeProvider theme={theme}>
       <TextField

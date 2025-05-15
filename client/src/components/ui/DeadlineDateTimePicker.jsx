@@ -2,22 +2,13 @@ import React from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DesktopDateTimePicker } from "@mui/x-date-pickers";
-import { createTheme, IconButton, ThemeProvider } from "@mui/material";
+import { IconButton, ThemeProvider } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#303030",
-      contrastText: "#3c3c3c",
-    },
-    text: {
-      primary: "#b3b3b3",
-    },
-  },
-});
+import { useMuiTheme } from "@/hooks/useMuiTheme.js";
 
 const DeadlineDateTimePicker = ({ value, onChange, mode }) => {
+  const theme = useMuiTheme();
+
   const handleClearDate = () => {
     onChange(null); // очищаем дату
   };

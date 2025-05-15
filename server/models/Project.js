@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from "../db.js"; // путь подкорректируй под себя
+import sequelize from "../db.js";
 
 class Project extends Model {}
 

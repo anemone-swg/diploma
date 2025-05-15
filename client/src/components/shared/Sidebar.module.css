@@ -72,3 +72,14 @@
   user-select: none;
 }
 
+.sidebarContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.bottomSection {
+  display: flex;
+  justify-content: end;
+}

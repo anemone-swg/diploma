@@ -1,0 +1,26 @@
+export const columnColors = {
+  dark: {
+    default: "var(--background-color)",
+    pink: "#B08080",
+    green: "#709570",
+    blue: "#8095B0",
+    purple: "#936c93",
+    yellow: "#B0A880",
+    lime: "#889870",
+    gray: "#A0A0A0",
+    peach: "#B09080",
+    indigo: "#8080B0",
+  },
+  light: {
+    default: "var(--background-color)",
+    pink: "#ff8e8e",
+    green: "#b1ffb1",
+    blue: "#afd3ff",
+    purple: "#ffacff",
+    yellow: "#fff0af",
+    lime: "#e0ffb0",
+    gray: "#A0A0A0",
+    peach: "#ffbb9d",
+    indigo: "#a0a0ff",
+  },
+};

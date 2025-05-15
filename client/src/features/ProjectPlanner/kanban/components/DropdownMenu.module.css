@@ -39,6 +39,10 @@
   transition: 0.3s ease background-color;
 }
 
+.dropdownItem svg {
+  margin: 0 3px 0 0;
+}
+
 /* Ховер-эффект для пунктов меню */
 .dropdownItem:hover {
   background-color: var(--default-btn-hover);

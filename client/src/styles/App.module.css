@@ -1,12 +1,29 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 :root {
+  --background-color: #c7c7c7;
+  --light-background-color: #d6d6d6;
+  --dark-background-color: #bbbbbb;
+  --text-color: #2c2c2c;
+  --text-color-dark: black;
+  --default-btn-hover: #a6a6a6;
+  --input-background-color: rgba(255, 255, 255, 0.3);
+  --input-border-color: #adadad;
+  --input-border-color-focus: rgba(47, 47, 47, 0.4);
+  --input-box-shadow-focus: rgba(35, 35, 35, 0.1);
+}
+
+[data-theme="dark"] {
   --background-color: #232323;
   --light-background-color: #303030;
   --dark-background-color: #1e1e1e;
   --text-color: #b3b3b3;
   --text-color-dark: black;
   --default-btn-hover: #505050;
+  --input-background-color: rgba(255, 255, 255, 0.1);
+  --input-border-color: rgba(255, 255, 255, 0.2);
+  --input-border-color-focus: rgba(255, 255, 255, 0.4);
+  --input-box-shadow-focus: rgba(255, 255, 255, 0.1);
 }
 
 ::-webkit-scrollbar {

@@ -3,18 +3,26 @@ import column_styles from "@/features/ProjectPlanner/kanban/components/KanbanCol
 import kanban_styles from "@/features/ProjectPlanner/kanban/styles/Kanban.module.css";
 import ProjectPageTask from "@/features/ProjectPage/components/ProjectPageTask.jsx";
 import project_page_styles from "@/styles/ProjectPage.module.css";
+import { useTheme } from "@/context/ThemeContext.jsx";
+import { columnColors } from "@/constants/columnColors.js";
 
 const ProjectPageColumn = ({ column, currentUserId }) => {
-  const isPastelColor =
-    column.color && column.color !== "var(--background-color)";
+  const { theme } = useTheme();
+
+  const resolvedColor =
+    columnColors[theme][column.color] || columnColors[theme].default;
+
+  const isPastelColor = resolvedColor !== "var(--background-color)";
 
   return (
     <div
       className={column_styles.column}
-      style={{ backgroundColor: column.color }}
+      style={{ backgroundColor: resolvedColor }}
     >
       <div
-        className={`${kanban_styles.elementHeader} ${isPastelColor ? project_page_styles.pastel : ""}`}
+        className={`${kanban_styles.elementHeader} ${
+          isPastelColor ? project_page_styles.pastel : ""
+        }`}
       >
         <h3 className={project_page_styles.titleInSection}>{column.title}</h3>
       </div>

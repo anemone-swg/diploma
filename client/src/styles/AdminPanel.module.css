@@ -16,3 +16,8 @@
 .deleteBtn button svg {
   margin: 0 5px 0 0;
 }
+
+.btnGroup {
+  display: flex;
+  gap: 10px;
+}

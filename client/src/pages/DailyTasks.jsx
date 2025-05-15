@@ -135,12 +135,6 @@ const DailyTasks = () => {
 
             <label>
               Дата выполнения:
-              {/*<input*/}
-              {/*  type="datetime-local"*/}
-              {/*  className={styles.myInput}*/}
-              {/*  value={dueDate}*/}
-              {/*  onChange={(e) => setDueDate(e.target.value)}*/}
-              {/*/>*/}
               <DeadlineDateTimePicker
                 value={dueDate ? new Date(dueDate) : null}
                 onChange={(newDate) => {

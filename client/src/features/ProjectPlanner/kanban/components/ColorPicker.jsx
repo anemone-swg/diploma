@@ -4,20 +4,12 @@ import DefaultBtn from "../../../../components/ui/DefaultBtn.jsx";
 import btn_styles from "../../../../components/ui/DefaultBtn.module.css";
 import { IoIosColorWand } from "react-icons/io";
 import { changeColorColumn } from "@/services/ProjectPlannerService.js";
+import { useTheme } from "@/context/ThemeContext.jsx";
+import { columnColors } from "@/constants/columnColors.js";
 
 const ColorPicker = ({ setBoards, column, isPastelColor }) => {
-  const columnColors = [
-    "var(--background-color)", // основной цвет без изменений
-    "#B08080",
-    "#709570",
-    "#8095B0",
-    "#936c93",
-    "#B0A880",
-    "#889870",
-    "#A0A0A0",
-    "#B09080",
-    "#8080B0",
-  ];
+  const { theme } = useTheme();
+
   const divRef = useRef(null);
   const buttonRef = useRef(null);
   const [showColorPicker, setShowColorPicker] = useState(false); // Состояние для показа/скрытия выбора цвета
@@ -40,15 +32,15 @@ const ColorPicker = ({ setBoards, column, isPastelColor }) => {
 
   const handleColorSelect = async (color, columnId) => {
     try {
-      await changeColorColumn(color, columnId);
+      await changeColorColumn(color, columnId); // отправляем ключ цвета в БД
 
       setBoards((prevBoards) =>
         prevBoards.map((board) => ({
           ...board,
           teams: board.teams.map((team) => ({
             ...team,
-            columns: team.columns.map((col) =>
-              col.id === column.id ? { ...col, color } : col,
+            columns: team.columns.map(
+              (col) => (col.id === column.id ? { ...col, color } : col), // обновляем поле color ключом цвета
             ),
           })),
         })),
@@ -73,14 +65,12 @@ const ColorPicker = ({ setBoards, column, isPastelColor }) => {
 
       {showColorPicker && (
         <div ref={divRef} className={color_picker_styles.colorPicker}>
-          {columnColors.map((color) => (
+          {Object.entries(columnColors[theme]).map(([key, color]) => (
             <DefaultBtn
-              key={color}
+              key={key}
               style={{ backgroundColor: color }}
               className={color_picker_styles.colorSelect}
-              onClick={() => {
-                handleColorSelect(color, column.id);
-              }}
+              onClick={() => handleColorSelect(key, column.id)} // передаем key, а не цвет
             />
           ))}
         </div>

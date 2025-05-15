@@ -97,11 +97,6 @@
   transition: color 0.3s ease;
 }
 
-.startBlock:hover p,
-.motivationBlock:hover p {
-  color: rgba(255, 255, 255, 0.9);
-}
-
 .steps {
   line-height: 1.8;
   transition: transform 0.3s ease;

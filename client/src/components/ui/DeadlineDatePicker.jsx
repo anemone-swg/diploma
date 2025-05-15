@@ -2,21 +2,12 @@ import React from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
-import { createTheme, ThemeProvider } from "@mui/material";
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#303030",
-      contrastText: "#3c3c3c",
-    },
-    text: {
-      primary: "#b3b3b3",
-    },
-  },
-});
+import { ThemeProvider } from "@mui/material";
+import { useMuiTheme } from "@/hooks/useMuiTheme.js";
 
 const DeadlineDatePicker = ({ value, onChange }) => {
+  const theme = useMuiTheme();
+
   return (
     <ThemeProvider theme={theme}>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
