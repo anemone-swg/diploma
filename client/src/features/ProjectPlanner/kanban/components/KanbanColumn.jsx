@@ -24,8 +24,6 @@ const KanbanColumn = ({
   const [editingColumnId, setEditingColumnId] = useState(null);
   const [showTaskInput, setShowTaskInput] = useState(null);
   const [newTaskContent, setNewTaskContent] = useState("");
-  // const isPastelColor =
-  //   column.color && column.color !== "var(--background-color)";
   const { theme } = useTheme();
   const columnColor =
     columnColors[theme][column.color] || columnColors[theme].default;

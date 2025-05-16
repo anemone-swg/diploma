@@ -55,6 +55,11 @@
   opacity: 0;
 }
 
+.visibleDisable {
+  pointer-events: none;
+  color: var(--toastify-text-color-light);
+}
+
 .mainSectionBtn {
   font-size: 1rem;
   color: white;
@@ -70,4 +75,10 @@
   background-color: var(--light-background-color);
   border-radius: 4px;
   margin-right: 0;
+}
+
+.noSvgMargin {
+  svg {
+    margin: 0;
+  }
 }

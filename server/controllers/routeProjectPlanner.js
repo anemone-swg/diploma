@@ -354,8 +354,9 @@ router.put(
   async (req, res) => {
     try {
       const { taskId } = req.params;
+      const currentUserId = req.session.user.id;
 
-      if (!taskId) {
+      if (!taskId || !currentUserId) {
         return res
           .status(400)
           .json({ success: false, message: "Недостаточно данных" });
@@ -363,6 +364,16 @@ router.put(
 
       const task = await Task.findOne({
         where: { id_task: taskId },
+        include: {
+          model: Column,
+          include: {
+            model: Team,
+            include: {
+              model: Project,
+              attributes: ["id_project", "id_user"],
+            },
+          },
+        },
       });
 
       if (!task) {
@@ -371,7 +382,25 @@ router.put(
           .json({ success: false, message: "Задача не найдена" });
       }
 
-      task.completed = !task.completed;
+      const projectOwnerId = task.Column.Team.Project.id_user;
+      let newStatus;
+
+      if (currentUserId === projectOwnerId) {
+        newStatus = task.completed === "done" ? "in_progress" : "done";
+      } else {
+        if (task.completed === "done") {
+          return res.status(403).json({
+            success: false,
+            message: "Вы не можете изменить статус выполненной задачи",
+          });
+        }
+        newStatus =
+          task.completed === "awaiting_approval"
+            ? "in_progress"
+            : "awaiting_approval";
+      }
+
+      task.completed = newStatus;
       await task.save();
 
       io.emit("taskStatusChanged", task);

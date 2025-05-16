@@ -99,7 +99,7 @@ Task.belongsToMany(User, {
   as: "assignedUsers",
   foreignKey: "id_task",
   otherKey: "id_user",
-  onDelete: "CASCADE", // <== ДОБАВЬ ЭТО
+  onDelete: "CASCADE",
 });
 
 User.belongsToMany(Task, {
@@ -110,5 +110,5 @@ User.belongsToMany(Task, {
   as: "tasks",
   foreignKey: "id_user",
   otherKey: "id_task",
-  onDelete: "CASCADE", // <== И ТУТ
+  onDelete: "CASCADE",
 });

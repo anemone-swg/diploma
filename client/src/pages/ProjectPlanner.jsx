@@ -8,6 +8,7 @@ import JoinSection from "../features/ProjectPlanner/join/components/JoinSection.
 import MainSection from "../features/ProjectPlanner/main/components/MainSection.jsx";
 import { fetchProjects } from "../services/ProjectPlannerService.js";
 import socket from "@/services/socket.js";
+import TasksSection from "@/features/ProjectPlanner/tasks/components/TasksSection.jsx";
 
 function ProjectPlanner({ sidebarWidth }) {
   const [boards, setBoards] = useState([]);
@@ -48,25 +49,6 @@ function ProjectPlanner({ sidebarWidth }) {
   }, []);
 
   useEffect(() => {
-    const handleTaskStatusChanged = (updatedTask) => {
-      setBoards((prevBoards) =>
-        prevBoards.map((board) => ({
-          ...board,
-          teams: board.teams.map((team) => ({
-            ...team,
-            columns: team.columns.map((column) => ({
-              ...column,
-              tasks: column.tasks.map((task) =>
-                task.id_task === updatedTask.id_task
-                  ? { ...task, completed: !task.completed }
-                  : task,
-              ),
-            })),
-          })),
-        })),
-      );
-    };
-
     const handleReloadProject = async () => {
       try {
         const data = await fetchProjects();
@@ -78,12 +60,12 @@ function ProjectPlanner({ sidebarWidth }) {
 
     socket.on("userDeleted", handleReloadProject);
     socket.on("userDeletedFromTeam", handleReloadProject);
-    socket.on("taskStatusChanged", handleTaskStatusChanged);
+    socket.on("taskStatusChanged", handleReloadProject);
 
     return () => {
       socket.off("userDeleted", handleReloadProject);
       socket.off("userDeletedFromTeam", handleReloadProject);
-      socket.off("taskStatusChanged", handleTaskStatusChanged);
+      socket.off("taskStatusChanged", handleReloadProject);
     };
   }, []);
 
@@ -106,6 +88,9 @@ function ProjectPlanner({ sidebarWidth }) {
 
       case "team":
         return <TeamSection projectId={boards[0].id} setBoards={setBoards} />;
+
+      case "tasks":
+        return <TasksSection setBoards={setBoards} boards={boards} />;
 
       case "join":
         return <JoinSection />;

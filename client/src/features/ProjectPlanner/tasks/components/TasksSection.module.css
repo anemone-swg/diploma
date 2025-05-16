@@ -1,0 +1,12 @@
+.awaiting_tasks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.awaiting_task {
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

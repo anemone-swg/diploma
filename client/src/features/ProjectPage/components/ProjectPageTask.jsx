@@ -8,6 +8,7 @@ import ReadOnlyDeadlineDatePicker from "@/components/ui/ReadOnlyDeadlineDatePick
 import btn_styles from "@/components/ui/DefaultBtn.module.css";
 import DefaultBtn from "@/components/ui/DefaultBtn.jsx";
 import { taskStatusChange } from "@/services/ProjectPlannerService.js";
+import { RiProgress3Line } from "react-icons/ri";
 
 const ProjectPageTask = ({ task, currentUserId }) => {
   const isUserAssigned = task.assignedUsers?.some(
@@ -66,10 +67,16 @@ const ProjectPageTask = ({ task, currentUserId }) => {
         </div>
         {isUserAssigned && (
           <DefaultBtn
-            className={btn_styles.roundCornersBtn}
+            icon={task.completed === "awaiting_approval" && RiProgress3Line}
+            className={`${btn_styles.roundCornersBtn} ${btn_styles.noSvgMargin}`}
             onClick={() => handleTaskStatusChange(task.id_task)}
+            visibleDisabled={task.completed === "done"}
           >
-            {task.completed ? "Выполнено" : "Выполнить"}
+            {task.completed === "done"
+              ? "Выполнено"
+              : task.completed === "awaiting_approval"
+                ? ""
+                : "Выполнить"}
           </DefaultBtn>
         )}
       </div>

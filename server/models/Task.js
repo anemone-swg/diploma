@@ -21,8 +21,9 @@ Task.init(
       },
     },
     completed: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
+      type: DataTypes.ENUM("in_progress", "awaiting_approval", "done"),
+      allowNull: false,
+      defaultValue: "in_progress",
     },
     deadline: {
       type: DataTypes.DATE,

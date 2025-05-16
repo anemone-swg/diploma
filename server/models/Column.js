@@ -23,7 +23,7 @@ Column.init(
     color: {
       type: DataTypes.STRING(50),
       allowNull: false,
-      defaultValue: "var(--background-color)",
+      defaultValue: "default",
     },
     createdAt: {
       type: DataTypes.DATE,

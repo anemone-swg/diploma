@@ -13,6 +13,7 @@ import {
   taskStatusChange,
 } from "@/services/ProjectPlannerService.js";
 import SelectedUser from "@/features/ProjectPlanner/kanban/components/SelectedUser.jsx";
+import { RiProgress3Line } from "react-icons/ri";
 
 const KanbanTask = ({
   task,
@@ -180,10 +181,15 @@ const KanbanTask = ({
                 />
               </div>
               <DefaultBtn
-                className={btn_styles.roundCornersBtn}
+                icon={task.completed === "awaiting_approval" && RiProgress3Line}
+                className={`${btn_styles.roundCornersBtn} ${btn_styles.noSvgMargin}`}
                 onClick={() => handleTaskStatusChange(task.id)}
               >
-                {task.completed ? "Выполнено" : "Выполнить"}
+                {task.completed === "done"
+                  ? "Выполнено"
+                  : task.completed === "awaiting_approval"
+                    ? ""
+                    : "Выполнить"}
               </DefaultBtn>
             </div>
           </div>

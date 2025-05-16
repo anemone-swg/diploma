@@ -8,6 +8,7 @@ import { PiKanban } from "react-icons/pi";
 import classNames from "classnames";
 import { MdEmojiPeople } from "react-icons/md";
 import { IoHomeOutline } from "react-icons/io5";
+import { BiTask } from "react-icons/bi";
 
 const NavBar = ({
   activeSection,
@@ -17,11 +18,11 @@ const NavBar = ({
   setShowDeleteModal,
   sidebarWidth,
 }) => {
-  const [isCompact, setIsCompact] = useState(window.innerWidth < 1200);
+  const [isCompact, setIsCompact] = useState(window.innerWidth < 1300);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsCompact(window.innerWidth < 1200);
+      setIsCompact(window.innerWidth < 1300);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -73,6 +74,19 @@ const NavBar = ({
               )}
             >
               {!isCompact && "Команда"}
+            </DefaultBtn>
+
+            <DefaultBtn
+              icon={BiTask}
+              active={activeSection === "tasks"}
+              onClick={() => setActiveSection("tasks")}
+              disabled={boards.length === 0}
+              className={classNames(
+                { [btn_styles.disable]: boards.length === 0 },
+                { [btn_styles.activeDefaultBtn]: activeSection === "tasks" },
+              )}
+            >
+              {!isCompact && "Задачи"}
             </DefaultBtn>
           </div>
           <div>

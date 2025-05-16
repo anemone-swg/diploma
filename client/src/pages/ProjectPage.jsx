@@ -30,23 +30,6 @@ const ProjectPage = ({ sidebarWidth }) => {
   }, [projectId]);
 
   useEffect(() => {
-    const handleTaskStatusChanged = (updatedTask) => {
-      setProject((prevProject) => ({
-        ...prevProject,
-        teams: prevProject.teams.map((team) => ({
-          ...team,
-          columns: team.columns.map((column) => ({
-            ...column,
-            tasks: column.tasks.map((task) =>
-              task.id_task === updatedTask.id_task
-                ? { ...task, completed: !task.completed }
-                : task,
-            ),
-          })),
-        })),
-      }));
-    };
-
     const handleProjectRenamed = (updatedProject) => {
       setProject((prevProject) =>
         prevProject?.id_project === updatedProject.id_project
@@ -88,7 +71,7 @@ const ProjectPage = ({ sidebarWidth }) => {
     socket.on("teamDeleted", handleReloadProject);
     socket.on("teamRenamed", handleReloadProject);
     socket.on("teamAdded", handleReloadProject);
-    socket.on("taskStatusChanged", handleTaskStatusChanged);
+    socket.on("taskStatusChanged", handleReloadProject);
     socket.on("projectRenamed", handleProjectRenamed);
 
     return () => {
@@ -108,7 +91,7 @@ const ProjectPage = ({ sidebarWidth }) => {
       socket.off("teamDeleted", handleReloadProject);
       socket.off("teamRenamed", handleReloadProject);
       socket.off("teamAdded", handleReloadProject);
-      socket.off("taskStatusChanged", handleTaskStatusChanged);
+      socket.off("taskStatusChanged", handleReloadProject);
       socket.off("projectRenamed", handleProjectRenamed);
     };
   }, []);

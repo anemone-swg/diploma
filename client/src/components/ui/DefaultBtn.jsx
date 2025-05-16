@@ -13,6 +13,7 @@ const DefaultBtn = React.forwardRef(
       onClick,
       children,
       className,
+      visibleDisabled,
       ...props
     },
     ref, // второй аргумент для рефа
@@ -26,11 +27,12 @@ const DefaultBtn = React.forwardRef(
           {
             [btn_styles.activeDefaultBtn]: active,
             [btn_styles.disable]: disabled,
+            [btn_styles.visibleDisable]: visibleDisabled,
           },
           className,
         )}
         onClick={onClick}
-        disabled={disabled}
+        disabled={disabled || visibleDisabled}
         {...props}
       >
         {Icon && <Icon className={main_styles.icon} />}
