@@ -19,11 +19,35 @@ import { toast } from "react-toastify";
 import socket from "@/services/socket.js";
 import { FaRegMoon, FaRegSun } from "react-icons/fa";
 import { useTheme } from "@/context/ThemeContext.jsx";
+import { IoArrowBack } from "react-icons/io5";
+import DefaultInput from "@/components/ui/DefaultInput.jsx";
+import input_styles from "@/components/ui/DefaultInput.module.css";
+import { searchUsersByLogin } from "@/services/ProjectPlannerTeamService.js";
 
 const AdminPanel = ({ onLogout }) => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const { theme, toggleTheme } = useTheme();
+  const [queryForAdmin, setQueryForAdmin] = useState("");
+  const [resultsForAdmin, setResultsForAdmin] = useState([]);
+
+  useEffect(() => {
+    if (queryForAdmin.trim() === "") {
+      setResultsForAdmin([]);
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      searchUsersByLogin(queryForAdmin)
+        .then(setResultsForAdmin)
+        .catch((err) => {
+          console.error("Ошибка при поиске пользователей:", err);
+          setResultsForAdmin([]);
+        });
+    }, 300);
+
+    return () => clearTimeout(timeout);
+  }, [queryForAdmin]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -78,6 +102,10 @@ const AdminPanel = ({ onLogout }) => {
     }
   };
 
+  const handleNavigateHome = () => {
+    navigate("/home");
+  };
+
   return (
     <div className={main_styles.page}>
       <div className={admin_styles.headerAdmin}>
@@ -86,6 +114,11 @@ const AdminPanel = ({ onLogout }) => {
           Панель администратора
         </h1>
         <div className={admin_styles.btnGroup}>
+          <DefaultBtn
+            onClick={handleNavigateHome}
+            icon={IoArrowBack}
+            className={btn_styles.roundCornersBtn}
+          />
           <DefaultBtn
             onClick={toggleTheme}
             icon={theme === "dark" ? FaRegMoon : FaRegSun}
@@ -99,34 +132,82 @@ const AdminPanel = ({ onLogout }) => {
 
       <hr className={styles.prettyHr} />
 
-      <div className={admin_styles.userList}>
-        <h2>Список пользователей</h2>
-        {users.map((user) => (
-          <div key={user.id_user} className={team_members.memberOfTeam}>
-            <img
-              className={search_members.userAvatar}
-              src={user.avatar || defaultAvatar}
-              alt="Аватар"
-            />
-            <div>
-              <p>
-                <strong>{user.login}</strong>
-              </p>
-              <p className={search_members.userNameInfo}>
-                {user.firstName} {user.lastName}
-              </p>
+      <div className={admin_styles.adminContent}>
+        <div className={admin_styles.userList}>
+          <h2>Список пользователей</h2>
+          {users.map((user) => (
+            <div key={user.id_user} className={team_members.memberOfTeam}>
+              <img
+                className={search_members.userAvatar}
+                src={user.avatar || defaultAvatar}
+                alt="Аватар"
+              />
+              <div>
+                <p>
+                  <strong>{user.login}</strong>
+                </p>
+                <p className={search_members.userNameInfo}>
+                  {user.firstName} {user.lastName}
+                </p>
+              </div>
+              <div className={admin_styles.deleteBtn}>
+                <DefaultBtn
+                  className={btn_styles.roundCornersBtn}
+                  icon={MdCancel}
+                  onClick={() => handleDeleteUser(user)}
+                >
+                  Удалить пользователя
+                </DefaultBtn>
+              </div>
             </div>
-            <div className={admin_styles.deleteBtn}>
-              <DefaultBtn
-                className={btn_styles.roundCornersBtn}
-                icon={MdCancel}
-                onClick={() => handleDeleteUser(user)}
-              >
-                Удалить пользователя
-              </DefaultBtn>
-            </div>
+          ))}
+        </div>
+        <div className={admin_styles.searchList}>
+          <p className={search_members.helpText}>Введите ник пользователя:</p>
+          <DefaultInput
+            value={queryForAdmin}
+            maxLength={50}
+            onChange={(e) => setQueryForAdmin(e.target.value)}
+            placeholder="Поиск по нику..."
+            className={`${input_styles.defaultInput} ${input_styles.searchMembersInput}`}
+          />
+          <div
+            className={`${main_styles.moduleSection} ${search_members.searchSection}`}
+          >
+            {resultsForAdmin.length > 0 ? (
+              resultsForAdmin
+                .filter((user) => user.role !== "admin")
+                .map((user) => {
+                  return (
+                    <div key={user.login} className={search_members.resultItem}>
+                      <img
+                        className={search_members.userAvatar}
+                        src={user.avatar || defaultAvatar}
+                        alt="Аватар"
+                      />
+                      <div>
+                        <p>
+                          <strong>{user.login}</strong>
+                        </p>
+                        <p className={search_members.userNameInfo}>
+                          {user.firstName} {user.lastName}
+                        </p>
+                      </div>
+                      <div className={admin_styles.deleteBtn}>
+                        <DefaultBtn
+                          className={btn_styles.roundCornersBtn}
+                          icon={MdCancel}
+                          onClick={() => handleDeleteUser(user)}
+                        />
+                      </div>
+                    </div>
+                  );
+                })
+            ) : queryForAdmin.trim() !== "" ? (
+              <p className={search_members.noResults}>Ничего не найдено</p>
+            ) : null}
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );

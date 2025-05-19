@@ -13,6 +13,10 @@
   margin: 20px 0 20px 0;
 }
 
+.deleteBtn {
+  white-space: nowrap
+}
+
 .deleteBtn button svg {
   margin: 0 5px 0 0;
 }
@@ -20,4 +24,13 @@
 .btnGroup {
   display: flex;
   gap: 10px;
+}
+
+.adminContent {
+  display: flex;
+  gap: 20px;
+}
+
+.searchList {
+  padding: 20px 0;
 }

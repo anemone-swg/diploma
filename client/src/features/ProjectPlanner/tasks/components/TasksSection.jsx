@@ -9,7 +9,7 @@ import { taskStatusChange } from "@/services/ProjectPlannerService.js";
 import { MdAddTask } from "react-icons/md";
 import main_styles from "@/styles/App.module.css";
 
-const TasksSection = ({ setBoards, boards }) => {
+const TasksSection = ({ boards }) => {
   const awaitingApprovalTasks = boards.flatMap((board) =>
     board.teams.flatMap((team) =>
       team.columns.flatMap((column) =>

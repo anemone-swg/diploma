@@ -30,11 +30,18 @@ router.get("/team/search_users/:login", async (req, res) => {
         id_user: {
           [Op.ne]: req.session.user.id, // исключить текущего пользователя
         },
-        role: {
-          [Op.ne]: "admin",
-        },
+        // role: {
+        //   [Op.ne]: "admin",
+        // },
       },
-      attributes: ["id_user", "login", "firstName", "lastName", "avatar"],
+      attributes: [
+        "id_user",
+        "login",
+        "firstName",
+        "lastName",
+        "avatar",
+        "role",
+      ],
     });
 
     // Обновить путь к аватару
@@ -435,10 +442,14 @@ router.get("/team/open_project/:projectId", async (req, res) => {
             {
               model: Column,
               as: "columns",
+              separate: true,
+              order: [["order", "ASC"]],
               include: [
                 {
                   model: Task,
                   as: "tasks",
+                  separate: true,
+                  order: [["createdAt", "ASC"]],
                   include: [
                     {
                       model: User,

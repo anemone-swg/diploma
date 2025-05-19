@@ -29,6 +29,10 @@ Column.init(
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
     },
+    order: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     id_team: {
       type: DataTypes.UUID,
       allowNull: false,

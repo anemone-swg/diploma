@@ -25,10 +25,14 @@ router.get("/projects", async (req, res) => {
             {
               model: Column,
               as: "columns",
+              separate: true,
+              order: [["order", "ASC"]],
               include: [
                 {
                   model: Task,
                   as: "tasks",
+                  separate: true,
+                  order: [["createdAt", "ASC"]],
                   include: [
                     {
                       model: User,
@@ -215,7 +219,14 @@ router.delete("/projects/teams/delete/:teamId", async (req, res) => {
 router.post("/projects/teams/columns/add", async (req, res) => {
   try {
     const { title, id_team } = req.body;
-    const newColumn = await Column.create({ title, id_team });
+
+    const lastColumn = await Column.findOne({
+      where: { id_team },
+      order: [["order", "DESC"]],
+    });
+
+    const newOrder = lastColumn ? lastColumn.order + 1 : 1;
+    const newColumn = await Column.create({ title, id_team, order: newOrder });
 
     io.emit("columnAdded");
     res.status(201).json(newColumn);
@@ -257,25 +268,38 @@ router.put("/projects/teams/columns/rename/:columnId", async (req, res) => {
   }
 });
 
-router.delete("/projects/teams/columns/delete/:columnId", async (req, res) => {
-  try {
-    const { columnId } = req.params;
+router.delete(
+  "/projects/teams/columns/delete/:columnId/:teamId",
+  async (req, res) => {
+    try {
+      const { columnId, teamId } = req.params;
 
-    const deleted = await Column.destroy({
-      where: { id_column: columnId },
-    });
+      const deleted = await Column.destroy({
+        where: { id_column: columnId },
+      });
 
-    if (deleted) {
-      io.emit("columnDeleted");
-      res.json({ success: true });
-    } else {
-      res.status(404).json({ success: false, message: "Столбец не найден" });
+      const columns = await Column.findAll({
+        where: { id_team: teamId },
+        order: [["order", "ASC"]],
+      });
+
+      for (let i = 0; i < columns.length; i++) {
+        columns[i].order = i + 1;
+        await columns[i].save();
+      }
+
+      if (deleted) {
+        io.emit("columnDeleted");
+        res.json({ success: true });
+      } else {
+        res.status(404).json({ success: false, message: "Столбец не найден" });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false });
     }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false });
-  }
-});
+  },
+);
 
 router.put(
   "/projects/teams/columns/change_color/:columnId",

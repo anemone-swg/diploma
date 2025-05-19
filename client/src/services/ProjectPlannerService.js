@@ -201,10 +201,10 @@ export const renameColumn = async (columnId, newTitle) => {
   }
 };
 
-export const deleteColumn = async (columnId) => {
+export const deleteColumn = async (columnId, teamId) => {
   try {
     const response = await fetch(
-      `http://localhost:5000/projects/teams/columns/delete/${columnId}`,
+      `http://localhost:5000/projects/teams/columns/delete/${columnId}/${teamId}`,
       {
         method: "DELETE",
         credentials: "include",

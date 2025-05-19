@@ -201,6 +201,9 @@ router.get("/account/get_users_for_admin", async (req, res) => {
         id_user: {
           [Op.ne]: req.session.user.id,
         },
+        role: {
+          [Op.ne]: "admin",
+        },
       },
       attributes: [
         "id_user",

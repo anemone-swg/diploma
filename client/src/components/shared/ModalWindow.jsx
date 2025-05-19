@@ -118,17 +118,19 @@ const ModalWindow = ({
 
   const handleDeleteColumnBoard = async ({ teamId, columnId }) => {
     try {
-      await deleteColumn(columnId);
+      await deleteColumn(columnId, teamId);
 
       setBoards(
         boards.map((board) => ({
           ...board,
           teams: board.teams.map((team) => {
             if (team.id === teamId) {
-              // Фильтруем массив колонок, удаляя нужную колонку
-              const updatedColumns = team.columns.filter(
-                (column) => column.id !== columnId,
-              );
+              const updatedColumns = team.columns
+                .filter((column) => column.id !== columnId)
+                .map((column, index) => ({
+                  ...column,
+                  order: index + 1,
+                }));
 
               return {
                 ...team,

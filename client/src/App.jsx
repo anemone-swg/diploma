@@ -1,5 +1,12 @@
+// App.jsx
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import DailyTasks from "./pages/DailyTasks.jsx";
 import ProjectPlanner from "./pages/ProjectPlanner.jsx";
@@ -15,25 +22,34 @@ import { ToastContainer } from "react-toastify";
 import AdminPanel from "@/pages/AdminPanel.jsx";
 
 function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
+  );
+}
+
+function AppContent() {
   const [sidebarWidth, setSidebarWidth] = useState(200);
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [userRole, setUserRole] = useState(null);
+  const location = useLocation();
+  const isAdminPage = location.pathname === "/admin";
 
-  // Проверка авторизации при монтировании компонента
   useEffect(() => {
     const checkUserAuth = async () => {
       try {
-        const response = await checkAuth(); // Отправка запроса на сервер
-        setIsAuthenticated(response.isAuthenticated); // Обновляем состояние авторизации
+        const response = await checkAuth();
+        setIsAuthenticated(response.isAuthenticated);
         setUserRole(response.role);
       } catch (error) {
         console.error("Ошибка при проверке авторизации:", error);
-        setIsAuthenticated(false); // Если ошибка, считаем, что не авторизован
+        setIsAuthenticated(false);
         setUserRole(null);
       }
     };
 
-    checkUserAuth(); // Проверка авторизации при монтировании компонента
+    checkUserAuth();
   }, []);
 
   if (isAuthenticated === null) {
@@ -45,63 +61,46 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
-      <div
-        className={main_styles.app}
-        style={{
-          paddingLeft:
-            isAuthenticated && userRole !== "admin" ? `${sidebarWidth}px` : 0,
-        }}
-      >
-        <ToastContainer position="top-right" autoClose={3000} theme="dark" />
-        {isAuthenticated && userRole !== "admin" && (
-          <Sidebar
-            onResize={(width) => setSidebarWidth(width)}
-            sidebarWidth={sidebarWidth}
-            setSidebarWidth={setSidebarWidth}
-          />
-        )}
-        <div className={main_styles.content}>
-          <Routes>
-            {!isAuthenticated ? (
-              <>
-                <Route
-                  path="/login"
-                  element={
-                    <Login
-                      onLogin={(role) => {
-                        setIsAuthenticated(true);
-                        setUserRole(role);
-                      }}
-                    />
-                  }
-                />
-                <Route path="/register" element={<Registration />} />
-                <Route path="*" element={<Navigate to="/login" />} />
-              </>
-            ) : userRole === "admin" ? (
-              <>
+    <div
+      className={main_styles.app}
+      style={{
+        paddingLeft: isAuthenticated && !isAdminPage ? `${sidebarWidth}px` : 0,
+      }}
+    >
+      <ToastContainer position="top-right" autoClose={3000} theme="dark" />
+      {isAuthenticated && !isAdminPage && (
+        <Sidebar
+          onResize={(width) => setSidebarWidth(width)}
+          sidebarWidth={sidebarWidth}
+          setSidebarWidth={setSidebarWidth}
+          userRole={userRole}
+        />
+      )}
+      <div className={main_styles.content}>
+        <Routes>
+          {!isAuthenticated ? (
+            <>
+              <Route
+                path="/login"
+                element={
+                  <Login
+                    onLogin={(role) => {
+                      setIsAuthenticated(true);
+                      setUserRole(role);
+                    }}
+                  />
+                }
+              />
+              <Route path="/register" element={<Registration />} />
+              <Route path="*" element={<Navigate to="/login" />} />
+            </>
+          ) : (
+            <>
+              {userRole === "admin" && (
                 <Route
                   path="/admin"
                   element={
-                    <div>
-                      <AdminPanel
-                        onLogout={() => {
-                          setIsAuthenticated(false);
-                          setUserRole(null);
-                        }}
-                      />
-                    </div>
-                  }
-                />
-                <Route path="*" element={<Navigate to="/admin" />} />
-              </>
-            ) : (
-              <>
-                <Route
-                  path="/home"
-                  element={
-                    <Home
+                    <AdminPanel
                       onLogout={() => {
                         setIsAuthenticated(false);
                         setUserRole(null);
@@ -109,22 +108,33 @@ function App() {
                     />
                   }
                 />
-                <Route path="/daily-tasks" element={<DailyTasks />} />
-                <Route
-                  path="/project-planner"
-                  element={<ProjectPlanner sidebarWidth={sidebarWidth} />}
-                />
-                <Route
-                  path="/open_project/:projectId"
-                  element={<ProjectPage sidebarWidth={sidebarWidth} />}
-                />
-                <Route path="*" element={<Navigate to="/home" />} />
-              </>
-            )}
-          </Routes>
-        </div>
+              )}
+              <Route
+                path="/home"
+                element={
+                  <Home
+                    onLogout={() => {
+                      setIsAuthenticated(false);
+                      setUserRole(null);
+                    }}
+                  />
+                }
+              />
+              <Route path="/daily-tasks" element={<DailyTasks />} />
+              <Route
+                path="/project-planner"
+                element={<ProjectPlanner sidebarWidth={sidebarWidth} />}
+              />
+              <Route
+                path="/open_project/:projectId"
+                element={<ProjectPage sidebarWidth={sidebarWidth} />}
+              />
+              <Route path="*" element={<Navigate to="/home" />} />
+            </>
+          )}
+        </Routes>
       </div>
-    </BrowserRouter>
+    </div>
   );
 }
 

@@ -87,6 +87,7 @@ const BoardContainer = memo(
                             id: createdColumn.id_column,
                             title: createdColumn.title,
                             color: createdColumn.color,
+                            order: createdColumn.order,
                             tasks: [],
                           },
                         ],

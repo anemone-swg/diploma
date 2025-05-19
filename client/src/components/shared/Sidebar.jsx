@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   FaHome,
   FaProjectDiagram,
@@ -11,9 +11,11 @@ import styles from "./Sidebar.module.css";
 import DefaultBtn from "@/components/ui/DefaultBtn.jsx";
 import btn_styles from "@/components/ui/DefaultBtn.module.css";
 import { useTheme } from "@/context/ThemeContext.jsx";
+import { RiAdminFill } from "react-icons/ri";
 
-const Sidebar = ({ onResize, sidebarWidth, setSidebarWidth }) => {
+const Sidebar = ({ onResize, sidebarWidth, setSidebarWidth, userRole }) => {
   const { theme, toggleTheme } = useTheme();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const savedWidth = localStorage.getItem("sidebarWidth");
@@ -46,6 +48,10 @@ const Sidebar = ({ onResize, sidebarWidth, setSidebarWidth }) => {
     document.removeEventListener("mouseup", stopResizing);
   };
 
+  const handleNavigateAdminPanel = () => {
+    navigate("/admin");
+  };
+
   return (
     <div className={styles.sidebar} style={{ width: `${sidebarWidth}px` }}>
       <h1 className={styles.nameProject}>TASKLY</h1>
@@ -73,6 +79,13 @@ const Sidebar = ({ onResize, sidebarWidth, setSidebarWidth }) => {
           </ul>
         </div>
         <div className={styles.bottomSection}>
+          {userRole === "admin" && (
+            <DefaultBtn
+              icon={RiAdminFill}
+              onClick={handleNavigateAdminPanel}
+              className={btn_styles.roundCornersBtn}
+            />
+          )}
           <DefaultBtn
             onClick={toggleTheme}
             icon={theme === "dark" ? FaRegMoon : FaRegSun}

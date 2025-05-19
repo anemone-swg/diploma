@@ -90,7 +90,7 @@ function ProjectPlanner({ sidebarWidth }) {
         return <TeamSection projectId={boards[0].id} setBoards={setBoards} />;
 
       case "tasks":
-        return <TasksSection setBoards={setBoards} boards={boards} />;
+        return <TasksSection boards={boards} />;
 
       case "join":
         return <JoinSection />;
