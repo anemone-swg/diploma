@@ -31,26 +31,21 @@ const ColorPicker = ({ setBoards, column, isPastelColor }) => {
   }, []);
 
   const handleColorSelect = async (color, columnId) => {
-    try {
-      await changeColorColumn(color, columnId); // отправляем ключ цвета в БД
+    await changeColorColumn(color, columnId);
 
-      setBoards((prevBoards) =>
-        prevBoards.map((board) => ({
-          ...board,
-          teams: board.teams.map((team) => ({
-            ...team,
-            columns: team.columns.map(
-              (col) => (col.id === column.id ? { ...col, color } : col), // обновляем поле color ключом цвета
-            ),
-          })),
+    setBoards((prevBoards) =>
+      prevBoards.map((board) => ({
+        ...board,
+        teams: board.teams.map((team) => ({
+          ...team,
+          columns: team.columns.map((col) =>
+            col.id === column.id ? { ...col, color } : col,
+          ),
         })),
-      );
+      })),
+    );
 
-      setShowColorPicker(false);
-    } catch (e) {
-      console.error(e);
-      alert("Ошибка при изменении цвета столбца");
-    }
+    setShowColorPicker(false);
   };
 
   return (

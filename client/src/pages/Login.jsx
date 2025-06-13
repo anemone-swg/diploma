@@ -1,31 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "../services/AuthAndRegService.js"; // Импортируем сервис
+import { loginUser } from "../services/AuthAndRegService.js";
 import styles from "../styles/Login.module.css";
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(""); // Для ошибок авторизации
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Сброс ошибки перед отправкой
+    setError("");
 
     try {
-      const responseData = await loginUser(username, password); // Вызов сервиса
-      if (responseData.success) {
+      const role = await loginUser(username, password);
+      if (role) {
         alert("Авторизация успешна!");
-        onLogin(responseData.role);
-        if (responseData.role === "admin") {
-          navigate("/admin");
-        } else {
-          navigate("/home");
-        }
+        onLogin(role);
+        navigate(role === "admin" ? "/admin" : "/home");
       }
     } catch (error) {
-      setError(error.message); // Устанавливаем ошибку
+      setError(error.message);
     }
   };
 

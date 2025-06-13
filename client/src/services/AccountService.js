@@ -1,156 +1,55 @@
-import { handleUnauthorizedError } from "../utils/utilsFunc.js";
+import axiosInstance from "@/services/axiosInstance.js";
 
 export const uploadAvatar = async (file) => {
   const formData = new FormData();
   formData.append("avatar", file);
 
-  try {
-    const response = await fetch(
-      "http://localhost:5000/account/upload-avatar",
-      {
-        method: "POST",
-        credentials: "include", // Важно для передачи сессии
-        body: formData,
-      },
-    );
-
-    if (await handleUnauthorizedError(response)) {
-      return [];
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Ошибка при загрузке аватара:", error);
-    throw error;
-  }
+  await axiosInstance.post("/account/upload_avatar", formData);
 };
 
 export const fetchUserData = async () => {
-  try {
-    const response = await fetch("http://localhost:5000/account", {
-      method: "GET",
-      credentials: "include", // Передача куков для аутентификации
-    });
-
-    if (await handleUnauthorizedError(response)) {
-      return null;
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Ошибка загрузки данных:", error);
-    return null;
-  }
+  const response = await axiosInstance.get(`/account`);
+  return response.data;
 };
 
 export const updateUserData = async (userData) => {
-  const response = await fetch("http://localhost:5000/account/update", {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(userData),
-    credentials: "include",
-  });
-
-  if (await handleUnauthorizedError(response)) {
-    return [];
+  try {
+    await axiosInstance.put(`/account/update_info`, userData);
+  } catch (error) {
+    throw new Error(error.response?.data?.error || "Ошибка обновления данных");
   }
-
-  const result = await response.json(); // Разбираем JSON-ответ
-
-  if (!response.ok) {
-    throw new Error(result.message || "Ошибка обновления данных"); // Показываем сообщение сервера
-  }
-
-  return result;
 };
 
 export const deleteUserAccount = async () => {
-  const response = await fetch("http://localhost:5000/account/delete", {
-    method: "DELETE",
-    credentials: "include",
-  });
-
-  if (await handleUnauthorizedError(response)) {
-    return [];
+  try {
+    await axiosInstance.delete(`/account/delete`);
+  } catch (error) {
+    throw new Error(error.response?.data?.error || "Ошибка удаления аккаунта");
   }
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message || "Ошибка удаления аккаунта");
-  }
-
-  return result;
 };
 
 export const changeUserLogin = async (newLogin) => {
-  const response = await fetch("http://localhost:5000/account/change_login", {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ newLogin }),
-    credentials: "include",
-  });
-
-  if (await handleUnauthorizedError(response)) {
-    return [];
+  try {
+    await axiosInstance.put(`/account/change_login`, { newLogin });
+  } catch (error) {
+    throw new Error(error.response?.data?.error || "Ошибка изменения логина");
   }
-
-  const result = await response.json(); // Разбираем JSON-ответ
-
-  if (!response.ok) {
-    throw new Error(result.message || "Ошибка обновления данных"); // Показываем сообщение сервера
-  }
-
-  return result;
 };
 
 export const getAllUsers = async () => {
-  const response = await fetch(
-    "http://localhost:5000/account/get_users_for_admin",
-    {
-      method: "GET",
-      credentials: "include",
-    },
-  );
-
-  if (await handleUnauthorizedError(response)) {
-    return [];
-  }
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || "Ошибка получения пользователей");
-  }
-
-  return response.json();
+  const response = await axiosInstance.get(`/account/get_users_for_admin`);
+  return response.data?.users;
 };
 
 export const deleteUserAccountByAdmin = async (userId) => {
-  const response = await fetch(
-    "http://localhost:5000/account/delete_by_admin",
-    {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ userId }),
-      credentials: "include",
-    },
-  );
-
-  if (await handleUnauthorizedError(response)) {
-    return [];
+  try {
+    await axiosInstance.delete(`/account/delete_by_admin`, {
+      data: { userId },
+    });
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.error ||
+        "Ошибка при удалении аккаунта администратором",
+    );
   }
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message || "Ошибка удаления аккаунта");
-  }
-
-  return result;
 };

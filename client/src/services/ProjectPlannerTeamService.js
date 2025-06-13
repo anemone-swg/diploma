@@ -1,258 +1,67 @@
-import { handleUnauthorizedError } from "@/utils/utilsFunc.js";
+import axiosInstance from "@/services/axiosInstance.js";
 
 export const searchUsersByLogin = async (login) => {
-  try {
-    const response = await fetch(
-      `http://localhost:5000/team/search_users/${login}`,
-      {
-        credentials: "include",
-      },
-    );
-
-    if (await handleUnauthorizedError(response)) {
-      return [];
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Ошибка поиска пользователей:", error);
-    return [];
-  }
+  const response = await axiosInstance.get(`/team/search_users/${login}`);
+  return response.data?.users;
 };
 
-export const handleInvite = async (toUserId, projectId) => {
-  try {
-    const response = await fetch("http://localhost:5000/team/invite", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ toUserId, projectId }),
-    });
-
-    if (await handleUnauthorizedError(response)) {
-      return [];
-    }
-
-    return response.json();
-  } catch (error) {
-    console.error("Ошибка приглашения:", error.message);
-  }
+export const sendInvite = async (toUserId, projectId) => {
+  await axiosInstance.post(`/team/invite`, { toUserId, projectId });
 };
 
 export const getSentInvites = async () => {
-  try {
-    const response = await fetch(
-      "http://localhost:5000/team/get_sent_invites",
-      {
-        credentials: "include",
-      },
-    );
-
-    if (await handleUnauthorizedError(response)) {
-      return [];
-    }
-
-    return response.json();
-  } catch (error) {
-    console.error("Ошибка загрузки приглашенных пользователей:", error.message);
-  }
+  const response = await axiosInstance.get(`/team/get_sent_invites`);
+  return response.data?.invitations;
 };
 
 export const cancelInvite = async (toUserId) => {
-  try {
-    const response = await fetch("http://localhost:5000/team/cancel_invite", {
-      method: "DELETE",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ toUserId }),
-    });
-
-    if (await handleUnauthorizedError(response)) {
-      return [];
-    }
-
-    return response.json();
-  } catch (error) {
-    console.error("Ошибка удаления приглашения:", error);
-  }
+  await axiosInstance.delete(`/team/cancel_invite`, { data: { toUserId } });
 };
 
 export const showInvitations = async () => {
-  try {
-    const response = await fetch(
-      `http://localhost:5000/team/show_invitations`,
-      {
-        credentials: "include",
-      },
-    );
-
-    if (await handleUnauthorizedError(response)) {
-      return [];
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Ошибка поиска приглашений:", error);
-    return [];
-  }
+  const response = await axiosInstance.get(`/team/show_invitations`);
+  return response.data?.invites;
 };
 
 export const acceptInvite = async (id_invite) => {
-  try {
-    const response = await fetch(`http://localhost:5000/team/accept_invite`, {
-      method: "PUT",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id_invite }),
-    });
-
-    if (await handleUnauthorizedError(response)) {
-      return [];
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Ошибка принятия приглашения:", error);
-    return [];
-  }
+  await axiosInstance.put(`/team/accept_invite`, { id_invite });
 };
 
 export const declineInvite = async (id_invite) => {
-  try {
-    const response = await fetch(`http://localhost:5000/team/decline_invite`, {
-      method: "PUT",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id_invite }),
-    });
-
-    if (await handleUnauthorizedError(response)) {
-      return [];
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Ошибка отклонения приглашения:", error);
-    return [];
-  }
+  await axiosInstance.put(`/team/decline_invite`, { id_invite });
 };
 
 export const showTeam = async (projectId) => {
-  try {
-    const response = await fetch(
-      `http://localhost:5000/team/show_team/${projectId}`,
-      {
-        credentials: "include",
-      },
-    );
-
-    if (await handleUnauthorizedError(response)) {
-      return [];
-    }
-
-    if (response.status === 404) {
-      // Команда не найдена, возвращаем пустой массив
-      return [];
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Ошибка поиска приглашений:", error);
-    return [];
-  }
+  const response = await axiosInstance.get(`/team/show_team/${projectId}`);
+  return response.data?.users;
 };
 
 export const deleteFromTeam = async (userId, projectId) => {
-  try {
-    const response = await fetch(
-      "http://localhost:5000/team/delete_from_team",
-      {
-        method: "DELETE",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, projectId }),
-      },
-    );
-
-    if (await handleUnauthorizedError(response)) {
-      return [];
-    }
-
-    return response.json();
-  } catch (error) {
-    console.error("Ошибка при удалении участника команды из нее:", error);
-  }
+  await axiosInstance.delete(`/team/delete_from_team`, {
+    data: { userId, projectId },
+  });
 };
 
 export const selectUserForTask = async (user, task) => {
-  try {
-    const response = await fetch("http://localhost:5000/team/assign_to_task", {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user, task }),
-    });
-
-    if (await handleUnauthorizedError(response)) {
-      return [];
-    }
-
-    return response.json();
-  } catch (error) {
-    console.error("Ошибка при удалении участника команды из нее:", error);
-  }
+  const response = await axiosInstance.post(`/team/assign_to_task`, {
+    user,
+    task,
+  });
+  return response.data?.assignedUser;
 };
 
 export const removeUserFromTask = async (user, task) => {
-  try {
-    const res = await fetch("http://localhost:5000/team/unassign_from_task", {
-      method: "DELETE",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user, task }),
-    });
-
-    return await res.json();
-  } catch (e) {
-    console.error("Ошибка при удалении пользователя из задачи:", e);
-  }
+  await axiosInstance.delete(`/team/unassign_from_task`, {
+    data: { user, task },
+  });
 };
 
 export async function fetchProjectById(projectId) {
-  try {
-    const response = await fetch(
-      `http://localhost:5000/team/open_project/${projectId}`,
-      {
-        credentials: "include",
-      },
-    );
-
-    if (await handleUnauthorizedError(response)) {
-      return [];
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Ошибка при получении проекта:", error);
-    throw error;
-  }
+  const response = await axiosInstance.get(`/team/open_project/${projectId}`);
+  return response.data;
 }
 
 export const fetchCurrentUser = async () => {
-  try {
-    const response = await fetch(`http://localhost:5000/team/me`, {
-      credentials: "include",
-    });
-
-    if (await handleUnauthorizedError(response)) {
-      return [];
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Ошибка поиска пользователя:", error);
-    return [];
-  }
+  const response = await axiosInstance.get(`/team/me`);
+  return response.data;
 };

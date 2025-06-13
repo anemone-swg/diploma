@@ -14,7 +14,7 @@ const EditableTitle = ({
   onEditEnd,
   onChange,
   onTitleChange,
-  level = 2, // h2 по умолчанию, можно передать 3 для h3
+  level = 2,
   isPastelColor,
   maxLength = 20,
 }) => {
@@ -56,7 +56,6 @@ const EditableTitle = ({
             ? onTitleChange(item.content)
             : onTitleChange(item.title);
         }
-        // onTitleChange(item.title);
         onEditStart(item.id);
       }}
     >
@@ -64,7 +63,6 @@ const EditableTitle = ({
         className={main_styles.icon}
         style={{ verticalAlign: level === 2 ? "baseline" : "middle" }}
       />
-      {level === 2 && <span>Название проекта: </span>}
       {item.content ? item.content : item.title}
     </HeadingTag>
   );

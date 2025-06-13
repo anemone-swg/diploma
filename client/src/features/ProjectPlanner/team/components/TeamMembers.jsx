@@ -16,18 +16,10 @@ const TeamMembers = ({ setBoards, projectId, refreshInvitations }) => {
   const [team, setTeam] = useState([]);
 
   useEffect(() => {
-    showTeam(projectId)
-      .then(setTeam)
-      .catch((err) => {
-        console.error("Ошибка при загрузке команды:", err);
-      });
+    showTeam(projectId).then(setTeam);
 
     const handleShowTeam = () => {
-      showTeam(projectId)
-        .then(setTeam)
-        .catch((err) => {
-          console.error("Ошибка при загрузке команды:", err);
-        });
+      showTeam(projectId).then(setTeam);
     };
 
     socket.on("inviteAccepted", handleShowTeam);
@@ -40,32 +32,28 @@ const TeamMembers = ({ setBoards, projectId, refreshInvitations }) => {
   }, []);
 
   const handleDeleteFromTeam = async (member) => {
-    try {
-      await deleteFromTeam(member.id_user, projectId);
-      setTeam((prev) => prev.filter((user) => user.id_user !== member.id_user));
+    await deleteFromTeam(member.id_user, projectId);
+    setTeam((prev) => prev.filter((user) => user.id_user !== member.id_user));
 
-      setBoards((prevBoards) =>
-        prevBoards.map((board) => ({
-          ...board,
-          teams: board.teams.map((team) => ({
-            ...team,
-            columns: team.columns.map((column) => ({
-              ...column,
-              tasks: column.tasks.map((task) => ({
-                ...task,
-                assignedUsers: task.assignedUsers?.filter(
-                  (user) => user.id_user !== member.id_user,
-                ),
-              })),
+    setBoards((prevBoards) =>
+      prevBoards.map((board) => ({
+        ...board,
+        teams: board.teams.map((team) => ({
+          ...team,
+          columns: team.columns.map((column) => ({
+            ...column,
+            tasks: column.tasks.map((task) => ({
+              ...task,
+              assignedUsers: task.assignedUsers?.filter(
+                (user) => user.id_user !== member.id_user,
+              ),
             })),
           })),
         })),
-      );
-      if (refreshInvitations) {
-        await refreshInvitations(); // обновить приглашения
-      }
-    } catch (error) {
-      console.error("Ошибка при удалении участника команды из нее:", error);
+      })),
+    );
+    if (refreshInvitations) {
+      await refreshInvitations();
     }
   };
 

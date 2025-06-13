@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+// eslint-disable-next-line no-unused-vars
 import { AnimatePresence, motion } from "framer-motion";
 import main_styles from "../styles/App.module.css";
 import styles from "../styles/DailyTasks.module.css";
@@ -19,7 +20,7 @@ const DailyTasks = () => {
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [taskDescriptionMap, setTaskDescriptionMap] = useState({});
   const [dueDate, setDueDate] = useState("");
-  const [editingTaskId, setEditingTaskId] = useState(null); // Хранит id редактируемой задачи
+  const [editingTaskId, setEditingTaskId] = useState(null);
   const [taskTitleMap, setTaskTitleMap] = useState({});
 
   useEffect(() => {
@@ -56,57 +57,40 @@ const DailyTasks = () => {
   };
 
   const handleToggleCompleted = async (taskId) => {
+    await toggleTaskStatus(taskId);
     const updatedTasks = tasks.map((task) =>
       task.id_task === taskId ? { ...task, completed: !task.completed } : task,
     );
     setTasks(updatedTasks);
-
-    const success = await toggleTaskStatus(taskId);
-    if (!success) {
-      setTasks(tasks); // откат на прежнее значение
-    }
   };
 
-  const handleDeleteTask = (id_task) => {
-    deleteTask(id_task).then((success) => {
-      if (success) {
-        setTasks((prev) => prev.filter((task) => task.id_task !== id_task));
-      }
-    });
+  const handleDeleteTask = async (id_task) => {
+    await deleteTask(id_task);
+    setTasks((prev) => prev.filter((task) => task.id_task !== id_task));
   };
 
   const handleDescriptionChange = (id_task, newDesc) => {
     setTaskDescriptionMap({ ...taskDescriptionMap, [id_task]: newDesc });
   };
 
-  const handleSaveDescription = (id_task) => {
+  const handleSaveDescription = async (id_task) => {
     const newDescription = taskDescriptionMap[id_task];
+    await updateTaskDescription(id_task, newDescription);
     const updatedTasks = tasks.map((task) =>
       task.id_task === id_task
         ? { ...task, description: newDescription }
         : task,
     );
     setTasks(updatedTasks);
-    updateTaskDescription(id_task, newDescription);
   };
 
-  const handleTitleChange = (id_task, newTitle) => {
+  const handleTitleChange = async (id_task, newTitle) => {
+    await updateTaskTitle(id_task, newTitle);
     const updatedTasks = tasks.map((task) =>
       task.id_task === id_task ? { ...task, title: newTitle } : task,
     );
     setTasks(updatedTasks);
-    updateTaskTitle(id_task, newTitle); // Обновляем на сервере
   };
-
-  // const formatLocalDateTime = (dateString) => {
-  //   const date = new Date(dateString);
-  //   const year = date.getFullYear();
-  //   const month = String(date.getMonth() + 1).padStart(2, "0");
-  //   const day = String(date.getDate()).padStart(2, "0");
-  //   const hours = String(date.getHours()).padStart(2, "0");
-  //   const minutes = String(date.getMinutes()).padStart(2, "0");
-  //   return `${year}-${month}-${day}T${hours}:${minutes}`;
-  // };
 
   const inProgressTasks = tasks.filter((task) => !task.completed);
   const completedTasks = tasks.filter((task) => task.completed);
@@ -139,7 +123,7 @@ const DailyTasks = () => {
                 value={dueDate ? new Date(dueDate) : null}
                 onChange={(newDate) => {
                   if (newDate) {
-                    setDueDate(newDate.toISOString()); // сохраняем как строку в формате ISO
+                    setDueDate(newDate.toISOString());
                   } else {
                     setDueDate(null);
                   }
@@ -186,13 +170,13 @@ const DailyTasks = () => {
                                 ...taskTitleMap,
                                 [task.id_task]: e.target.value,
                               });
-                              handleTitleChange(task.id_task, e.target.value); // Сразу обновляем данные
+                              handleTitleChange(task.id_task, e.target.value);
                             }
                           }}
-                          onBlur={() => setEditingTaskId(null)} // Закрытие инпута при потере фокуса
+                          onBlur={() => setEditingTaskId(null)}
                           onKeyDown={(e) => {
                             if (e.key === "Enter") {
-                              setEditingTaskId(null); // Выход из режима редактирования по Enter
+                              setEditingTaskId(null);
                             }
                             if (e.key === "Escape") {
                               setEditingTaskId(null);
@@ -202,7 +186,7 @@ const DailyTasks = () => {
                       ) : (
                         <span
                           className={styles.titleTask}
-                          onClick={() => setEditingTaskId(task.id_task)} // Включаем режим редактирования при клике
+                          onClick={() => setEditingTaskId(task.id_task)}
                         >
                           <FaEdit style={{ verticalAlign: "top" }} />{" "}
                           {taskTitleMap[task.id_task] || task.title}

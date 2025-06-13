@@ -6,8 +6,8 @@ import input_styles from "@/components/ui/DefaultInput.module.css";
 import btn_styles from "@/components/ui/DefaultBtn.module.css";
 import {
   cancelInvite,
-  handleInvite,
   searchUsersByLogin,
+  sendInvite,
 } from "@/services/ProjectPlannerTeamService.js";
 import defaultAvatar from "@/assets/default_avatar.jpg";
 import DefaultBtn from "@/components/ui/DefaultBtn.jsx";
@@ -30,8 +30,7 @@ const SearchMembers = ({ projectId, invitations, refreshInvitations }) => {
     const timeout = setTimeout(() => {
       searchUsersByLogin(query)
         .then(setResults)
-        .catch((err) => {
-          console.error("Ошибка при поиске пользователей:", err);
+        .catch(() => {
           setResults([]);
         });
     }, 300); // debounce-пауза
@@ -40,12 +39,11 @@ const SearchMembers = ({ projectId, invitations, refreshInvitations }) => {
   }, [query]);
 
   useEffect(() => {
-    const handleInviteCnanged = () => {
+    const handleInviteChanged = () => {
       if (query.trim() !== "") {
         searchUsersByLogin(query)
           .then(setResults)
-          .catch((err) => {
-            console.error("Ошибка при обновлении после inviteAccepted:", err);
+          .catch(() => {
             setResults([]);
           });
       }
@@ -53,32 +51,24 @@ const SearchMembers = ({ projectId, invitations, refreshInvitations }) => {
       refreshInvitations();
     };
 
-    socket.on("userDeletedFromTeam", handleInviteCnanged);
-    socket.on("inviteDeclined", handleInviteCnanged);
-    socket.on("inviteAccepted", handleInviteCnanged);
+    socket.on("userDeletedFromTeam", handleInviteChanged);
+    socket.on("inviteDeclined", handleInviteChanged);
+    socket.on("inviteAccepted", handleInviteChanged);
 
     return () => {
-      socket.off("inviteDeclined", handleInviteCnanged);
-      socket.off("inviteAccepted", handleInviteCnanged);
+      socket.off("inviteDeclined", handleInviteChanged);
+      socket.off("inviteAccepted", handleInviteChanged);
     };
   }, [query]);
 
   const handleInviteClick = async (user) => {
-    try {
-      await handleInvite(user.id_user, projectId);
-      await refreshInvitations();
-    } catch (error) {
-      console.error("Ошибка при отправке приглашения:", error);
-    }
+    await sendInvite(user.id_user, projectId);
+    await refreshInvitations();
   };
 
   const handleCancelInvite = async (user) => {
-    try {
-      await cancelInvite(user.id_user);
-      await refreshInvitations();
-    } catch (err) {
-      console.error("Ошибка при отмене приглашения:", err);
-    }
+    await cancelInvite(user.id_user);
+    await refreshInvitations();
   };
 
   return (

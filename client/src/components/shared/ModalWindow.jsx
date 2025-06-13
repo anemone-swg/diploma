@@ -49,103 +49,77 @@ const ModalWindow = ({
     return () => document.removeEventListener("click", handleClickOutside);
   }, [showModal]);
 
-  // Создание доски (проекта)
   const handleCreateBoard = async () => {
     if (newBoardTitle.trim() && boards.length === 0) {
-      try {
-        const createdProject = await createProject({
-          title: newBoardTitle,
-        });
+      const createdProject = await createProject({
+        title: newBoardTitle,
+      });
 
-        const newBoard = {
-          id: createdProject.id_project,
-          title: createdProject.title,
-          teams: [],
-          createdAt: createdProject.createdAt,
-        };
+      const newBoard = {
+        id: createdProject.id_project,
+        title: createdProject.title,
+        teams: [],
+        createdAt: createdProject.createdAt,
+      };
 
-        setBoards([newBoard]);
-        setNewBoardTitle("");
-        setShowModal(false);
-        setActiveSection("kanban");
-      } catch (error) {
-        console.error(error);
-        alert("Ошибка при создании доски");
-      }
+      setBoards([newBoard]);
+      setNewBoardTitle("");
+      setShowModal(false);
+      setActiveSection("kanban");
     }
   };
 
   const handleDeleteBoard = async () => {
-    try {
-      await deleteProject();
+    await deleteProject();
 
-      setBoards([]);
-      setActiveSection("main");
-      setShowModal(false);
-    } catch (error) {
-      console.error(error);
-      alert("Ошибка при удалении доски (проекта)");
-    }
+    setBoards([]);
+    setActiveSection("main");
+    setShowModal(false);
   };
 
   const handleDeleteTeamBoard = async ({ boardId, teamId }) => {
-    try {
-      await deleteTeam(teamId);
+    await deleteTeam(teamId);
 
-      setBoards(
-        boards.map((board) => {
-          if (board.id === boardId) {
-            // Фильтруем массив команд, удаляя нужную команду
-            const updatedTeams = board.teams.filter(
-              (team) => team.id !== teamId,
-            );
-
-            // Возвращаем доску с обновленным списком команд (даже если он пустой)
-            return {
-              ...board,
-              teams: updatedTeams,
-            };
-          }
-          return board;
-        }),
-      );
-      setShowModal(false);
-    } catch (error) {
-      console.error(error);
-      alert("Ошибка при удалении команды");
-    }
+    setBoards(
+      boards.map((board) => {
+        if (board.id === boardId) {
+          const updatedTeams = board.teams.filter((team) => team.id !== teamId);
+          return {
+            ...board,
+            teams: updatedTeams,
+          };
+        }
+        return board;
+      }),
+    );
+    setShowModal(false);
   };
 
   const handleDeleteColumnBoard = async ({ teamId, columnId }) => {
-    try {
-      await deleteColumn(columnId, teamId);
+    await deleteColumn(columnId, teamId);
 
-      setBoards(
-        boards.map((board) => ({
-          ...board,
-          teams: board.teams.map((team) => {
-            if (team.id === teamId) {
-              const updatedColumns = team.columns
-                .filter((column) => column.id !== columnId)
-                .map((column, index) => ({
-                  ...column,
-                  order: index + 1,
-                }));
+    setBoards(
+      boards.map((board) => ({
+        ...board,
+        teams: board.teams.map((team) => {
+          if (team.id === teamId) {
+            const updatedColumns = team.columns
+              .filter((column) => column.id !== columnId)
+              .map((column, index) => ({
+                ...column,
+                order: index + 1,
+              }));
 
-              return {
-                ...team,
-                columns: updatedColumns,
-              };
-            }
-            return team;
-          }),
-        })),
-      );
-      setShowModal(false);
-    } catch (error) {
-      console.error(error);
-      alert("Ошибка при удалении столбца");
-    }
+            return {
+              ...team,
+              columns: updatedColumns,
+            };
+          }
+          return team;
+        }),
+      })),
+    );
+    setShowModal(false);
   };
 
   return (
@@ -164,6 +138,7 @@ const ModalWindow = ({
                       Создание kanban-доски
                     </h3>
                     <DefaultInput
+                      maxLength={100}
                       value={newBoardTitle}
                       onChange={(e) => setNewBoardTitle(e.target.value)}
                       onKeyPress={(e) =>

@@ -8,7 +8,7 @@ import {
   TeamMembers,
   TeamOfProject,
   User,
-} from "./Export.js";
+} from "./export.js";
 
 // Один пользователь может иметь много задач
 User.hasMany(DailyTask, { foreignKey: "id_user", onDelete: "CASCADE" });

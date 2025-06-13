@@ -8,12 +8,8 @@ const TeamSection = ({ projectId, setBoards }) => {
   const [invitations, setInvitations] = useState([]);
 
   const refreshInvitations = async () => {
-    try {
-      const data = await getSentInvites();
-      setInvitations(data);
-    } catch (err) {
-      console.error("Ошибка при получении приглашений:", err);
-    }
+    const data = await getSentInvites();
+    setInvitations(data);
   };
 
   useEffect(() => {

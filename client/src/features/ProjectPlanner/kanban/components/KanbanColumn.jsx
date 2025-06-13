@@ -31,73 +31,62 @@ const KanbanColumn = ({
 
   const handleColumnTitleChange = async (columnId, newTitle) => {
     if (newColumnTitle.trim()) {
-      try {
-        await renameColumn(columnId, newTitle);
+      await renameColumn(columnId, newTitle);
 
-        setBoards((prevBoards) =>
-          prevBoards.map((board) => ({
-            ...board,
-            teams: board.teams.map((team) => ({
-              ...team,
-              columns: team.columns.map((col) =>
-                col.id === columnId ? { ...col, title: newTitle } : col,
-              ),
-            })),
+      setBoards((prevBoards) =>
+        prevBoards.map((board) => ({
+          ...board,
+          teams: board.teams.map((team) => ({
+            ...team,
+            columns: team.columns.map((col) =>
+              col.id === columnId ? { ...col, title: newTitle } : col,
+            ),
           })),
-        );
-        setNewColumnTitle("");
-      } catch (e) {
-        console.error(e);
-        alert("Ошибка при переименовании столбца команды");
-      }
+        })),
+      );
+      setNewColumnTitle("");
     }
   };
 
   const handleCreateTask = async (teamId, columnId) => {
     if (newTaskContent.trim()) {
-      try {
-        const createdTask = await createTask(newTaskContent, columnId);
+      const createdTask = await createTask(newTaskContent, columnId);
 
-        setBoards((prevBoards) =>
-          prevBoards.map((board) => ({
-            ...board,
-            teams: board.teams.map((team) => {
-              if (team.id === teamId) {
-                return {
-                  ...team,
-                  columns: team.columns.map((column) => {
-                    if (column.id === columnId) {
-                      return {
-                        ...column,
-                        tasks: [
-                          ...column.tasks,
-                          {
-                            id: createdTask.id_task,
-                            id_task: createdTask.id_task,
-                            content: createdTask.content,
-                            completed: createdTask.completed,
-                            deadline: createdTask.deadline,
-                            createdAt: createdTask.createdAt,
-                          },
-                        ],
-                      };
-                    }
-                    return column;
-                  }),
-                };
-              }
-              return team;
-            }),
-          })),
-        );
+      setBoards((prevBoards) =>
+        prevBoards.map((board) => ({
+          ...board,
+          teams: board.teams.map((team) => {
+            if (team.id === teamId) {
+              return {
+                ...team,
+                columns: team.columns.map((column) => {
+                  if (column.id === columnId) {
+                    return {
+                      ...column,
+                      tasks: [
+                        ...column.tasks,
+                        {
+                          id: createdTask.id_task,
+                          id_task: createdTask.id_task,
+                          content: createdTask.content,
+                          completed: createdTask.completed,
+                          deadline: createdTask.deadline,
+                          createdAt: createdTask.createdAt,
+                        },
+                      ],
+                    };
+                  }
+                  return column;
+                }),
+              };
+            }
+            return team;
+          }),
+        })),
+      );
 
-        // Очищаем поле ввода после создания
-        setNewTaskContent("");
-        setShowTaskInput(false);
-      } catch (e) {
-        console.error(e);
-        alert("Ошибка при создании задачи");
-      }
+      setNewTaskContent("");
+      setShowTaskInput(false);
     }
   };
 
@@ -118,7 +107,7 @@ const KanbanColumn = ({
           }}
           onTitleChange={setNewColumnTitle}
           onChange={(id, newTitle) => {
-            handleColumnTitleChange(id, newTitle);
+            return handleColumnTitleChange(id, newTitle);
           }}
           level={3}
           isPastelColor={isPastelColor}

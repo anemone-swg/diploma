@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from "../db.js";
+import sequelize from "../config/db.js";
 
 class Project extends Model {}
 
@@ -11,12 +11,12 @@ Project.init(
       primaryKey: true,
     },
     title: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.STRING(100),
       allowNull: false,
       validate: {
         len: {
-          args: [1, 20],
-          msg: "Название проекта должно содержать от 1 до 20 символов",
+          args: [1, 100],
+          msg: "Название проекта должно содержать от 1 до 100 символов",
         },
       },
     },
@@ -33,7 +33,7 @@ Project.init(
     sequelize,
     modelName: "Project",
     tableName: "projects",
-    timestamps: false, // если ты не используешь автоматическое createdAt/updatedAt
+    timestamps: false,
   },
 );
 

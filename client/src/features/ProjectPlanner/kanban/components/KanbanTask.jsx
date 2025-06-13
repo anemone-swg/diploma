@@ -28,11 +28,10 @@ const KanbanTask = ({
     task.deadline ? new Date(task.deadline) : null,
   );
 
-  const handleTaskContentChange = async (taskId, newContent) => {
+  const handleTaskContentChange = (taskId, newContent) => {
     if (!newContent.trim()) return;
-    try {
-      await taskContentChange(taskId, newContent);
 
+    taskContentChange(taskId, newContent).then(() => {
       setBoards((prevBoards) =>
         prevBoards.map((board) => ({
           ...board,
@@ -47,35 +46,27 @@ const KanbanTask = ({
           })),
         })),
       );
-      setNewTaskContent(""); // Очистка поля ввода
-    } catch (error) {
-      console.error(error);
-      alert("Ошибка при обновлении контента задачи");
-    }
+      setNewTaskContent("");
+    });
   };
 
   const handleDeadlineChange = async (taskId, newDeadline) => {
-    try {
-      await taskDeadlineChange(taskId, newDeadline);
+    await taskDeadlineChange(taskId, newDeadline);
 
-      setBoards((prevBoards) =>
-        prevBoards.map((board) => ({
-          ...board,
-          teams: board.teams.map((team) => ({
-            ...team,
-            columns: team.columns.map((column) => ({
-              ...column,
-              tasks: column.tasks.map((task) =>
-                task.id === taskId ? { ...task, deadline: newDeadline } : task,
-              ),
-            })),
+    setBoards((prevBoards) =>
+      prevBoards.map((board) => ({
+        ...board,
+        teams: board.teams.map((team) => ({
+          ...team,
+          columns: team.columns.map((column) => ({
+            ...column,
+            tasks: column.tasks.map((task) =>
+              task.id === taskId ? { ...task, deadline: newDeadline } : task,
+            ),
           })),
         })),
-      );
-    } catch (error) {
-      console.error(error);
-      alert("Ошибка при обновлении дэдлайна задачи");
-    }
+      })),
+    );
   };
 
   const handleDatePickerChange = (date) => {
@@ -83,41 +74,30 @@ const KanbanTask = ({
       setSelectedDate(date);
       handleDeadlineChange(task.id, date.toISOString());
     } else {
-      // Если дата пуста, установим null
       setSelectedDate(null);
       handleDeadlineChange(task.id, null);
     }
   };
 
   const handleDeleteTaskBoard = async (taskId) => {
-    try {
-      await deleteTask(taskId);
+    await deleteTask(taskId);
 
-      setBoards((prevBoards) =>
-        prevBoards.map((board) => ({
-          ...board,
-          teams: board.teams.map((team) => ({
-            ...team,
-            columns: team.columns.map((column) => ({
-              ...column,
-              tasks: column.tasks.filter((task) => task.id !== taskId),
-            })),
+    setBoards((prevBoards) =>
+      prevBoards.map((board) => ({
+        ...board,
+        teams: board.teams.map((team) => ({
+          ...team,
+          columns: team.columns.map((column) => ({
+            ...column,
+            tasks: column.tasks.filter((task) => task.id !== taskId),
           })),
         })),
-      );
-    } catch (error) {
-      console.error(error);
-      alert("Ошибка при удалении задачи");
-    }
+      })),
+    );
   };
 
   const handleTaskStatusChange = async (taskId) => {
-    try {
-      await taskStatusChange(taskId);
-    } catch (error) {
-      console.error(error);
-      alert("Ошибка при изменении статуса задачи");
-    }
+    await taskStatusChange(taskId);
   };
 
   return (

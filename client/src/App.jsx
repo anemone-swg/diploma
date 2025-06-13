@@ -43,7 +43,6 @@ function AppContent() {
         setIsAuthenticated(response.isAuthenticated);
         setUserRole(response.role);
       } catch (error) {
-        console.error("Ошибка при проверке авторизации:", error);
         setIsAuthenticated(false);
         setUserRole(null);
       }

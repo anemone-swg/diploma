@@ -2,29 +2,28 @@ import express from "express";
 import session from "express-session";
 import cors from "cors";
 import path from "path";
-import sequelize from "./db.js";
+import "./config/env.js";
+import sequelize from "./config/db.js";
 import bodyParser from "body-parser";
-import regAndAuthRoutes from "./controllers/routeAuthAndReg.js";
-import accountRoutes from "./controllers/routeAccount.js";
-import dailyTaskRoutes from "./controllers/routeDailyTask.js";
-import projectPlannerTeamRoutes from "./controllers/routeProjectPlannerTeam.js";
-import projectPlannerRoutes from "./controllers/routeProjectPlanner.js";
+import regAndAuthRoutes from "./routes/authAndReg.routes.js";
+import accountRoutes from "./routes/account.routes.js";
+import dailyTaskRoutes from "./routes/dailyTask.routes.js";
+import projectPlannerTeamRoutes from "./routes/projectPlannerTeam.routes.js";
+import projectPlannerRoutes from "./routes/projectPlanner.routes.js";
 import { fileURLToPath } from "url";
 import { Server } from "socket.io";
 import http from "http";
-import "./models/Associations.js";
+import "./models/associations.js";
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_ORIGIN,
     credentials: true,
   },
 });
-
-const PORT = 5000;
-
+const PORT = process.env.PORT || 5000;
 export { io };
 
 sequelize
@@ -36,14 +35,19 @@ sequelize
     console.error("Unable to connect to the database:", error);
   });
 
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(
+  cors({
+    origin: process.env.CLIENT_ORIGIN,
+    credentials: true,
+  }),
+);
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 app.use("/uploads", express.static(path.join(__dirname)));
 
 app.use(
   session({
-    secret: "secret_key",
+    secret: process.env.SESSION_SECRET || "secret_key",
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -61,11 +65,11 @@ app.get("/", (req, res) => {
   res.json({ message: "Сервер работает!" });
 });
 
-app.use(regAndAuthRoutes);
-app.use(accountRoutes);
-app.use(dailyTaskRoutes);
-app.use(projectPlannerRoutes);
-app.use(projectPlannerTeamRoutes);
+app.use("/api", regAndAuthRoutes);
+app.use("/api", accountRoutes);
+app.use("/api", dailyTaskRoutes);
+app.use("/api", projectPlannerRoutes);
+app.use("/api", projectPlannerTeamRoutes);
 
 io.on("connection", (socket) => {
   console.log("✅ Пользователь подключился:", socket.id);

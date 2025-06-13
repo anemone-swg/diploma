@@ -53,6 +53,7 @@
 .taskHeader h3 {
   font-size: 16px;
   width: fit-content;
+  word-break: keep-all;
   border: 1px solid var(--background-color);
 }
 

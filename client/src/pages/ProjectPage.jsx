@@ -16,14 +16,10 @@ const ProjectPage = ({ sidebarWidth }) => {
 
   useEffect(() => {
     const getProject = async () => {
-      try {
-        const { project, currentUserId } = await fetchProjectById(projectId);
-        setProject(project);
-        setCurrentUserId(currentUserId);
-        console.log(project);
-      } catch (err) {
-        console.error("Ошибка при загрузки проекта:", err);
-      }
+      const { project, currentUserId } = await fetchProjectById(projectId);
+      setProject(project);
+      setCurrentUserId(currentUserId);
+      console.log(project);
     };
 
     getProject();
@@ -39,12 +35,8 @@ const ProjectPage = ({ sidebarWidth }) => {
     };
 
     const handleReloadProject = async () => {
-      try {
-        const { project } = await fetchProjectById(projectId);
-        setProject(project);
-      } catch (err) {
-        console.error("Ошибка при обновлении проекта:", err);
-      }
+      const { project } = await fetchProjectById(projectId);
+      setProject(project);
     };
 
     const handleUserDeletedFromTeam = () => {

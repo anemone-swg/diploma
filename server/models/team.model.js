@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from "../db.js"; // путь подкорректируй под себя
+import sequelize from "../config/db.js";
 
 class Team extends Model {}
 
@@ -11,12 +11,12 @@ Team.init(
       primaryKey: true,
     },
     title: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.STRING(50),
       allowNull: false,
       validate: {
         len: {
-          args: [1, 20],
-          msg: "Название команды должно содержать от 1 до 20 символов",
+          args: [1, 50],
+          msg: "Название команды должно содержать от 1 до 50 символов",
         },
       },
     },

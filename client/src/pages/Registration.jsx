@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../services/AuthAndRegService.js";
 import styles from "../styles/Login.module.css";
@@ -44,16 +44,9 @@ const Registration = () => {
     }
 
     try {
-      const responseData = await registerUser(
-        username,
-        email,
-        password,
-        confirmPassword,
-      );
-      if (responseData.success) {
-        alert("Регистрация успешна!");
-        navigate("/login");
-      }
+      await registerUser(username, email, password, confirmPassword);
+      alert("Регистрация успешна!");
+      navigate("/login");
     } catch (error) {
       setError(error.message);
     }

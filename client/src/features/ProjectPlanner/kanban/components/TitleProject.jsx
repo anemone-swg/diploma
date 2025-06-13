@@ -13,18 +13,13 @@ const TitleProject = ({
 
   const handleBoardTitleChange = async (boardId, newTitle) => {
     if (newTitle.trim()) {
-      try {
-        await renameProject(boardId, newTitle);
+      await renameProject(boardId, newTitle);
 
-        setBoards((prevBoards) =>
-          prevBoards.map((b) =>
-            b.id === boardId ? { ...b, title: newTitle } : b,
-          ),
-        );
-      } catch (error) {
-        console.error(error);
-        alert("Ошибка при переименовании доски (проекта)");
-      }
+      setBoards((prevBoards) =>
+        prevBoards.map((b) =>
+          b.id === boardId ? { ...b, title: newTitle } : b,
+        ),
+      );
     }
   };
 

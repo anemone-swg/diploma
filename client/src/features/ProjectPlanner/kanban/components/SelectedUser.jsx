@@ -20,12 +20,8 @@ const SelectedUser = ({ task, projectId, setBoards }) => {
   const [team, setTeam] = useState([]);
 
   useEffect(() => {
-    showTeam(projectId)
-      .then(setTeam)
-      .catch((err) => {
-        console.error("Ошибка при загрузке команды:", err);
-      });
-  }, []);
+    showTeam(projectId).then(setTeam);
+  }, [projectId]);
 
   const handleClickOutside = (event) => {
     if (
@@ -44,62 +40,54 @@ const SelectedUser = ({ task, projectId, setBoards }) => {
   }, []);
 
   const handleSelectUserForTask = async (member) => {
-    try {
-      const updatedUser = await selectUserForTask(member, task);
+    const updatedUser = await selectUserForTask(member, task);
 
-      setBoards((prevBoards) =>
-        prevBoards.map((board) => ({
-          ...board,
-          teams: board.teams.map((team) => ({
-            ...team,
-            columns: team.columns.map((column) => ({
-              ...column,
-              tasks: column.tasks.map((t) => {
-                if (t.id === task.id) {
-                  return {
-                    ...t,
-                    assignedUsers: [...(t.assignedUsers || []), updatedUser],
-                  };
-                }
-                return t;
-              }),
-            })),
+    setBoards((prevBoards) =>
+      prevBoards.map((board) => ({
+        ...board,
+        teams: board.teams.map((team) => ({
+          ...team,
+          columns: team.columns.map((column) => ({
+            ...column,
+            tasks: column.tasks.map((t) => {
+              if (t.id === task.id) {
+                return {
+                  ...t,
+                  assignedUsers: [...(t.assignedUsers || []), updatedUser],
+                };
+              }
+              return t;
+            }),
           })),
         })),
-      );
-    } catch (error) {
-      console.error("Ошибка при назначении пользователя на задачу: ", error);
-    }
+      })),
+    );
   };
 
   const handleRemoveUserFromTask = async (member) => {
-    try {
-      await removeUserFromTask(member, task);
+    await removeUserFromTask(member, task);
 
-      setBoards((prevBoards) =>
-        prevBoards.map((board) => ({
-          ...board,
-          teams: board.teams.map((team) => ({
-            ...team,
-            columns: team.columns.map((column) => ({
-              ...column,
-              tasks: column.tasks.map((t) =>
-                t.id === task.id
-                  ? {
-                      ...t,
-                      assignedUsers: t.assignedUsers?.filter(
-                        (u) => u.id_user !== member.id_user,
-                      ),
-                    }
-                  : t,
-              ),
-            })),
+    setBoards((prevBoards) =>
+      prevBoards.map((board) => ({
+        ...board,
+        teams: board.teams.map((team) => ({
+          ...team,
+          columns: team.columns.map((column) => ({
+            ...column,
+            tasks: column.tasks.map((t) =>
+              t.id === task.id
+                ? {
+                    ...t,
+                    assignedUsers: t.assignedUsers?.filter(
+                      (u) => u.id_user !== member.id_user,
+                    ),
+                  }
+                : t,
+            ),
           })),
         })),
-      );
-    } catch (err) {
-      console.error("Ошибка при удалении пользователя из задачи:", err);
-    }
+      })),
+    );
   };
 
   return (

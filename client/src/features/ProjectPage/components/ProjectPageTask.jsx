@@ -16,12 +16,7 @@ const ProjectPageTask = ({ task, currentUserId }) => {
   );
 
   const handleTaskStatusChange = async (taskId) => {
-    try {
-      await taskStatusChange(taskId);
-    } catch (error) {
-      console.error(error);
-      alert("Ошибка при изменении статуса задачи");
-    }
+    await taskStatusChange(taskId);
   };
 
   return (

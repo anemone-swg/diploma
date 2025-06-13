@@ -40,8 +40,7 @@ const AdminPanel = ({ onLogout }) => {
     const timeout = setTimeout(() => {
       searchUsersByLogin(queryForAdmin)
         .then(setResultsForAdmin)
-        .catch((err) => {
-          console.error("Ошибка при поиске пользователей:", err);
+        .catch(() => {
           setResultsForAdmin([]);
         });
     }, 300);
@@ -51,12 +50,8 @@ const AdminPanel = ({ onLogout }) => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      try {
-        const data = await getAllUsers();
-        setUsers(data);
-      } catch (error) {
-        console.error("Ошибка загрузки пользователей:", error);
-      }
+      const data = await getAllUsers();
+      setUsers(data);
     };
 
     fetchUsers();
@@ -76,8 +71,7 @@ const AdminPanel = ({ onLogout }) => {
       onLogout();
       navigate("/login");
     } catch (error) {
-      console.error("Ошибка выхода:", error);
-      toast.error("Не удалось выйти.");
+      toast.error(error.message);
     }
   };
 
@@ -97,7 +91,6 @@ const AdminPanel = ({ onLogout }) => {
       );
       toast.success("Пользователь успешно удален");
     } catch (error) {
-      console.error("Ошибка удаления аккаунта:", error);
       toast.error(error.message);
     }
   };

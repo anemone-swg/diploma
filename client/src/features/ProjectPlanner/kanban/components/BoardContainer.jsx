@@ -34,78 +34,66 @@ const BoardContainer = memo(
 
     const [isCollapsed, setIsCollapsed] = useCollapsedState(team.id_team);
 
-    // Редактирование названия команды
     const handleTeamTitleChange = async (boardId, teamId, newTitle) => {
       if (newTitle.trim()) {
-        try {
-          await renameTeam(boardId, teamId, newTitle);
+        await renameTeam(teamId, newTitle);
 
-          setBoards((prevBoards) =>
-            prevBoards.map((board) => {
-              if (board.id === boardId) {
-                return {
-                  ...board,
-                  teams: board.teams.map((team) => {
-                    if (team.id === teamId) {
-                      return {
-                        ...team,
-                        title: newTitle,
-                      };
-                    }
-                    return team;
-                  }),
-                };
-              }
-              return board;
-            }),
-          );
-        } catch (e) {
-          console.error(e);
-          alert("Ошибка при переименовании доски команды");
-        }
+        setBoards((prevBoards) =>
+          prevBoards.map((board) => {
+            if (board.id === boardId) {
+              return {
+                ...board,
+                teams: board.teams.map((team) => {
+                  if (team.id === teamId) {
+                    return {
+                      ...team,
+                      title: newTitle,
+                    };
+                  }
+                  return team;
+                }),
+              };
+            }
+            return board;
+          }),
+        );
       }
     };
 
-    // Создание колонки для конкретной команды
     const handleCreateColumn = async (boardId, teamId) => {
       if (newColumnTitle.trim()) {
-        try {
-          const createdColumn = await createColumn(newColumnTitle, teamId);
+        const createdColumn = await createColumn(newColumnTitle, teamId);
 
-          setBoards((prevBoards) =>
-            prevBoards.map((board) => {
-              if (board.id === boardId) {
-                return {
-                  ...board,
-                  teams: board.teams.map((team) => {
-                    if (team.id === teamId) {
-                      return {
-                        ...team,
-                        columns: [
-                          ...team.columns,
-                          {
-                            id: createdColumn.id_column,
-                            title: createdColumn.title,
-                            color: createdColumn.color,
-                            order: createdColumn.order,
-                            tasks: [],
-                          },
-                        ],
-                      };
-                    }
-                    return team;
-                  }),
-                };
-              }
-              return board;
-            }),
-          );
-          setNewColumnTitle("");
-          setShowColumnInput(false);
-        } catch (e) {
-          console.error(e);
-          alert("Ошибка при создании столбца команды");
-        }
+        setBoards((prevBoards) =>
+          prevBoards.map((board) => {
+            if (board.id === boardId) {
+              return {
+                ...board,
+                teams: board.teams.map((team) => {
+                  if (team.id === teamId) {
+                    return {
+                      ...team,
+                      columns: [
+                        ...team.columns,
+                        {
+                          id: createdColumn.id_column,
+                          title: createdColumn.title,
+                          color: createdColumn.color,
+                          order: createdColumn.order,
+                          tasks: [],
+                        },
+                      ],
+                    };
+                  }
+                  return team;
+                }),
+              };
+            }
+            return board;
+          }),
+        );
+        setNewColumnTitle("");
+        setShowColumnInput(false);
       }
     };
 
@@ -124,7 +112,7 @@ const BoardContainer = memo(
       setBoards((prevBoards) => {
         return prevBoards.map((board) => ({
           ...board,
-          teams: board.teams.map((team) => {
+          teams: board.teams.map(async (team) => {
             // Для случая перемещения внутри одной колонки
             if (source.droppableId === destination.droppableId) {
               const column = team.columns.find(
@@ -161,7 +149,7 @@ const BoardContainer = memo(
             const [movedTask] = newSourceTasks.splice(source.index, 1);
             newDestTasks.splice(destination.index, 0, movedTask);
 
-            updateTaskMove(movedTask.id_task, destination.droppableId);
+            await updateTaskMove(movedTask.id_task, destination.droppableId);
 
             return {
               ...team,
@@ -185,6 +173,7 @@ const BoardContainer = memo(
         <div className={boards_container.board}>
           <div className={kanban_styles.elementHeader}>
             <EditableTitle
+              maxLength={50}
               item={team}
               isEditing={editingTeamId === team.id}
               title={teamTitle}
@@ -221,6 +210,7 @@ const BoardContainer = memo(
 
           {showColumnInput === team.id && (
             <InputWithActions
+              maxLength={50}
               type="column"
               value={newColumnTitle}
               onChange={(e) => setNewColumnTitle(e.target.value)}

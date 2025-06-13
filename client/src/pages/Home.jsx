@@ -90,7 +90,7 @@ const Home = ({ onLogout }) => {
       setErrorLogin(error.message);
     }
     setTimeout(() => {
-      setIsDisabled(false); // Через 5 секунд снова активируем кнопку
+      setIsDisabled(false);
     }, 5000);
   };
 
@@ -99,13 +99,7 @@ const Home = ({ onLogout }) => {
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setAvatar(imageUrl);
-
-      try {
-        await uploadAvatar(file);
-        console.log("Аватар успешно загружен!");
-      } catch (error) {
-        console.error("Ошибка загрузки аватара:", error);
-      }
+      await uploadAvatar(file);
     }
   };
 
@@ -114,7 +108,7 @@ const Home = ({ onLogout }) => {
       if (isDisabled) return;
       setIsDisabled(true);
       await updateUserData({ firstName, lastName });
-      setError(""); // Если успешно, очищаем ошибку
+      setError("");
       setMessage("Данные успешно сохранены!");
       setMessageVisible(true);
       setTimeout(() => {
@@ -141,8 +135,7 @@ const Home = ({ onLogout }) => {
       onLogout();
       navigate("/login");
     } catch (error) {
-      console.error("Ошибка выхода:", error);
-      alert("Не удалось выйти");
+      alert(error.message);
     }
   };
 
@@ -154,9 +147,7 @@ const Home = ({ onLogout }) => {
     try {
       await deleteUserAccount();
       alert("Аккаунт успешно удалён!");
-
-      // Перенаправляем на страницу входа
-      onLogout(); // Вызываем выход из аккаунта
+      onLogout();
       navigate("/login");
     } catch (error) {
       console.error("Ошибка удаления аккаунта:", error);

@@ -24,12 +24,8 @@ const JoinSection = () => {
 
   useEffect(() => {
     const loadInvitations = async () => {
-      try {
-        const invitations = await showInvitations();
-        setInvitations(invitations);
-      } catch (err) {
-        console.error("Ошибка при загрузке приглашений:", err);
-      }
+      const invitations = await showInvitations();
+      setInvitations(invitations);
     };
 
     loadInvitations();
@@ -46,31 +42,23 @@ const JoinSection = () => {
   }, []);
 
   const handleAcceptInvite = async (id_invite) => {
-    try {
-      await acceptInvite(id_invite);
+    await acceptInvite(id_invite);
 
-      setInvitations((prev) =>
-        prev.map((inv) =>
-          inv.id_invite === id_invite ? { ...inv, status: "accepted" } : inv,
-        ),
-      );
-    } catch (error) {
-      console.error("Ошибка при принятии приглашения:", error);
-    }
+    setInvitations((prev) =>
+      prev.map((inv) =>
+        inv.id_invite === id_invite ? { ...inv, status: "accepted" } : inv,
+      ),
+    );
   };
 
   const handleDeclineInvite = async (id_invite) => {
-    try {
-      await declineInvite(id_invite);
+    await declineInvite(id_invite);
 
-      setInvitations((prev) =>
-        prev.map((inv) =>
-          inv.id_invite === id_invite ? { ...inv, status: "declined" } : inv,
-        ),
-      );
-    } catch (error) {
-      console.error("Ошибка при отклонении приглашения:", error);
-    }
+    setInvitations((prev) =>
+      prev.map((inv) =>
+        inv.id_invite === id_invite ? { ...inv, status: "declined" } : inv,
+      ),
+    );
   };
 
   const handleOpenProject = (projectId) => {
@@ -78,15 +66,9 @@ const JoinSection = () => {
   };
 
   const handleExitProject = async (projectId, inviteId) => {
-    try {
-      const currentUserId = await fetchCurrentUser();
-      await deleteFromTeam(currentUserId, projectId);
-      setInvitations((prev) =>
-        prev.filter((inv) => inv.id_invite !== inviteId),
-      );
-    } catch (error) {
-      console.error("Ошибка при выходе из проекта:", error);
-    }
+    const currentUserId = await fetchCurrentUser();
+    await deleteFromTeam(currentUserId, projectId);
+    setInvitations((prev) => prev.filter((inv) => inv.id_invite !== inviteId));
   };
 
   return (

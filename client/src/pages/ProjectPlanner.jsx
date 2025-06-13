@@ -50,12 +50,8 @@ function ProjectPlanner({ sidebarWidth }) {
 
   useEffect(() => {
     const handleReloadProject = async () => {
-      try {
-        const data = await fetchProjects();
-        setBoards(normalizeProjects(data));
-      } catch (err) {
-        console.error("Ошибка при обновлении проекта:", err);
-      }
+      const data = await fetchProjects();
+      setBoards(normalizeProjects(data));
     };
 
     socket.on("userDeleted", handleReloadProject);
