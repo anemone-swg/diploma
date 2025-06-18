@@ -18,8 +18,8 @@ const TasksSection = ({ boards }) => {
     ),
   );
 
-  const handleTaskStatusChange = async (taskId) => {
-    await taskStatusChange(taskId);
+  const handleTaskStatusChange = (taskId) => {
+    taskStatusChange(taskId).then(() => {});
   };
 
   return (

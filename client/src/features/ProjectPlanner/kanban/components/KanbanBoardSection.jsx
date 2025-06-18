@@ -25,26 +25,30 @@ const KanbanBoardSection = memo(
 
     const handleAddTeam = useCallback(
       async (boardId) => {
-        const createdTeam = await createTeam("Новая команда", boardId);
+        try {
+          const createdTeam = await createTeam("Новая команда", boardId);
 
-        setBoards((prevBoards) =>
-          prevBoards.map((board) => {
-            if (board.id === boardId) {
-              return {
-                ...board,
-                teams: [
-                  ...board.teams,
-                  {
-                    id: createdTeam.id_team,
-                    title: createdTeam.title,
-                    columns: [],
-                  },
-                ],
-              };
-            }
-            return board;
-          }),
-        );
+          setBoards((prevBoards) =>
+            prevBoards.map((board) => {
+              if (board.id === boardId) {
+                return {
+                  ...board,
+                  teams: [
+                    ...board.teams,
+                    {
+                      id: createdTeam.id_team,
+                      title: createdTeam.title,
+                      columns: [],
+                    },
+                  ],
+                };
+              }
+              return board;
+            }),
+          );
+        } catch (_) {
+          /* empty */
+        }
       },
       [setBoards],
     );

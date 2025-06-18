@@ -34,66 +34,70 @@ const BoardContainer = memo(
 
     const [isCollapsed, setIsCollapsed] = useCollapsedState(team.id_team);
 
-    const handleTeamTitleChange = async (boardId, teamId, newTitle) => {
+    const handleTeamTitleChange = (boardId, teamId, newTitle) => {
       if (newTitle.trim()) {
-        await renameTeam(teamId, newTitle);
-
-        setBoards((prevBoards) =>
-          prevBoards.map((board) => {
-            if (board.id === boardId) {
-              return {
-                ...board,
-                teams: board.teams.map((team) => {
-                  if (team.id === teamId) {
-                    return {
-                      ...team,
-                      title: newTitle,
-                    };
-                  }
-                  return team;
-                }),
-              };
-            }
-            return board;
-          }),
-        );
+        renameTeam(teamId, newTitle).then(() => {
+          setBoards((prevBoards) =>
+            prevBoards.map((board) => {
+              if (board.id === boardId) {
+                return {
+                  ...board,
+                  teams: board.teams.map((team) => {
+                    if (team.id === teamId) {
+                      return {
+                        ...team,
+                        title: newTitle,
+                      };
+                    }
+                    return team;
+                  }),
+                };
+              }
+              return board;
+            }),
+          );
+        });
       }
     };
 
     const handleCreateColumn = async (boardId, teamId) => {
       if (newColumnTitle.trim()) {
-        const createdColumn = await createColumn(newColumnTitle, teamId);
+        try {
+          const createdColumn = await createColumn(newColumnTitle, teamId);
 
-        setBoards((prevBoards) =>
-          prevBoards.map((board) => {
-            if (board.id === boardId) {
-              return {
-                ...board,
-                teams: board.teams.map((team) => {
-                  if (team.id === teamId) {
-                    return {
-                      ...team,
-                      columns: [
-                        ...team.columns,
-                        {
-                          id: createdColumn.id_column,
-                          title: createdColumn.title,
-                          color: createdColumn.color,
-                          order: createdColumn.order,
-                          tasks: [],
-                        },
-                      ],
-                    };
-                  }
-                  return team;
-                }),
-              };
-            }
-            return board;
-          }),
-        );
-        setNewColumnTitle("");
-        setShowColumnInput(false);
+          setBoards((prevBoards) =>
+            prevBoards.map((board) => {
+              if (board.id === boardId) {
+                return {
+                  ...board,
+                  teams: board.teams.map((team) => {
+                    if (team.id === teamId) {
+                      return {
+                        ...team,
+                        columns: [
+                          ...team.columns,
+                          {
+                            id: createdColumn.id_column,
+                            title: createdColumn.title,
+                            color: createdColumn.color,
+                            order: createdColumn.order,
+                            tasks: [],
+                          },
+                        ],
+                      };
+                    }
+                    return team;
+                  }),
+                };
+              }
+              return board;
+            }),
+          );
+          setNewColumnTitle("");
+          setShowColumnInput(false);
+        } catch (_) {
+          /* empty */
+        }
       }
     };
 

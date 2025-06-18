@@ -59,16 +59,18 @@ const SearchMembers = ({ projectId, invitations, refreshInvitations }) => {
       socket.off("inviteDeclined", handleInviteChanged);
       socket.off("inviteAccepted", handleInviteChanged);
     };
-  }, [query]);
+  }, [query, refreshInvitations]);
 
-  const handleInviteClick = async (user) => {
-    await sendInvite(user.id_user, projectId);
-    await refreshInvitations();
+  const handleInviteClick = (user) => {
+    sendInvite(user.id_user, projectId).then(() => {
+      refreshInvitations();
+    });
   };
 
-  const handleCancelInvite = async (user) => {
-    await cancelInvite(user.id_user);
-    await refreshInvitations();
+  const handleCancelInvite = (user) => {
+    cancelInvite(user.id_user).then(() => {
+      refreshInvitations();
+    });
   };
 
   return (

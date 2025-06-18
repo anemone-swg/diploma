@@ -13,14 +13,7 @@ import {
   deleteProject,
   deleteTeam,
 } from "@/services/ProjectPlannerService.js";
-
-// Типы модальных окон
-export const ModalTypes = {
-  CREATE: "create",
-  DELETE: "delete",
-  DELETE_TEAM: "delete_team",
-  DELETE_COLUMN: "delete_column",
-};
+import { ModalTypes } from "@/constants/modalTypes.js";
 
 const ModalWindow = ({
   newBoardTitle,
@@ -36,7 +29,6 @@ const ModalWindow = ({
   setDeletingColumn,
   deletingColumn,
 }) => {
-  // Эффект для закрытия модалки
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (e.target.classList.contains(modal_styles.modal)) {
@@ -47,79 +39,85 @@ const ModalWindow = ({
 
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
-  }, [showModal]);
+  }, [setNewBoardTitle, setShowModal, showModal]);
 
   const handleCreateBoard = async () => {
     if (newBoardTitle.trim() && boards.length === 0) {
-      const createdProject = await createProject({
-        title: newBoardTitle,
-      });
+      try {
+        const createdProject = await createProject({
+          title: newBoardTitle,
+        });
 
-      const newBoard = {
-        id: createdProject.id_project,
-        title: createdProject.title,
-        teams: [],
-        createdAt: createdProject.createdAt,
-      };
+        const newBoard = {
+          id: createdProject.id_project,
+          title: createdProject.title,
+          teams: [],
+          createdAt: createdProject.createdAt,
+        };
 
-      setBoards([newBoard]);
-      setNewBoardTitle("");
-      setShowModal(false);
-      setActiveSection("kanban");
+        setBoards([newBoard]);
+        setNewBoardTitle("");
+        setShowModal(false);
+        setActiveSection("kanban");
+      } catch (_) {
+        /* empty */
+      }
     }
   };
 
-  const handleDeleteBoard = async () => {
-    await deleteProject();
-
-    setBoards([]);
-    setActiveSection("main");
-    setShowModal(false);
+  const handleDeleteBoard = () => {
+    deleteProject().then(() => {
+      setBoards([]);
+      setActiveSection("main");
+      setShowModal(false);
+    });
   };
 
-  const handleDeleteTeamBoard = async ({ boardId, teamId }) => {
-    await deleteTeam(teamId);
-
-    setBoards(
-      boards.map((board) => {
-        if (board.id === boardId) {
-          const updatedTeams = board.teams.filter((team) => team.id !== teamId);
-          return {
-            ...board,
-            teams: updatedTeams,
-          };
-        }
-        return board;
-      }),
-    );
-    setShowModal(false);
-  };
-
-  const handleDeleteColumnBoard = async ({ teamId, columnId }) => {
-    await deleteColumn(columnId, teamId);
-
-    setBoards(
-      boards.map((board) => ({
-        ...board,
-        teams: board.teams.map((team) => {
-          if (team.id === teamId) {
-            const updatedColumns = team.columns
-              .filter((column) => column.id !== columnId)
-              .map((column, index) => ({
-                ...column,
-                order: index + 1,
-              }));
-
+  const handleDeleteTeamBoard = ({ boardId, teamId }) => {
+    deleteTeam(teamId).then(() => {
+      setBoards(
+        boards.map((board) => {
+          if (board.id === boardId) {
+            const updatedTeams = board.teams.filter(
+              (team) => team.id !== teamId,
+            );
             return {
-              ...team,
-              columns: updatedColumns,
+              ...board,
+              teams: updatedTeams,
             };
           }
-          return team;
+          return board;
         }),
-      })),
-    );
-    setShowModal(false);
+      );
+      setShowModal(false);
+    });
+  };
+
+  const handleDeleteColumnBoard = ({ teamId, columnId }) => {
+    deleteColumn(columnId, teamId).then(() => {
+      setBoards(
+        boards.map((board) => ({
+          ...board,
+          teams: board.teams.map((team) => {
+            if (team.id === teamId) {
+              const updatedColumns = team.columns
+                .filter((column) => column.id !== columnId)
+                .map((column, index) => ({
+                  ...column,
+                  order: index + 1,
+                }));
+
+              return {
+                ...team,
+                columns: updatedColumns,
+              };
+            }
+            return team;
+          }),
+        })),
+      );
+      setShowModal(false);
+    });
   };
 
   return (

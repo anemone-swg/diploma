@@ -12,7 +12,7 @@ const ColorPicker = ({ setBoards, column, isPastelColor }) => {
 
   const divRef = useRef(null);
   const buttonRef = useRef(null);
-  const [showColorPicker, setShowColorPicker] = useState(false); // Состояние для показа/скрытия выбора цвета
+  const [showColorPicker, setShowColorPicker] = useState(false);
 
   const handleClickOutside = (event) => {
     if (
@@ -30,22 +30,21 @@ const ColorPicker = ({ setBoards, column, isPastelColor }) => {
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
-  const handleColorSelect = async (color, columnId) => {
-    await changeColorColumn(color, columnId);
-
-    setBoards((prevBoards) =>
-      prevBoards.map((board) => ({
-        ...board,
-        teams: board.teams.map((team) => ({
-          ...team,
-          columns: team.columns.map((col) =>
-            col.id === column.id ? { ...col, color } : col,
-          ),
+  const handleColorSelect = (color, columnId) => {
+    changeColorColumn(color, columnId).then(() => {
+      setBoards((prevBoards) =>
+        prevBoards.map((board) => ({
+          ...board,
+          teams: board.teams.map((team) => ({
+            ...team,
+            columns: team.columns.map((col) =>
+              col.id === column.id ? { ...col, color } : col,
+            ),
+          })),
         })),
-      })),
-    );
-
-    setShowColorPicker(false);
+      );
+      setShowColorPicker(false);
+    });
   };
 
   return (
@@ -65,7 +64,7 @@ const ColorPicker = ({ setBoards, column, isPastelColor }) => {
               key={key}
               style={{ backgroundColor: color }}
               className={color_picker_styles.colorSelect}
-              onClick={() => handleColorSelect(key, column.id)} // передаем key, а не цвет
+              onClick={() => handleColorSelect(key, column.id)}
             />
           ))}
         </div>

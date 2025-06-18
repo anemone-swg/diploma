@@ -49,9 +49,10 @@ function ProjectPlanner({ sidebarWidth }) {
   }, []);
 
   useEffect(() => {
-    const handleReloadProject = async () => {
-      const data = await fetchProjects();
-      setBoards(normalizeProjects(data));
+    const handleReloadProject = () => {
+      fetchProjects().then((data) => {
+        setBoards(normalizeProjects(data));
+      });
     };
 
     socket.on("userDeleted", handleReloadProject);

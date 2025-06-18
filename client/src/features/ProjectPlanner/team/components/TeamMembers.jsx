@@ -29,31 +29,36 @@ const TeamMembers = ({ setBoards, projectId, refreshInvitations }) => {
       socket.off("inviteAccepted", handleShowTeam);
       socket.off("userDeletedFromTeam", handleShowTeam);
     };
-  }, []);
+  }, [projectId]);
 
   const handleDeleteFromTeam = async (member) => {
-    await deleteFromTeam(member.id_user, projectId);
-    setTeam((prev) => prev.filter((user) => user.id_user !== member.id_user));
+    try {
+      await deleteFromTeam(member.id_user, projectId);
 
-    setBoards((prevBoards) =>
-      prevBoards.map((board) => ({
-        ...board,
-        teams: board.teams.map((team) => ({
-          ...team,
-          columns: team.columns.map((column) => ({
-            ...column,
-            tasks: column.tasks.map((task) => ({
-              ...task,
-              assignedUsers: task.assignedUsers?.filter(
-                (user) => user.id_user !== member.id_user,
-              ),
+      setTeam((prev) => prev.filter((user) => user.id_user !== member.id_user));
+
+      setBoards((prevBoards) =>
+        prevBoards.map((board) => ({
+          ...board,
+          teams: board.teams.map((team) => ({
+            ...team,
+            columns: team.columns.map((column) => ({
+              ...column,
+              tasks: column.tasks.map((task) => ({
+                ...task,
+                assignedUsers: task.assignedUsers?.filter(
+                  (user) => user.id_user !== member.id_user,
+                ),
+              })),
             })),
           })),
         })),
-      })),
-    );
-    if (refreshInvitations) {
-      await refreshInvitations();
+      );
+      if (refreshInvitations) {
+        await refreshInvitations();
+      }
+    } catch (_) {
+      /* empty */
     }
   };
 

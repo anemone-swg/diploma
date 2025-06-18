@@ -23,9 +23,8 @@ const JoinSection = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const loadInvitations = async () => {
-      const invitations = await showInvitations();
-      setInvitations(invitations);
+    const loadInvitations = () => {
+      showInvitations().then(setInvitations);
     };
 
     loadInvitations();
@@ -41,24 +40,24 @@ const JoinSection = () => {
     };
   }, []);
 
-  const handleAcceptInvite = async (id_invite) => {
-    await acceptInvite(id_invite);
-
-    setInvitations((prev) =>
-      prev.map((inv) =>
-        inv.id_invite === id_invite ? { ...inv, status: "accepted" } : inv,
-      ),
-    );
+  const handleAcceptInvite = (id_invite) => {
+    acceptInvite(id_invite).then(() => {
+      setInvitations((prev) =>
+        prev.map((inv) =>
+          inv.id_invite === id_invite ? { ...inv, status: "accepted" } : inv,
+        ),
+      );
+    });
   };
 
-  const handleDeclineInvite = async (id_invite) => {
-    await declineInvite(id_invite);
-
-    setInvitations((prev) =>
-      prev.map((inv) =>
-        inv.id_invite === id_invite ? { ...inv, status: "declined" } : inv,
-      ),
-    );
+  const handleDeclineInvite = (id_invite) => {
+    declineInvite(id_invite).then(() => {
+      setInvitations((prev) =>
+        prev.map((inv) =>
+          inv.id_invite === id_invite ? { ...inv, status: "declined" } : inv,
+        ),
+      );
+    });
   };
 
   const handleOpenProject = (projectId) => {
@@ -66,9 +65,16 @@ const JoinSection = () => {
   };
 
   const handleExitProject = async (projectId, inviteId) => {
-    const currentUserId = await fetchCurrentUser();
-    await deleteFromTeam(currentUserId, projectId);
-    setInvitations((prev) => prev.filter((inv) => inv.id_invite !== inviteId));
+    try {
+      const currentUserId = await fetchCurrentUser();
+      deleteFromTeam(currentUserId, projectId).then(() => {
+        setInvitations((prev) =>
+          prev.filter((inv) => inv.id_invite !== inviteId),
+        );
+      });
+    } catch (_) {
+      /* empty */
+    }
   };
 
   return (

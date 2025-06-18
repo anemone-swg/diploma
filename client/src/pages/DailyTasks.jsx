@@ -56,40 +56,46 @@ const DailyTasks = () => {
     }
   };
 
-  const handleToggleCompleted = async (taskId) => {
-    await toggleTaskStatus(taskId);
-    const updatedTasks = tasks.map((task) =>
-      task.id_task === taskId ? { ...task, completed: !task.completed } : task,
-    );
-    setTasks(updatedTasks);
+  const handleToggleCompleted = (taskId) => {
+    toggleTaskStatus(taskId).then(() => {
+      const updatedTasks = tasks.map((task) =>
+        task.id_task === taskId
+          ? { ...task, completed: !task.completed }
+          : task,
+      );
+      setTasks(updatedTasks);
+    });
   };
 
-  const handleDeleteTask = async (id_task) => {
-    await deleteTask(id_task);
-    setTasks((prev) => prev.filter((task) => task.id_task !== id_task));
+  const handleDeleteTask = (id_task) => {
+    deleteTask(id_task).then(() => {
+      setTasks((prev) => prev.filter((task) => task.id_task !== id_task));
+    });
   };
 
   const handleDescriptionChange = (id_task, newDesc) => {
     setTaskDescriptionMap({ ...taskDescriptionMap, [id_task]: newDesc });
   };
 
-  const handleSaveDescription = async (id_task) => {
+  const handleSaveDescription = (id_task) => {
     const newDescription = taskDescriptionMap[id_task];
-    await updateTaskDescription(id_task, newDescription);
-    const updatedTasks = tasks.map((task) =>
-      task.id_task === id_task
-        ? { ...task, description: newDescription }
-        : task,
-    );
-    setTasks(updatedTasks);
+    updateTaskDescription(id_task, newDescription).then(() => {
+      const updatedTasks = tasks.map((task) =>
+        task.id_task === id_task
+          ? { ...task, description: newDescription }
+          : task,
+      );
+      setTasks(updatedTasks);
+    });
   };
 
-  const handleTitleChange = async (id_task, newTitle) => {
-    await updateTaskTitle(id_task, newTitle);
-    const updatedTasks = tasks.map((task) =>
-      task.id_task === id_task ? { ...task, title: newTitle } : task,
-    );
-    setTasks(updatedTasks);
+  const handleTitleChange = (id_task, newTitle) => {
+    updateTaskTitle(id_task, newTitle).then(() => {
+      const updatedTasks = tasks.map((task) =>
+        task.id_task === id_task ? { ...task, title: newTitle } : task,
+      );
+      setTasks(updatedTasks);
+    });
   };
 
   const inProgressTasks = tasks.filter((task) => !task.completed);
@@ -265,14 +271,17 @@ const DailyTasks = () => {
                               const updatedDueDate = newDate
                                 ? newDate.toISOString()
                                 : null;
-                              setTasks((prevTasks) =>
-                                prevTasks.map((t) =>
-                                  t.id_task === task.id_task
-                                    ? { ...t, due_date: updatedDueDate }
-                                    : t,
-                                ),
+                              updateDueDate(task.id_task, updatedDueDate).then(
+                                () => {
+                                  setTasks((prevTasks) =>
+                                    prevTasks.map((t) =>
+                                      t.id_task === task.id_task
+                                        ? { ...t, due_date: updatedDueDate }
+                                        : t,
+                                    ),
+                                  );
+                                },
                               );
-                              updateDueDate(task.id_task, updatedDueDate);
                             }}
                             mode={"change"}
                           />

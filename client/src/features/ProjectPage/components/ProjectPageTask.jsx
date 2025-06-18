@@ -15,8 +15,8 @@ const ProjectPageTask = ({ task, currentUserId }) => {
     (user) => user.id_user === currentUserId,
   );
 
-  const handleTaskStatusChange = async (taskId) => {
-    await taskStatusChange(taskId);
+  const handleTaskStatusChange = (taskId) => {
+    taskStatusChange(taskId).then(() => {});
   };
 
   return (

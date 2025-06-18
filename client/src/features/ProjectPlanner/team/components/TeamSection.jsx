@@ -7,9 +7,10 @@ import { getSentInvites } from "@/services/ProjectPlannerTeamService.js";
 const TeamSection = ({ projectId, setBoards }) => {
   const [invitations, setInvitations] = useState([]);
 
-  const refreshInvitations = async () => {
-    const data = await getSentInvites();
-    setInvitations(data);
+  const refreshInvitations = () => {
+    getSentInvites().then((data) => {
+      setInvitations(data);
+    });
   };
 
   useEffect(() => {

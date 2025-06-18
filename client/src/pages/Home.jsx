@@ -52,14 +52,13 @@ const Home = ({ onLogout }) => {
     loadUserData();
   }, []);
 
-  const loadUserData = async () => {
-    const data = await fetchUserData();
-    if (data && data.user) {
+  const loadUserData = () => {
+    fetchUserData().then((data) => {
       setUser(data.user);
       setAvatar(data.user.avatar || defaultAvatar);
       setFirstName(data.user.firstName || "");
       setLastName(data.user.lastName || "");
-    }
+    });
   };
 
   const handleCloseChangeLoginModal = () => {
@@ -73,7 +72,7 @@ const Home = ({ onLogout }) => {
       setIsDisabled(true);
       await changeUserLogin(newLogin);
       await loadUserData();
-      setErrorLogin(""); // Если успешно, очищаем ошибку
+      setErrorLogin("");
       setMessageLogin("Данные успешно сохранены!");
       setMessageLoginVisible(true);
       setTimeout(() => {
@@ -81,7 +80,6 @@ const Home = ({ onLogout }) => {
         setTimeout(() => setMessageLogin(""), 500);
       }, 3000);
     } catch (error) {
-      console.error("Ошибка изменения логина:", error);
       setMessageLoginVisible(true);
       setTimeout(() => {
         setMessageLoginVisible(false);
@@ -94,12 +92,11 @@ const Home = ({ onLogout }) => {
     }, 5000);
   };
 
-  const handleAvatarChange = async (event) => {
+  const handleAvatarChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-      setAvatar(imageUrl);
-      await uploadAvatar(file);
+      uploadAvatar(file).then(() => setAvatar(imageUrl));
     }
   };
 
@@ -116,7 +113,6 @@ const Home = ({ onLogout }) => {
         setTimeout(() => setMessage(""), 500);
       }, 3000);
     } catch (error) {
-      console.error("Ошибка сохранения данных:", error);
       setMessageVisible(true);
       setTimeout(() => {
         setMessageVisible(false);
@@ -125,34 +121,27 @@ const Home = ({ onLogout }) => {
       setError(error.message);
     }
     setTimeout(() => {
-      setIsDisabled(false); // Через 5 секунд снова активируем кнопку
+      setIsDisabled(false);
     }, 5000);
   };
 
-  const handleLogout = async () => {
-    try {
-      await logoutUser();
+  const handleLogout = () => {
+    logoutUser().then(() => {
       onLogout();
       navigate("/login");
-    } catch (error) {
-      alert(error.message);
-    }
+    });
   };
 
-  const handleDeleteAcc = async () => {
+  const handleDeleteAcc = () => {
     if (!window.confirm("Вы уверены, что хотите удалить аккаунт?")) {
       return;
     }
 
-    try {
-      await deleteUserAccount();
+    deleteUserAccount().then(() => {
       alert("Аккаунт успешно удалён!");
       onLogout();
       navigate("/login");
-    } catch (error) {
-      console.error("Ошибка удаления аккаунта:", error);
-      alert(error.message);
-    }
+    });
   };
 
   return (

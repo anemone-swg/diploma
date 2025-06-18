@@ -50,23 +50,23 @@ const KanbanTask = ({
     });
   };
 
-  const handleDeadlineChange = async (taskId, newDeadline) => {
-    await taskDeadlineChange(taskId, newDeadline);
-
-    setBoards((prevBoards) =>
-      prevBoards.map((board) => ({
-        ...board,
-        teams: board.teams.map((team) => ({
-          ...team,
-          columns: team.columns.map((column) => ({
-            ...column,
-            tasks: column.tasks.map((task) =>
-              task.id === taskId ? { ...task, deadline: newDeadline } : task,
-            ),
+  const handleDeadlineChange = (taskId, newDeadline) => {
+    taskDeadlineChange(taskId, newDeadline).then(() => {
+      setBoards((prevBoards) =>
+        prevBoards.map((board) => ({
+          ...board,
+          teams: board.teams.map((team) => ({
+            ...team,
+            columns: team.columns.map((column) => ({
+              ...column,
+              tasks: column.tasks.map((task) =>
+                task.id === taskId ? { ...task, deadline: newDeadline } : task,
+              ),
+            })),
           })),
         })),
-      })),
-    );
+      );
+    });
   };
 
   const handleDatePickerChange = (date) => {
@@ -79,25 +79,25 @@ const KanbanTask = ({
     }
   };
 
-  const handleDeleteTaskBoard = async (taskId) => {
-    await deleteTask(taskId);
-
-    setBoards((prevBoards) =>
-      prevBoards.map((board) => ({
-        ...board,
-        teams: board.teams.map((team) => ({
-          ...team,
-          columns: team.columns.map((column) => ({
-            ...column,
-            tasks: column.tasks.filter((task) => task.id !== taskId),
+  const handleDeleteTaskBoard = (taskId) => {
+    deleteTask(taskId).then(() => {
+      setBoards((prevBoards) =>
+        prevBoards.map((board) => ({
+          ...board,
+          teams: board.teams.map((team) => ({
+            ...team,
+            columns: team.columns.map((column) => ({
+              ...column,
+              tasks: column.tasks.filter((task) => task.id !== taskId),
+            })),
           })),
         })),
-      })),
-    );
+      );
+    });
   };
 
-  const handleTaskStatusChange = async (taskId) => {
-    await taskStatusChange(taskId);
+  const handleTaskStatusChange = (taskId) => {
+    taskStatusChange(taskId).then(() => {});
   };
 
   return (

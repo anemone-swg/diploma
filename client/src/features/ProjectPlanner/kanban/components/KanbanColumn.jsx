@@ -29,64 +29,68 @@ const KanbanColumn = ({
     columnColors[theme][column.color] || columnColors[theme].default;
   const isPastelColor = column.color && column.color !== "default";
 
-  const handleColumnTitleChange = async (columnId, newTitle) => {
+  const handleColumnTitleChange = (columnId, newTitle) => {
     if (newColumnTitle.trim()) {
-      await renameColumn(columnId, newTitle);
-
-      setBoards((prevBoards) =>
-        prevBoards.map((board) => ({
-          ...board,
-          teams: board.teams.map((team) => ({
-            ...team,
-            columns: team.columns.map((col) =>
-              col.id === columnId ? { ...col, title: newTitle } : col,
-            ),
+      renameColumn(columnId, newTitle).then(() => {
+        setBoards((prevBoards) =>
+          prevBoards.map((board) => ({
+            ...board,
+            teams: board.teams.map((team) => ({
+              ...team,
+              columns: team.columns.map((col) =>
+                col.id === columnId ? { ...col, title: newTitle } : col,
+              ),
+            })),
           })),
-        })),
-      );
-      setNewColumnTitle("");
+        );
+        setNewColumnTitle("");
+      });
     }
   };
 
   const handleCreateTask = async (teamId, columnId) => {
     if (newTaskContent.trim()) {
-      const createdTask = await createTask(newTaskContent, columnId);
+      try {
+        const createdTask = await createTask(newTaskContent, columnId);
 
-      setBoards((prevBoards) =>
-        prevBoards.map((board) => ({
-          ...board,
-          teams: board.teams.map((team) => {
-            if (team.id === teamId) {
-              return {
-                ...team,
-                columns: team.columns.map((column) => {
-                  if (column.id === columnId) {
-                    return {
-                      ...column,
-                      tasks: [
-                        ...column.tasks,
-                        {
-                          id: createdTask.id_task,
-                          id_task: createdTask.id_task,
-                          content: createdTask.content,
-                          completed: createdTask.completed,
-                          deadline: createdTask.deadline,
-                          createdAt: createdTask.createdAt,
-                        },
-                      ],
-                    };
-                  }
-                  return column;
-                }),
-              };
-            }
-            return team;
-          }),
-        })),
-      );
+        setBoards((prevBoards) =>
+          prevBoards.map((board) => ({
+            ...board,
+            teams: board.teams.map((team) => {
+              if (team.id === teamId) {
+                return {
+                  ...team,
+                  columns: team.columns.map((column) => {
+                    if (column.id === columnId) {
+                      return {
+                        ...column,
+                        tasks: [
+                          ...column.tasks,
+                          {
+                            id: createdTask.id_task,
+                            id_task: createdTask.id_task,
+                            content: createdTask.content,
+                            completed: createdTask.completed,
+                            deadline: createdTask.deadline,
+                            createdAt: createdTask.createdAt,
+                          },
+                        ],
+                      };
+                    }
+                    return column;
+                  }),
+                };
+              }
+              return team;
+            }),
+          })),
+        );
 
-      setNewTaskContent("");
-      setShowTaskInput(false);
+        setNewTaskContent("");
+        setShowTaskInput(false);
+      } catch (_) {
+        /* empty */
+      }
     }
   };
 
@@ -107,7 +111,7 @@ const KanbanColumn = ({
           }}
           onTitleChange={setNewColumnTitle}
           onChange={(id, newTitle) => {
-            return handleColumnTitleChange(id, newTitle);
+            handleColumnTitleChange(id, newTitle);
           }}
           level={3}
           isPastelColor={isPastelColor}

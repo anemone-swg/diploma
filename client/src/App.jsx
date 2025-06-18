@@ -37,15 +37,16 @@ function AppContent() {
   const isAdminPage = location.pathname === "/admin";
 
   useEffect(() => {
-    const checkUserAuth = async () => {
-      try {
-        const response = await checkAuth();
-        setIsAuthenticated(response.isAuthenticated);
-        setUserRole(response.role);
-      } catch (error) {
-        setIsAuthenticated(false);
-        setUserRole(null);
-      }
+    const checkUserAuth = () => {
+      checkAuth()
+        .then((response) => {
+          setIsAuthenticated(response.isAuthenticated);
+          setUserRole(response.role);
+        })
+        .catch(() => {
+          setIsAuthenticated(false);
+          setUserRole(null);
+        });
     };
 
     checkUserAuth();

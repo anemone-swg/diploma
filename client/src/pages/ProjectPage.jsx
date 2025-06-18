@@ -15,11 +15,12 @@ const ProjectPage = ({ sidebarWidth }) => {
   const wasKicked = useRef(false);
 
   useEffect(() => {
-    const getProject = async () => {
-      const { project, currentUserId } = await fetchProjectById(projectId);
-      setProject(project);
-      setCurrentUserId(currentUserId);
-      console.log(project);
+    const getProject = () => {
+      fetchProjectById(projectId).then(({ project, currentUserId }) => {
+        setProject(project);
+        setCurrentUserId(currentUserId);
+        console.log(project);
+      });
     };
 
     getProject();
@@ -34,9 +35,10 @@ const ProjectPage = ({ sidebarWidth }) => {
       );
     };
 
-    const handleReloadProject = async () => {
-      const { project } = await fetchProjectById(projectId);
-      setProject(project);
+    const handleReloadProject = () => {
+      fetchProjectById(projectId).then(({ project }) => {
+        setProject(project);
+      });
     };
 
     const handleUserDeletedFromTeam = () => {
@@ -86,7 +88,7 @@ const ProjectPage = ({ sidebarWidth }) => {
       socket.off("taskStatusChanged", handleReloadProject);
       socket.off("projectRenamed", handleProjectRenamed);
     };
-  }, []);
+  }, [navigate, projectId]);
 
   return (
     <div className={main_styles.page}>

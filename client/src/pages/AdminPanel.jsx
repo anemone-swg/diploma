@@ -49,9 +49,10 @@ const AdminPanel = ({ onLogout }) => {
   }, [queryForAdmin]);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      const data = await getAllUsers();
-      setUsers(data);
+    const fetchUsers = () => {
+      getAllUsers().then((data) => {
+        setUsers(data);
+      });
     };
 
     fetchUsers();
@@ -65,17 +66,14 @@ const AdminPanel = ({ onLogout }) => {
     };
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      await logoutUser();
+  const handleLogout = () => {
+    logoutUser().then(() => {
       onLogout();
       navigate("/login");
-    } catch (error) {
-      toast.error(error.message);
-    }
+    });
   };
 
-  const handleDeleteUser = async (user) => {
+  const handleDeleteUser = (user) => {
     if (
       !window.confirm(
         "Вы уверены, что хотите удалить аккаунт данного пользователя?",
@@ -84,15 +82,16 @@ const AdminPanel = ({ onLogout }) => {
       return;
     }
 
-    try {
-      await deleteUserAccountByAdmin(user.id_user);
-      setUsers((prevUsers) =>
-        prevUsers.filter((u) => u.id_user !== user.id_user),
-      );
-      toast.success("Пользователь успешно удален");
-    } catch (error) {
-      toast.error(error.message);
-    }
+    deleteUserAccountByAdmin(user.id_user)
+      .then(() => {
+        setUsers((prevUsers) =>
+          prevUsers.filter((u) => u.id_user !== user.id_user),
+        );
+        toast.success("Пользователь успешно удален");
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
   };
 
   const handleNavigateHome = () => {

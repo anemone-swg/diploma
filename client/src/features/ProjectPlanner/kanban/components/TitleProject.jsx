@@ -11,15 +11,15 @@ const TitleProject = ({
 }) => {
   const [editingBoardId, setEditingBoardId] = useState(null);
 
-  const handleBoardTitleChange = async (boardId, newTitle) => {
+  const handleBoardTitleChange = (boardId, newTitle) => {
     if (newTitle.trim()) {
-      await renameProject(boardId, newTitle);
-
-      setBoards((prevBoards) =>
-        prevBoards.map((b) =>
-          b.id === boardId ? { ...b, title: newTitle } : b,
-        ),
-      );
+      renameProject(boardId, newTitle).then(() => {
+        setBoards((prevBoards) =>
+          prevBoards.map((b) =>
+            b.id === boardId ? { ...b, title: newTitle } : b,
+          ),
+        );
+      });
     }
   };
 
