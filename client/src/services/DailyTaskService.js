@@ -1,4 +1,4 @@
-import axiosInstance from "@/services/axiosInstance.js";
+import axiosInstance from "@/shared/api/axiosInstance.js";
 
 export const fetchTasks = async () => {
   const response = await axiosInstance.get(`/daily-tasks`);
