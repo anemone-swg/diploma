@@ -1,3 +1,7 @@
+.taskNoWrapHeader {
+  white-space: nowrap;
+}
+
 .gradientHr {
   margin-bottom: 10px;
   border: 0;

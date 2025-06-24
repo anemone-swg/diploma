@@ -14,6 +14,7 @@ import {
 } from "@/services/DailyTaskService.js";
 import { FaEdit, FaTasks } from "react-icons/fa";
 import DeadlineDateTimePicker from "@/shared/ui/DeadlineDateTimePicker.jsx";
+import PageTitle from "@/shared/ui/PageTitle.jsx";
 
 const DailyTasksPage = () => {
   const [tasks, setTasks] = useState([]);
@@ -106,10 +107,7 @@ const DailyTasksPage = () => {
       <div className={styles.taskSectionsWrapper}>
         {/* ЗАДАЧИ В ПРОЦЕССЕ */}
         <div className={styles.taskSection}>
-          <h1>
-            <FaTasks className={main_styles.titleIcon} />
-            Список задач
-          </h1>
+          <PageTitle title={"Список задач"} icon={FaTasks} />
           <hr className={styles.gradientHr} />
 
           <div className={`${styles.taskInput} ${main_styles.moduleSection}`}>
@@ -303,10 +301,11 @@ const DailyTasksPage = () => {
 
         {/* ВЫПОЛНЕННЫЕ ЗАДАЧИ */}
         <div className={styles.taskSection}>
-          <h1 style={{ whiteSpace: "nowrap" }}>
-            <FaTasks className={main_styles.titleIcon} />
-            Выполненные задачи
-          </h1>
+          <PageTitle
+            className={styles.taskNoWrapHeader}
+            title={"Выполненные задачи"}
+            icon={FaTasks}
+          />
           <hr className={styles.gradientHr} />
 
           {completedTasks.length === 0 ? (

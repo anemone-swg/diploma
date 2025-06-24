@@ -28,7 +28,7 @@ const MainSection = ({ boards, setActiveSection, setShowCreateModal }) => {
               if (boards.length > 0) setActiveSection("kanban");
               else setShowCreateModal(true);
             }}
-            className={`${btn_styles.roundCornersBtn} ${btn_styles.mainSectionBtn}`}
+            className={`${btn_styles.roundCornersBtn} ${btn_styles.blueSectionBtn}`}
           >
             {boards.length === 0
               ? "🚀 Создать новую доску"

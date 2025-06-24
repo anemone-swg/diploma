@@ -13,12 +13,12 @@ import Sidebar from "@/widgets/Sidebar/ui/Sidebar.jsx";
 import LoginPage from "@/pages/LoginPage/ui/LoginPage.jsx";
 import RegistrationPage from "@/pages/RegistrationPage/ui/RegistrationPage.jsx";
 import { checkAuth } from "@/services/AuthAndRegService.js";
-import { ClipLoader } from "react-spinners";
 import main_styles from "@/app/styles/App.module.css";
 import ProjectPage from "@/pages/ProjectPage/ui/ProjectPage.jsx";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import AdminPanelPage from "@/pages/AdminPanelPage/ui/AdminPanelPage.jsx";
+import Loader from "@/shared/ui/Loader.jsx";
 
 function App() {
   return (
@@ -52,11 +52,7 @@ function AppContent() {
   }, []);
 
   if (isAuthenticated === null) {
-    return (
-      <div className={main_styles.spinner}>
-        <ClipLoader size={50} color="#3498db" />
-      </div>
-    );
+    return <Loader />;
   }
 
   return (

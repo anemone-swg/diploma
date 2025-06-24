@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchProjectById } from "@/services/ProjectPlannerTeamService.js";
 import main_styles from "@/app/styles/App.module.css";
-import { ClipLoader } from "react-spinners";
 import ProjectPageSection from "@/widgets/ProjectPageSection/ui/ProjectPageSection.jsx";
 import socket from "@/shared/lib/socket/socket.js";
 import { toast } from "react-toastify";
+import Loader from "@/shared/ui/Loader.jsx";
 
 const ProjectPage = ({ sidebarWidth }) => {
   const { projectId } = useParams();
@@ -99,9 +99,7 @@ const ProjectPage = ({ sidebarWidth }) => {
           currentUserId={currentUserId}
         />
       ) : (
-        <div className={main_styles.spinner}>
-          <ClipLoader size={50} color="#3498db" />
-        </div>
+        <Loader />
       )}
     </div>
   );

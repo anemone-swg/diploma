@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import main_styles from "@/app/styles/App.module.css";
 import navbar_styles from "@/widgets/Navbar/ui/NavBar.module.css";
 import btn_styles from "@/shared/ui/DefaultBtn.module.css";
 import { FaPlus, FaProjectDiagram, FaTrash, FaUsers } from "react-icons/fa";
@@ -9,6 +8,7 @@ import classNames from "classnames";
 import { MdEmojiPeople } from "react-icons/md";
 import { IoHomeOutline } from "react-icons/io5";
 import { BiTask } from "react-icons/bi";
+import PageTitle from "@/shared/ui/PageTitle.jsx";
 
 const NavBar = ({
   activeSection,
@@ -31,10 +31,11 @@ const NavBar = ({
   return (
     <div className={navbar_styles.navbar} style={{ left: `${sidebarWidth}px` }}>
       <nav>
-        <h1 className={navbar_styles.title}>
-          <FaProjectDiagram className={main_styles.titleIcon} />
-          Планировщик проектов / Kanban-доска
-        </h1>
+        <PageTitle
+          className={navbar_styles.title}
+          title={"Планировщик проектов / Kanban-доска"}
+          icon={FaProjectDiagram}
+        />
         <div className={navbar_styles.menu}>
           <div>
             <DefaultBtn

@@ -7,7 +7,6 @@ import main_styles from "@/app/styles/App.module.css";
 import { RiAdminFill } from "react-icons/ri";
 import admin_styles from "@/pages/AdminPanelPage/ui/AdminPanelPage.module.css";
 import DefaultBtn from "@/shared/ui/DefaultBtn.jsx";
-import styles from "@/pages/HomePage/ui/HomePage.module.css";
 import { logoutUser } from "@/services/AuthAndRegService.js";
 import { useNavigate } from "react-router-dom";
 import team_members from "@/widgets/TeamSection/ui/ui/TeamMembers.module.css";
@@ -23,6 +22,7 @@ import { IoArrowBack } from "react-icons/io5";
 import DefaultInput from "@/shared/ui/DefaultInput.jsx";
 import input_styles from "@/shared/ui/DefaultInput.module.css";
 import { searchUsersByLogin } from "@/services/ProjectPlannerTeamService.js";
+import PageTitle from "@/shared/ui/PageTitle.jsx";
 
 const AdminPanelPage = ({ onLogout }) => {
   const navigate = useNavigate();
@@ -101,10 +101,7 @@ const AdminPanelPage = ({ onLogout }) => {
   return (
     <div className={main_styles.page}>
       <div className={admin_styles.headerAdmin}>
-        <h1>
-          <RiAdminFill className={main_styles.titleIcon} />
-          Панель администратора
-        </h1>
+        <PageTitle title={"Панель администратора"} icon={RiAdminFill} />
         <div className={admin_styles.btnGroup}>
           <DefaultBtn
             onClick={handleNavigateHome}
@@ -122,7 +119,7 @@ const AdminPanelPage = ({ onLogout }) => {
         </div>
       </div>
 
-      <hr className={styles.prettyHr} />
+      <hr className={main_styles.prettyHr} />
 
       <div className={admin_styles.adminContent}>
         <div className={admin_styles.userList}>
