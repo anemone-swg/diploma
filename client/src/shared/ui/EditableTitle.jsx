@@ -1,7 +1,7 @@
 import React from "react";
 import { FaEdit } from "react-icons/fa";
 import DefaultInput from "./DefaultInput.jsx";
-import main_styles from "@/app/styles/App.module.css";
+import styles from "@/shared/lib/classNames/Additional.module.css";
 import title_styles from "./EditableTitle.module.css";
 import input_styles from "./DefaultInput.module.css";
 
@@ -60,7 +60,7 @@ const EditableTitle = ({
       }}
     >
       <FaEdit
-        className={main_styles.icon}
+        className={styles.icon}
         style={{ verticalAlign: level === 2 ? "baseline" : "middle" }}
       />
       {item.content ? item.content : item.title}

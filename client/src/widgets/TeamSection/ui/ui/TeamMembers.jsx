@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import main_styles from "@/app/styles/App.module.css";
+import styles from "@/shared/lib/classNames/Additional.module.css";
 import team_members from "@/widgets/TeamSection/ui/ui/TeamMembers.module.css";
 import search_members from "@/widgets/TeamSection/ui/ui/SearchMembers.module.css";
 import defaultAvatar from "@/shared/assets/default_avatar.jpg";
@@ -63,9 +63,7 @@ const TeamMembers = ({ setBoards, projectId, refreshInvitations }) => {
   };
 
   return (
-    <div
-      className={`${main_styles.moduleSection} ${team_members.membersSection}`}
-    >
+    <div className={`${styles.moduleSection} ${team_members.membersSection}`}>
       {team.length === 0 ? (
         <p>В команде никого нет.</p>
       ) : (

@@ -1,0 +1,14 @@
+.headerAdmin {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.headerAdmin button {
+  margin: 0 0 20px 0;
+}
+
+.btnGroup {
+  display: flex;
+  gap: 10px;
+}

@@ -1,6 +1,6 @@
 import React from "react";
 import classNames from "classnames";
-import main_styles from "@/app/styles/App.module.css";
+import styles from "@/shared/lib/classNames/Additional.module.css";
 import btn_styles from "./DefaultBtn.module.css";
 
 const DefaultBtn = React.forwardRef(
@@ -14,6 +14,7 @@ const DefaultBtn = React.forwardRef(
       children,
       className,
       visibleDisabled,
+      svgMargin,
       ...props
     },
     ref, // второй аргумент для рефа
@@ -25,6 +26,8 @@ const DefaultBtn = React.forwardRef(
           btn_styles.defaultBtn,
           btn_styles[variant],
           {
+            [btn_styles.noSvgMargin]: !svgMargin,
+            [btn_styles.SvgMargin]: svgMargin,
             [btn_styles.activeDefaultBtn]: active,
             [btn_styles.disable]: disabled,
             [btn_styles.visibleDisable]: visibleDisabled,
@@ -35,7 +38,7 @@ const DefaultBtn = React.forwardRef(
         disabled={disabled || visibleDisabled}
         {...props}
       >
-        {Icon && <Icon className={main_styles.icon} />}
+        {Icon && <Icon className={styles.icon} />}
         {children}
       </button>
     );

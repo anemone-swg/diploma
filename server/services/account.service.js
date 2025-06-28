@@ -142,11 +142,13 @@ class AccountService {
       ],
     });
 
-    return users.forEach((user) => {
+    users.forEach((user) => {
       if (user.avatar && !user.avatar.startsWith("http")) {
         user.avatar = `${process.env.AVATAR_PATH}${user.avatar}`;
       }
     });
+
+    return users;
   }
 }
 

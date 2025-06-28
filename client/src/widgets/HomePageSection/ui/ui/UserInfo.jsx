@@ -1,6 +1,6 @@
 import React from "react";
-import styles from "@/widgets/HomePageSection/ui/HomePageSection.module.css";
-import main_styles from "@/app/styles/App.module.css";
+import styles from "@/widgets/HomePageSection/ui/ui/UserInfo.module.css";
+import additional_styles from "@/shared/lib/classNames/Additional.module.css";
 import DefaultBtn from "@/shared/ui/DefaultBtn.jsx";
 import DefaultInput from "@/shared/ui/DefaultInput.jsx";
 
@@ -26,9 +26,9 @@ const UserInfo = ({
   return (
     <>
       {/* Основные данные */}
-      <div className={main_styles.moduleSection}>
+      <div className={additional_styles.moduleSection}>
         <h2>Основные данные</h2>
-        <hr className={main_styles.prettyHr} />
+        <hr className={additional_styles.prettyHr} />
         <div className={styles.profileInfo}>
           <img
             className={styles.avatar}
@@ -53,9 +53,9 @@ const UserInfo = ({
       </div>
 
       {/* Дополнительные данные */}
-      <div className={main_styles.moduleSection}>
+      <div className={additional_styles.moduleSection}>
         <h2>Дополнительные данные</h2>
-        <hr className={main_styles.prettyHr} />
+        <hr className={additional_styles.prettyHr} />
         <div>
           <label>
             Имя:
@@ -82,9 +82,9 @@ const UserInfo = ({
       </div>
 
       {/* Функции */}
-      <div className={main_styles.moduleSection}>
+      <div className={additional_styles.moduleSection}>
         <h2>Функции</h2>
-        <hr className={main_styles.prettyHr} />
+        <hr className={additional_styles.prettyHr} />
         <div className={styles.buttons}>
           <DefaultBtn onClick={onDeleteAcc} variant={"blueSectionBtn"}>
             Удалить аккаунт

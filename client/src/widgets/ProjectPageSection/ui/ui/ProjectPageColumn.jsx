@@ -1,6 +1,6 @@
 import React from "react";
 import column_styles from "@/widgets/KanbanBoardSection/ui/ui/KanbanColumn.module.css";
-import kanban_styles from "@/app/styles/Kanban.module.css";
+import kanban_styles from "@/shared/lib/classNames/Kanban.module.css";
 import ProjectPageTask from "@/widgets/ProjectPageSection/ui/ui/ProjectPageTask.jsx";
 import project_page_styles from "@/pages/ProjectPage/ui/ProjectPage.module.css";
 import { useTheme } from "@/shared/lib/hooks/useTheme.js";

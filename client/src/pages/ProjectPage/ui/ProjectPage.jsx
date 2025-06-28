@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchProjectById } from "@/services/ProjectPlannerTeamService.js";
-import main_styles from "@/app/styles/App.module.css";
+import styles from "@/shared/lib/classNames/Additional.module.css";
 import ProjectPageSection from "@/widgets/ProjectPageSection/ui/ProjectPageSection.jsx";
 import socket from "@/shared/lib/socket/socket.js";
 import { toast } from "react-toastify";
@@ -91,7 +91,7 @@ const ProjectPage = ({ sidebarWidth }) => {
   }, [navigate, projectId]);
 
   return (
-    <div className={main_styles.page}>
+    <div className={styles.page}>
       {project ? (
         <ProjectPageSection
           project={project}

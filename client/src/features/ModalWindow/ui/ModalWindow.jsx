@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import main_styles from "@/app/styles/App.module.css";
-import modal_styles from "@/features/ModalWindow/ui/ModalWindow.module.css";
+import styles from "@/shared/lib/classNames/Additional.module.css";
+import modal_styles from "@/shared/lib/classNames/ModalWindow.module.css";
 import DefaultBtn from "@/shared/ui/DefaultBtn.jsx";
 import DefaultInput from "@/shared/ui/DefaultInput.jsx";
 import { PiKanban } from "react-icons/pi";
@@ -132,7 +132,7 @@ const ModalWindow = ({
                 return (
                   <>
                     <h3>
-                      <PiKanban className={main_styles.icon} />
+                      <PiKanban className={styles.icon} />
                       Создание kanban-доски
                     </h3>
                     <DefaultInput
@@ -147,6 +147,7 @@ const ModalWindow = ({
                     />
                     <div className={modal_styles.modalActions}>
                       <DefaultBtn
+                        svgMargin
                         variant="confirmBtn"
                         icon={IoCheckmarkDoneOutline}
                         onClick={handleCreateBoard}
@@ -154,6 +155,7 @@ const ModalWindow = ({
                         Создать
                       </DefaultBtn>
                       <DefaultBtn
+                        svgMargin
                         variant="cancelBtn"
                         icon={RxCross1}
                         onClick={() => {
@@ -171,7 +173,7 @@ const ModalWindow = ({
                 return (
                   <>
                     <h3>
-                      <FaTrash className={main_styles.icon} />
+                      <FaTrash className={styles.icon} />
                       Удаление kanban-доски
                     </h3>
                     <p>
@@ -180,6 +182,7 @@ const ModalWindow = ({
                     </p>
                     <div className={modal_styles.modalActions}>
                       <DefaultBtn
+                        svgMargin
                         variant="cancelBtn"
                         icon={FaTrash}
                         onClick={handleDeleteBoard}
@@ -187,6 +190,7 @@ const ModalWindow = ({
                         Удалить
                       </DefaultBtn>
                       <DefaultBtn
+                        svgMargin
                         icon={RxCross1}
                         onClick={() => setShowModal(false)}
                         variant="confirmBtn"
@@ -201,7 +205,7 @@ const ModalWindow = ({
                 return (
                   <>
                     <h3>
-                      <FaTrash className={main_styles.icon} />
+                      <FaTrash className={styles.icon} />
                       Удаление команды kanban-доски
                     </h3>
                     <p>
@@ -210,6 +214,7 @@ const ModalWindow = ({
                     </p>
                     <div className={modal_styles.modalActions}>
                       <DefaultBtn
+                        svgMargin
                         variant="cancelBtn"
                         icon={FaTrash}
                         onClick={() => {
@@ -220,6 +225,7 @@ const ModalWindow = ({
                         Удалить
                       </DefaultBtn>
                       <DefaultBtn
+                        svgMargin
                         icon={RxCross1}
                         onClick={() => setShowModal(false)}
                         variant="confirmBtn"
@@ -234,7 +240,7 @@ const ModalWindow = ({
                 return (
                   <>
                     <h3>
-                      <FaTrash className={main_styles.icon} />
+                      <FaTrash className={styles.icon} />
                       Удаление столбца kanban-доски
                     </h3>
                     <p>
@@ -243,6 +249,7 @@ const ModalWindow = ({
                     </p>
                     <div className={modal_styles.modalActions}>
                       <DefaultBtn
+                        svgMargin
                         variant="cancelBtn"
                         icon={FaTrash}
                         onClick={() => {
@@ -253,6 +260,7 @@ const ModalWindow = ({
                         Удалить
                       </DefaultBtn>
                       <DefaultBtn
+                        svgMargin
                         icon={RxCross1}
                         onClick={() => setShowModal(false)}
                         variant="confirmBtn"

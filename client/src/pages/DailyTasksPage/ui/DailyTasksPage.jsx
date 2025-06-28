@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 // eslint-disable-next-line no-unused-vars
 import { AnimatePresence, motion } from "framer-motion";
-import main_styles from "@/app/styles/App.module.css";
+import additional_styles from "@/shared/lib/classNames/Additional.module.css";
+import btn_styles from "@/shared/ui/DefaultBtn.module.css";
 import styles from "@/pages/DailyTasksPage/ui/DailyTasksPage.module.css";
 import {
   addTask,
@@ -103,14 +104,16 @@ const DailyTasksPage = () => {
   const completedTasks = tasks.filter((task) => task.completed);
 
   return (
-    <div className={main_styles.page}>
+    <div className={additional_styles.page}>
       <div className={styles.taskSectionsWrapper}>
         {/* ЗАДАЧИ В ПРОЦЕССЕ */}
         <div className={styles.taskSection}>
           <PageTitle title={"Список задач"} icon={FaTasks} />
           <hr className={styles.gradientHr} />
 
-          <div className={`${styles.taskInput} ${main_styles.moduleSection}`}>
+          <div
+            className={`${styles.taskInput} ${additional_styles.moduleSection}`}
+          >
             <label className={styles.myLabel}>
               Название задачи:
               <input
@@ -137,7 +140,7 @@ const DailyTasksPage = () => {
             </label>
 
             <button
-              className={`${main_styles.defaultButton} ${styles.taskInputButton}`}
+              className={`${btn_styles.defaultBtn} ${styles.taskInputButton}`}
               onClick={handleAddTask}
             >
               Добавить
@@ -149,7 +152,9 @@ const DailyTasksPage = () => {
               <p>Задач пока нет</p>
             </div>
           ) : (
-            <ul className={`${styles.taskList} ${main_styles.moduleSection}`}>
+            <ul
+              className={`${styles.taskList} ${additional_styles.moduleSection}`}
+            >
               <AnimatePresence>
                 {inProgressTasks.map((task) => (
                   <motion.li
@@ -248,7 +253,7 @@ const DailyTasksPage = () => {
                         }
                       />
                       <button
-                        className={main_styles.defaultButton}
+                        className={btn_styles.defaultBtn}
                         onClick={() => handleSaveDescription(task.id_task)}
                       >
                         Добавить описание
@@ -286,7 +291,7 @@ const DailyTasksPage = () => {
                         </label>
                       </div>
                       <button
-                        className={`${main_styles.defaultButton} ${main_styles.exitDeleteButton} ${styles.deleteButton}`}
+                        className={`${btn_styles.defaultBtn} ${btn_styles.exitDeleteBtn} ${styles.deleteButton}`}
                         onClick={() => handleDeleteTask(task.id_task)}
                       >
                         Удалить заметку
@@ -313,7 +318,9 @@ const DailyTasksPage = () => {
               <p>Нет выполненных задач</p>
             </div>
           ) : (
-            <ul className={`${styles.taskList} ${main_styles.moduleSection}`}>
+            <ul
+              className={`${styles.taskList} ${additional_styles.moduleSection}`}
+            >
               <AnimatePresence>
                 {completedTasks.map((task) => (
                   <motion.li
@@ -371,7 +378,7 @@ const DailyTasksPage = () => {
                       )}
                       <div className={`${styles.deleteButtonBody}`}>
                         <button
-                          className={`${main_styles.defaultButton} ${main_styles.exitDeleteButton}`}
+                          className={`${btn_styles.defaultBtn} ${btn_styles.exitDeleteBtn}`}
                           onClick={() => handleDeleteTask(task.id_task)}
                         >
                           Удалить заметку

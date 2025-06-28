@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import main_styles from "@/app/styles/App.module.css";
+import styles from "@/shared/lib/classNames/Additional.module.css";
 import dropdownMenu_styles from "@/features/DropdownMenu/ui/DropdownMenu.module.css";
 import btn_styles from "@/shared/ui/DefaultBtn.module.css";
 import DefaultBtn from "@/shared/ui/DefaultBtn.jsx";
@@ -20,13 +20,13 @@ const DropdownMenu = ({
     team: [
       {
         action: "addColumn",
-        icon: <FaPlus className={main_styles.smallIcon} />,
+        icon: <FaPlus className={styles.smallIcon} />,
         text: "Добавить столбец",
         handler: onAdd,
       },
       {
         action: "deleteTeam",
-        icon: <FaTrash className={main_styles.smallIcon} />,
+        icon: <FaTrash className={styles.smallIcon} />,
         text: "Удалить команду",
         handler: () => {
           onPrepareDelete();
@@ -37,13 +37,13 @@ const DropdownMenu = ({
     column: [
       {
         action: "addTask",
-        icon: <FaPlus className={main_styles.smallIcon} />,
+        icon: <FaPlus className={styles.smallIcon} />,
         text: "Добавить задачу",
         handler: onAdd,
       },
       {
         action: "deleteColumn",
-        icon: <FaTrash className={main_styles.smallIcon} />,
+        icon: <FaTrash className={styles.smallIcon} />,
         text: "Удалить столбец",
         handler: () => {
           onPrepareDelete();

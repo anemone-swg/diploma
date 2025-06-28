@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import kanban_styles from "@/app/styles/Kanban.module.css";
+import kanban_styles from "@/shared/lib/classNames/Kanban.module.css";
 import column_styles from "@/widgets/KanbanBoardSection/ui/ui/KanbanColumn.module.css";
 import EditableTitle from "@/shared/ui/EditableTitle.jsx";
 import DropdownMenu from "@/features/DropdownMenu/ui/DropdownMenu.jsx";

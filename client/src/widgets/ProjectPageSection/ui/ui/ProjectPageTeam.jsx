@@ -1,6 +1,6 @@
 import React from "react";
 import boards_container from "@/widgets/KanbanBoardSection/ui/ui/BoardContainer.module.css";
-import kanban_styles from "@/app/styles/Kanban.module.css";
+import kanban_styles from "@/shared/lib/classNames/Kanban.module.css";
 import btn_styles from "@/shared/ui/DefaultBtn.module.css";
 import project_page_styles from "@/pages/ProjectPage/ui/ProjectPage.module.css";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";

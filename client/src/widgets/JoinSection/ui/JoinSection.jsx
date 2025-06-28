@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import main_styles from "@/app/styles/App.module.css";
+import styles from "@/shared/lib/classNames/Additional.module.css";
 import btn_styles from "@/shared/ui/DefaultBtn.module.css";
 import team_section from "@/widgets/TeamSection/ui/TeamSection.module.css";
 import join_section from "@/widgets/JoinSection/ui/JoinSection.module.css";
@@ -80,9 +80,7 @@ const JoinSection = () => {
   return (
     <div>
       <h2 className={team_section.teamPageTitle}>Ваши приглашения</h2>
-      <div
-        className={`${main_styles.moduleSection} ${join_section.joinSection}`}
-      >
+      <div className={`${styles.moduleSection} ${join_section.joinSection}`}>
         {invitations.length === 0 ? (
           <p>Приглашения отсутствуют.</p>
         ) : (

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import main_styles from "@/app/styles/App.module.css";
+import styles from "@/shared/lib/classNames/Additional.module.css";
 import search_members from "@/widgets/TeamSection/ui/ui/SearchMembers.module.css";
 import DefaultInput from "@/shared/ui/DefaultInput.jsx";
-import input_styles from "@/shared/ui/DefaultInput.module.css";
 import btn_styles from "@/shared/ui/DefaultBtn.module.css";
 import {
   cancelInvite,
@@ -81,10 +80,9 @@ const SearchMembers = ({ projectId, invitations, refreshInvitations }) => {
         maxLength={50}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Поиск по нику..."
-        className={`${input_styles.defaultInput} ${input_styles.searchMembersInput}`}
       />
       <div
-        className={`${main_styles.moduleSection} ${search_members.searchSection}`}
+        className={`${styles.moduleSection} ${search_members.searchSection}`}
       >
         {results.length > 0 ? (
           results.map((user) => {
@@ -110,7 +108,7 @@ const SearchMembers = ({ projectId, invitations, refreshInvitations }) => {
                 {isInvited && invited.status === "pending" ? (
                   <div>
                     <FaHourglassHalf
-                      className={`${main_styles.icon} ${search_members.invitedIcon}`}
+                      className={`${styles.icon} ${search_members.invitedIcon}`}
                     />
                     <DefaultBtn
                       className={btn_styles.roundCornersBtn}
@@ -127,7 +125,7 @@ const SearchMembers = ({ projectId, invitations, refreshInvitations }) => {
                   />
                 ) : isInvited && invited.status === "accepted" ? (
                   <ImCheckmark2
-                    className={`${main_styles.icon} ${search_members.invitedIcon}`}
+                    className={`${styles.icon} ${search_members.invitedIcon}`}
                   />
                 ) : (
                   <div className={search_members.declinedItem}>

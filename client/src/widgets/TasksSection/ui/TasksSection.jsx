@@ -7,7 +7,7 @@ import { RiProgress3Line } from "react-icons/ri";
 import btn_styles from "@/shared/ui/DefaultBtn.module.css";
 import { taskStatusChange } from "@/services/ProjectPlannerService.js";
 import { MdAddTask } from "react-icons/md";
-import main_styles from "@/app/styles/App.module.css";
+import styles from "@/shared/lib/classNames/Additional.module.css";
 
 const TasksSection = ({ boards }) => {
   const awaitingApprovalTasks = boards.flatMap((board) =>
@@ -25,8 +25,7 @@ const TasksSection = ({ boards }) => {
   return (
     <div>
       <h2 className={team_section.teamPageTitle}>
-        <MdAddTask className={main_styles.icon} /> Задачи, ожидающие
-        подтверждения
+        <MdAddTask className={styles.icon} /> Задачи, ожидающие подтверждения
       </h2>
       <div className={tasks_section_styles.awaiting_tasks}>
         {awaitingApprovalTasks.length === 0 && <p>Задачи отсутствуют.</p>}

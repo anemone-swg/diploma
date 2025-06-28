@@ -1,0 +1,8 @@
+.userList h2 {
+  font-size: 1.2rem;
+  margin: 20px 0 20px 0;
+}
+
+.deleteBtn {
+  white-space: nowrap
+}

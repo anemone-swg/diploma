@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Loader from "@/shared/ui/Loader.jsx";
 import defaultAvatar from "@/shared/assets/default_avatar.jpg";
-import {
-  changeUserLogin,
-  deleteUserAccount,
-  fetchUserData,
-  updateUserData,
-  uploadAvatar,
-} from "@/services/AccountService.js";
-import { logoutUser } from "@/services/AuthAndRegService.js";
 import { useNavigate } from "react-router-dom";
-import modal_styles from "@/features/ModalWindow/ui/ModalWindow.module.css";
 import ChangeLoginModal from "@/features/ChangeLoginModal/ui/ChangeLoginModal.jsx";
 import UserInfo from "@/widgets/HomePageSection/ui/ui/UserInfo.jsx";
+import { uploadAvatar } from "@/entities/User/api/uploadAvatar.js";
+import { fetchUserData } from "@/entities/User/api/fetchUserData.js";
+import { updateUserData } from "@/entities/User/api/updateUserData.js";
+import { deleteUserAccount } from "@/entities/User/api/deleteUserAccount.js";
+import { logoutUser } from "@/entities/User/api/logout.js";
 
 const HomePageSection = ({ onLogout }) => {
   const navigate = useNavigate();
@@ -23,17 +19,15 @@ const HomePageSection = ({ onLogout }) => {
   const [messageVisible, setMessageVisible] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [errorLogin, setErrorLogin] = useState("");
-  const [messageLogin, setMessageLogin] = useState("");
-  const [messageLoginVisible, setMessageLoginVisible] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [isOpenChangeLoginModal, setIsOpenChangeLoginModal] = useState(false);
-  const [newLogin, setNewLogin] = useState("");
+
+  useEffect(() => {
+    loadUserData();
+  }, []);
 
   const handleUserInfoSubmit = async ({
     action,
-    onSuccess = () => {},
-    onError = () => {},
     setMessage,
     setError,
     setVisible,
@@ -51,8 +45,6 @@ const HomePageSection = ({ onLogout }) => {
         if (setVisible) setVisible(false);
         setTimeout(() => setMessage && setMessage(""), 500);
       }, 3000);
-
-      onSuccess();
     } catch (error) {
       if (setError) setError(error.message);
       if (setVisible) setVisible(true);
@@ -61,8 +53,6 @@ const HomePageSection = ({ onLogout }) => {
         if (setVisible) setVisible(false);
         setTimeout(() => setError && setError(""), 500);
       }, 3000);
-
-      onError(error);
     }
 
     if (setDisabled) {
@@ -82,35 +72,6 @@ const HomePageSection = ({ onLogout }) => {
     });
   };
 
-  const handleUserLoginSave = () => {
-    handleUserInfoSubmit({
-      action: async () => {
-        await changeUserLogin(newLogin);
-        await loadUserData();
-      },
-      setMessage: setMessageLogin,
-      setError: setErrorLogin,
-      setVisible: setMessageLoginVisible,
-      setDisabled: setIsDisabled,
-    });
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (e.target.classList.contains(modal_styles.modal)) {
-        setIsOpenChangeLoginModal(false);
-        setNewLogin("");
-      }
-    };
-
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, [setIsOpenChangeLoginModal]);
-
-  useEffect(() => {
-    loadUserData();
-  }, []);
-
   const loadUserData = () => {
     fetchUserData().then((data) => {
       setUser(data.user);
@@ -118,11 +79,6 @@ const HomePageSection = ({ onLogout }) => {
       setFirstName(data.user.firstName || "");
       setLastName(data.user.lastName || "");
     });
-  };
-
-  const handleCloseChangeLoginModal = () => {
-    setIsOpenChangeLoginModal(false);
-    setNewLogin("");
   };
 
   const handleAvatarChange = (event) => {
@@ -176,13 +132,8 @@ const HomePageSection = ({ onLogout }) => {
 
           <ChangeLoginModal
             isOpen={isOpenChangeLoginModal}
-            newLogin={newLogin}
-            onChange={(e) => setNewLogin(e.target.value)}
-            onClose={handleCloseChangeLoginModal}
-            onSave={handleUserLoginSave}
-            error={errorLogin}
-            message={messageLogin}
-            messageVisible={messageLoginVisible}
+            setIsOpen={setIsOpenChangeLoginModal}
+            onSuccess={loadUserData}
           />
         </>
       ) : (

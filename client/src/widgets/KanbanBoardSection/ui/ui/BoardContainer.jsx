@@ -1,6 +1,6 @@
 import React, { memo, useState } from "react";
 import boards_container from "@/widgets/KanbanBoardSection/ui/ui/BoardContainer.module.css";
-import kanban_styles from "@/app/styles/Kanban.module.css";
+import kanban_styles from "@/shared/lib/classNames/Kanban.module.css";
 import KanbanColumn from "@/widgets/KanbanBoardSection/ui/ui/KanbanColumn.jsx";
 import EditableTitle from "@/shared/ui/EditableTitle.jsx";
 import DropdownMenu from "@/features/DropdownMenu/ui/DropdownMenu.jsx";

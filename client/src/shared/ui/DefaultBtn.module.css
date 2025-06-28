@@ -3,11 +3,10 @@
   color: var(--text-color);
   border: none;
   padding: 5px 10px 5px 10px;
-  border-radius: 4px 4px 0 0;
+  border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
   transition: 0.3s ease background-color;
-  margin-right: 3px;
   user-select: none;
 }
 
@@ -23,9 +22,17 @@
   background-color: var(--default-btn-hover);
 }
 
-.roundCornersBtn {
-  border-radius: 4px;
-  margin-right: 0;
+.noSvgMargin svg {
+  margin: 0;
+}
+
+.SvgMargin svg {
+  margin: 0 5px 0 0;
+}
+
+.navbarNoRoundCornersBtn {
+  border-radius: 4px 4px 0 0;
+  margin: 0 3px 0 0;
 }
 
 .activeDefaultBtn {
@@ -37,7 +44,6 @@
   background-color: #e75050;
   color: white;
   border-radius: 4px;
-  margin-right: 0;
 }
 
 .cancelBtn:hover {
@@ -46,7 +52,6 @@
 
 .confirmBtn {
   border-radius: 4px;
-  margin-right: 0;
   border: 1px solid var(--text-color);
 }
 
@@ -87,11 +92,4 @@
 .openProjectBtn:hover {
   background-color: var(--light-background-color);
   border-radius: 4px;
-  margin-right: 0;
-}
-
-.noSvgMargin {
-  svg {
-    margin: 0;
-  }
 }

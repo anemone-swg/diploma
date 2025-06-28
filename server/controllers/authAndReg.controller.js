@@ -5,15 +5,19 @@ class AuthAndRegController {
   static async registration(req, res) {
     try {
       const { username, email, password, confirmPassword } = req.body;
-      if (password !== confirmPassword) {
-        return res.status(400).json({ error: "Пароли не совпадают" });
-      }
-      await AuthAndRegService.registration(username, email, password);
+      await AuthAndRegService.registration(
+        username,
+        email,
+        password,
+        confirmPassword,
+      );
       io.emit("userRegistered");
       res.sendStatus(204);
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Ошибка при регистрации" });
+      console.error("Registration error:", error);
+      res
+        .status(500)
+        .json({ error: error.message || "Ошибка при регистрации" });
     }
   }
 
@@ -29,8 +33,10 @@ class AuthAndRegController {
       };
       res.json({ role: req.session.user.role });
     } catch (error) {
-      console.error("Database error:", error);
-      res.status(500).json({ error: "Ошибка при аутентификации" });
+      console.error("Login error:", error);
+      res
+        .status(500)
+        .json({ error: error.message || "Ошибка при аутентификации" });
     }
   }
 
@@ -43,7 +49,7 @@ class AuthAndRegController {
         role: user ? user.role : null,
       });
     } catch (error) {
-      console.error("checkAuth error:", error);
+      console.error("Check Authorization error:", error);
       res.status(500).json({ error: "Ошибка при проверке авторизации" });
     }
   }

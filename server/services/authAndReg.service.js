@@ -2,15 +2,34 @@ import { User } from "../models/export.js";
 import bcrypt from "bcrypt";
 
 class AuthAndRegService {
-  static async registration(username, email, password) {
+  static async registration(username, email, password, confirmPassword) {
+    if (password !== confirmPassword) {
+      throw new Error("Пароли не совпадают.");
+    }
+
+    const isPasswordValid = (password) => {
+      return (
+        /[0-9]/.test(password) &&
+        /[A-Z]/.test(password) &&
+        /[a-z]/.test(password) &&
+        /[\W_]/.test(password)
+      );
+    };
+
+    if (!isPasswordValid(password)) {
+      throw new Error(
+        "Пароль должен содержать хотя бы одну цифру, заглавную и строчную буквы, один специальный символ.",
+      );
+    }
+
     const existingUser = await User.findOne({ where: { login: username } });
     if (existingUser) {
-      throw new Error("Пользователь с таким логином уже существует");
+      throw new Error("Пользователь с таким логином уже существует.");
     }
 
     const existingEmail = await User.findOne({ where: { email } });
     if (existingEmail) {
-      throw new Error("Пользователь с такой почтой уже существует");
+      throw new Error("Пользователь с такой почтой уже существует.");
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -24,14 +43,12 @@ class AuthAndRegService {
   static async login(username, password) {
     const user = await User.findOne({ where: { login: username } });
     if (!user) {
-      console.log("Пользователя с таким логином не существует");
-      throw new Error("Пользователя с таким логином не существует");
+      throw new Error("Пользователя с таким логином не существует.");
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      console.log("Неверный пароль");
-      throw new Error("Неверный пароль");
+      throw new Error("Неверный пароль.");
     }
 
     return user;

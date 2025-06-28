@@ -54,7 +54,7 @@ const KanbanBoardSection = memo(
     );
 
     return (
-      <div>
+      <>
         {boards.map((board) => (
           <div key={board.id}>
             <TitleProject
@@ -84,7 +84,7 @@ const KanbanBoardSection = memo(
                 </div>
               ))}
 
-            <div>
+            <>
               <DefaultBtn
                 onClick={() => handleAddTeam(board.id)}
                 className={btn_styles.roundCornersBtn}
@@ -92,10 +92,10 @@ const KanbanBoardSection = memo(
               >
                 Добавить команду
               </DefaultBtn>
-            </div>
+            </>
           </div>
         ))}
-      </div>
+      </>
     );
   },
 );
