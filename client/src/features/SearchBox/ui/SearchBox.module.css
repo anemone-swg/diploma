@@ -1,0 +1,21 @@
+.deleteBtn {
+  white-space: nowrap
+}
+
+.searchList {
+  padding: 20px 0;
+}
+
+.searchSection {
+  word-break: break-word;
+  padding: 20px;
+}
+
+.helpText {
+  margin: 0 0 20px 0;
+}
+
+.noResults {
+  font-size: 14px;
+  user-select: none;
+}

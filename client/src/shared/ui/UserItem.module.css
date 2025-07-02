@@ -1,0 +1,28 @@
+.deleteBtn {
+  white-space: nowrap
+}
+
+.userItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px;
+  border-radius: 10px;
+  border: var(--default-btn-hover) 1px solid;
+  width: fit-content;
+}
+
+.userItem:not(:last-child) {
+  margin: 0 0 20px 0;
+}
+
+.userAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.userNameInfo {
+  font-size: 10px;
+}

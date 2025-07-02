@@ -1,0 +1,32 @@
+.titleCompleteTask {
+  word-break: break-word;
+}
+
+.completed {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.completeTaskBody {
+  margin: 10px 0 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+}
+
+.completeTaskBody div p {
+  word-break: break-word;
+}
+
+.completeTaskBody .deleteButtonBody {
+  margin-left: auto;
+}
+
+.completeTaskBody button {
+  padding: 5px 10px 5px 10px;
+}
+
+.completeTaskBody h3 {
+  font-size: 16px;
+}

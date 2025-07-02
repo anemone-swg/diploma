@@ -1,0 +1,59 @@
+.descriptionBlock {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.descriptionBlock button {
+  padding: 5px;
+}
+
+.descriptionBlock label span {
+  margin-right: 10px;
+}
+
+.descriptionArea {
+  min-height: 50px;
+  background: var(--input-background-color);
+  color: var(--text-color);
+  padding: 10px;
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid var(--input-border-color);
+  transition: border 0.4s ease;
+}
+
+.descriptionArea:focus {
+  outline: none;
+  border: 1px solid var(--text-color);
+}
+
+.descriptionArea.unsaved {
+  border: 1px solid #0056b3;
+  box-shadow: 0 0 5px rgba(33, 50, 152, 0.4);
+}
+
+.deadlineBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.deadlineBlock label span {
+  margin: 0 !important;
+}
+
+.titleTask {
+  transition: 0.4s background-color;
+  border-radius: 4px;
+  margin: 0 10px 0 0;
+  padding: 2px 5px;
+  cursor: pointer;
+  word-break: break-all;
+}
+
+.titleTask:hover {
+  background-color: var(--default-btn-hover);
+}

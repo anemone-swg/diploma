@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import task_styles from "@/widgets/KanbanBoardSection/ui/ui/KanbanTask.module.css";
-import btn_styles from "@/shared/ui/DefaultBtn.module.css";
 import DefaultBtn from "@/shared/ui/DefaultBtn.jsx";
 import { FaTrash } from "react-icons/fa";
 import DeadlineDatePicker from "@/shared/ui/DeadlineDatePicker.jsx";
@@ -135,7 +134,6 @@ const KanbanTask = ({
                 level={3}
               />
               <DefaultBtn
-                className={btn_styles.roundCornersBtn}
                 icon={FaTrash}
                 onClick={() => handleDeleteTaskBoard(task.id)}
               ></DefaultBtn>
@@ -162,7 +160,6 @@ const KanbanTask = ({
               </div>
               <DefaultBtn
                 icon={task.completed === "awaiting_approval" && RiProgress3Line}
-                className={`${btn_styles.roundCornersBtn} ${btn_styles.noSvgMargin}`}
                 onClick={() => handleTaskStatusChange(task.id)}
               >
                 {task.completed === "done"

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import admin_styles from "@/widgets/AdminContent/ui/AdminContent.module.css";
 import UserList from "@/features/UserList/ui/UserList.jsx";
-import SearchList from "@/features/SearchList/ui/SearchList.jsx";
+import SearchBox from "@/features/SearchBox/ui/SearchBox.jsx";
 
 const AdminContent = () => {
   const [users, setUsers] = useState([]);
@@ -9,7 +9,7 @@ const AdminContent = () => {
   return (
     <div className={admin_styles.adminContent}>
       <UserList users={users} setUsers={setUsers} />
-      <SearchList setUsers={setUsers} />
+      <SearchBox setUsers={setUsers} />
     </div>
   );
 };

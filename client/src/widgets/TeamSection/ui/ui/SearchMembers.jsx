@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styles from "@/shared/lib/classNames/Additional.module.css";
 import search_members from "@/widgets/TeamSection/ui/ui/SearchMembers.module.css";
 import DefaultInput from "@/shared/ui/DefaultInput.jsx";
-import btn_styles from "@/shared/ui/DefaultBtn.module.css";
 import {
   cancelInvite,
   searchUsersByLogin,
@@ -73,7 +72,7 @@ const SearchMembers = ({ projectId, invitations, refreshInvitations }) => {
   };
 
   return (
-    <div>
+    <>
       <p className={search_members.helpText}>Введите ник пользователя:</p>
       <DefaultInput
         value={query}
@@ -111,7 +110,6 @@ const SearchMembers = ({ projectId, invitations, refreshInvitations }) => {
                       className={`${styles.icon} ${search_members.invitedIcon}`}
                     />
                     <DefaultBtn
-                      className={btn_styles.roundCornersBtn}
                       icon={MdCancel}
                       disabled={false}
                       onClick={() => handleCancelInvite(user)}
@@ -119,7 +117,6 @@ const SearchMembers = ({ projectId, invitations, refreshInvitations }) => {
                   </div>
                 ) : !isInvited ? (
                   <DefaultBtn
-                    className={btn_styles.roundCornersBtn}
                     icon={isInvited ? FaHourglassHalf : FcInvite}
                     onClick={() => handleInviteClick(user)}
                   />
@@ -133,7 +130,6 @@ const SearchMembers = ({ projectId, invitations, refreshInvitations }) => {
                       Отменил ваше приглашение
                     </span>
                     <DefaultBtn
-                      className={btn_styles.roundCornersBtn}
                       icon={FcInvite}
                       onClick={() => handleInviteClick(user)}
                     />
@@ -146,7 +142,7 @@ const SearchMembers = ({ projectId, invitations, refreshInvitations }) => {
           <p className={search_members.noResults}>Ничего не найдено</p>
         ) : null}
       </div>
-    </div>
+    </>
   );
 };
 
