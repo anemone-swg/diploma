@@ -3,13 +3,6 @@ import styles from "@/shared/lib/classNames/Additional.module.css";
 import btn_styles from "@/shared/ui/DefaultBtn.module.css";
 import team_section from "@/widgets/TeamSection/ui/TeamSection.module.css";
 import join_section from "@/widgets/JoinSection/ui/JoinSection.module.css";
-import {
-  acceptInvite,
-  declineInvite,
-  deleteFromTeam,
-  fetchCurrentUser,
-  showInvitations,
-} from "@/services/ProjectPlannerTeamService.js";
 import search_members from "@/widgets/TeamSection/ui/ui/SearchMembers.module.css";
 import defaultAvatar from "@/shared/assets/default_avatar.jpg";
 import DefaultBtn from "@/shared/ui/DefaultBtn.jsx";
@@ -17,6 +10,11 @@ import { ImCheckmark2 } from "react-icons/im";
 import { RxCross2 } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
 import socket from "@/shared/lib/socket/socket.js";
+import { showInvitations } from "../api/showInvitations.js";
+import { acceptInvite } from "../api/acceptInvite.js";
+import { declineInvite } from "../api/declineInvite.js";
+import { fetchCurrentUser } from "../api/fetchCurrentUser.js";
+import { deleteFromTeam } from "@/entities/User/api/deleteFromTeam.js";
 
 const JoinSection = () => {
   const [invitations, setInvitations] = useState([]);

@@ -1,17 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import selected_user_styles from "@/features/SelectedUser/ui/SelectedUser.module.css";
-import {
-  removeUserFromTask,
-  selectUserForTask,
-  showTeam,
-} from "@/services/ProjectPlannerTeamService.js";
 import team_members from "@/widgets/TeamSection/ui/ui/TeamMembers.module.css";
 import search_members from "@/widgets/TeamSection/ui/ui/SearchMembers.module.css";
 import defaultAvatar from "@/shared/assets/default_avatar.jpg";
 import DefaultBtn from "@/shared/ui/DefaultBtn.jsx";
-import btn_styles from "@/shared/ui/DefaultBtn.module.css";
 import { ImCheckmark2 } from "react-icons/im";
 import { IoMdClose } from "react-icons/io";
+import { showTeam } from "@/entities/User/api/showTeam.js";
+import { selectUserForTask } from "../model/api/selectUserForTask.js";
+import { removeUserFromTask } from "../model/api/removeUserFromTask.js";
 
 const SelectedUser = ({ task, projectId, setBoards }) => {
   const divRef = useRef(null);
@@ -152,13 +149,11 @@ const SelectedUser = ({ task, projectId, setBoards }) => {
                   <div>
                     {isAssigned ? (
                       <DefaultBtn
-                        className={btn_styles.roundCornersBtn}
                         icon={IoMdClose}
                         onClick={() => handleRemoveUserFromTask(member)}
                       />
                     ) : (
                       <DefaultBtn
-                        className={btn_styles.roundCornersBtn}
                         icon={ImCheckmark2}
                         onClick={() => handleSelectUserForTask(member)}
                       />

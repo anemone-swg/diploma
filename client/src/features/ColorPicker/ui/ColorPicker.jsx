@@ -3,9 +3,9 @@ import color_picker_styles from "@/features/ColorPicker/ui/ColorPicker.module.cs
 import DefaultBtn from "@/shared/ui/DefaultBtn.jsx";
 import btn_styles from "@/shared/ui/DefaultBtn.module.css";
 import { IoIosColorWand } from "react-icons/io";
-import { changeColorColumn } from "@/services/ProjectPlannerService.js";
 import { useTheme } from "@/shared/lib/hooks/useTheme.js";
 import { columnColors } from "@/shared/constants/columnColors.js";
+import { changeColorColumn } from "../model/api/changeColorColumn.js";
 
 const ColorPicker = ({ setBoards, column, isPastelColor }) => {
   const { theme } = useTheme();

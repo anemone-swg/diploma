@@ -3,14 +3,12 @@ import styles from "@/shared/lib/classNames/Additional.module.css";
 import team_members from "@/widgets/TeamSection/ui/ui/TeamMembers.module.css";
 import search_members from "@/widgets/TeamSection/ui/ui/SearchMembers.module.css";
 import defaultAvatar from "@/shared/assets/default_avatar.jpg";
-import {
-  deleteFromTeam,
-  showTeam,
-} from "@/services/ProjectPlannerTeamService.js";
 import DefaultBtn from "@/shared/ui/DefaultBtn.jsx";
 import btn_styles from "@/shared/ui/DefaultBtn.module.css";
 import { MdCancel } from "react-icons/md";
 import socket from "@/shared/lib/socket/socket.js";
+import { showTeam } from "@/entities/User/api/showTeam.js";
+import { deleteFromTeam } from "@/entities/User/api/deleteFromTeam.js";
 
 const TeamMembers = ({ setBoards, projectId, refreshInvitations }) => {
   const [team, setTeam] = useState([]);

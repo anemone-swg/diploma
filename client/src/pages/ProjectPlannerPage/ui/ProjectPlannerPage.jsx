@@ -7,7 +7,7 @@ import { ModalTypes } from "@/shared/constants/modalTypes.js";
 import NavBar from "@/widgets/Navbar/ui/NavBar.jsx";
 import JoinSection from "@/widgets/JoinSection/ui/JoinSection.jsx";
 import MainSection from "@/widgets/MainSection/ui/MainSection.jsx";
-import { fetchProjects } from "@/services/ProjectPlannerService.js";
+import { fetchProjects } from "../api/fetchProjects.js";
 import socket from "@/shared/lib/socket/socket.js";
 import TasksSection from "@/widgets/TasksSection/ui/TasksSection.jsx";
 

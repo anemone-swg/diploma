@@ -7,13 +7,11 @@ import { PiKanban } from "react-icons/pi";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
 import { RxCross1 } from "react-icons/rx";
 import { FaTrash } from "react-icons/fa";
-import {
-  createProject,
-  deleteColumn,
-  deleteProject,
-  deleteTeam,
-} from "@/services/ProjectPlannerService.js";
 import { ModalTypes } from "@/shared/constants/modalTypes.js";
+import { createProject } from "../model/api/createProject.js";
+import { deleteProject } from "../model/api/deleteProject.js";
+import { deleteTeam } from "../model/api/deleteTeam.js";
+import { deleteColumn } from "../model/api/deleteColumn.js";
 
 const ModalWindow = ({
   newBoardTitle,

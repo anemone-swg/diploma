@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import TeamMembers from "@/widgets/TeamSection/ui/ui/TeamMembers.jsx";
 import team_section from "@/widgets/TeamSection/ui/TeamSection.module.css";
 import SearchMembers from "@/widgets/TeamSection/ui/ui/SearchMembers.jsx";
-import { getSentInvites } from "@/services/ProjectPlannerTeamService.js";
+import { getSentInvites } from "../api/getSentInvites.js";
 
 const TeamSection = ({ projectId, setBoards }) => {
   const [invitations, setInvitations] = useState([]);

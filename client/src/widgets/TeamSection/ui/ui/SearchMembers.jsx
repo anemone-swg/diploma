@@ -2,11 +2,6 @@ import React, { useEffect, useState } from "react";
 import styles from "@/shared/lib/classNames/Additional.module.css";
 import search_members from "@/widgets/TeamSection/ui/ui/SearchMembers.module.css";
 import DefaultInput from "@/shared/ui/DefaultInput.jsx";
-import {
-  cancelInvite,
-  searchUsersByLogin,
-  sendInvite,
-} from "@/services/ProjectPlannerTeamService.js";
 import defaultAvatar from "@/shared/assets/default_avatar.jpg";
 import DefaultBtn from "@/shared/ui/DefaultBtn.jsx";
 import { FcInvite } from "react-icons/fc";
@@ -14,6 +9,9 @@ import { FaHourglassHalf } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
 import { ImCheckmark2 } from "react-icons/im";
 import socket from "@/shared/lib/socket/socket.js";
+import { searchUsersByLogin } from "@/entities/User/api/searchUsersByLogin.js";
+import { sendInvite } from "../../api/sendInvite.js";
+import { cancelInvite } from "../../api/cancelInvite.js";
 
 const SearchMembers = ({ projectId, invitations, refreshInvitations }) => {
   const [query, setQuery] = useState("");

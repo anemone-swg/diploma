@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchProjectById } from "@/services/ProjectPlannerTeamService.js";
 import styles from "@/shared/lib/classNames/Additional.module.css";
 import ProjectPageSection from "@/widgets/ProjectPageSection/ui/ProjectPageSection.jsx";
 import socket from "@/shared/lib/socket/socket.js";
 import { toast } from "react-toastify";
 import Loader from "@/shared/ui/Loader.jsx";
+import { fetchProjectById } from "../api/fetchProjectById.js";
 
 const ProjectPage = ({ sidebarWidth }) => {
   const { projectId } = useParams();

@@ -9,12 +9,10 @@ import { DragDropContext } from "react-beautiful-dnd";
 import DefaultBtn from "@/shared/ui/DefaultBtn.jsx";
 import btn_styles from "@/shared/ui/DefaultBtn.module.css";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
-import {
-  createColumn,
-  renameTeam,
-  updateTaskMove,
-} from "@/services/ProjectPlannerService.js";
 import { useCollapsedState } from "@/shared/lib/hooks/useCollapsedState.js";
+import { renameTeam } from "../../api/renameTeam.js";
+import { createColumn } from "../../api/createColumn.js";
+import { updateTaskMove } from "../../api/updateTaskMove.js";
 
 const BoardContainer = memo(
   ({

@@ -7,9 +7,10 @@ import InputWithActions from "@/shared/ui/InputWithActions.jsx";
 import KanbanTask from "@/widgets/KanbanBoardSection/ui/ui/KanbanTask.jsx";
 import { StrictModeDroppable } from "@/widgets/KanbanBoardSection/ui/ui/StrictModeDroppable.jsx";
 import ColorPicker from "@/features/ColorPicker/ui/ColorPicker.jsx";
-import { createTask, renameColumn } from "@/services/ProjectPlannerService.js";
 import { useTheme } from "@/shared/lib/hooks/useTheme.js";
 import { columnColors } from "@/shared/constants/columnColors.js";
+import { renameColumn } from "../../api/renameColumn.js";
+import { createTask } from "../../api/createTask.js";
 
 const KanbanColumn = ({
   column,

@@ -5,9 +5,9 @@ import tasks_section_styles from "@/widgets/TasksSection/ui/TasksSection.module.
 import DefaultBtn from "@/shared/ui/DefaultBtn.jsx";
 import { RiProgress3Line } from "react-icons/ri";
 import btn_styles from "@/shared/ui/DefaultBtn.module.css";
-import { taskStatusChange } from "@/services/ProjectPlannerService.js";
 import { MdAddTask } from "react-icons/md";
 import styles from "@/shared/lib/classNames/Additional.module.css";
+import { taskStatusChange } from "@/entities/Task/api/taskStatusChange.js";
 
 const TasksSection = ({ boards }) => {
   const awaitingApprovalTasks = boards.flatMap((board) =>
@@ -38,7 +38,7 @@ const TasksSection = ({ boards }) => {
             <DefaultBtn
               variant="confirmBtn"
               icon={task.completed === "awaiting_approval" && RiProgress3Line}
-              className={`${btn_styles.roundCornersBtn} ${btn_styles.noSvgMargin}`}
+              className={`${btn_styles.noSvgMargin}`}
               onClick={() => handleTaskStatusChange(task.id_task)}
             >
               {task.completed === "done"

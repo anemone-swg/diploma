@@ -4,15 +4,13 @@ import task_styles from "@/widgets/KanbanBoardSection/ui/ui/KanbanTask.module.cs
 import DefaultBtn from "@/shared/ui/DefaultBtn.jsx";
 import { FaTrash } from "react-icons/fa";
 import DeadlineDatePicker from "@/shared/ui/DeadlineDatePicker.jsx";
-import {
-  deleteTask,
-  taskContentChange,
-  taskDeadlineChange,
-  taskStatusChange,
-} from "@/services/ProjectPlannerService.js";
 import SelectedUser from "@/features/SelectedUser/ui/SelectedUser.jsx";
 import { RiProgress3Line } from "react-icons/ri";
 import EditableTitle from "@/shared/ui/EditableTitle.jsx";
+import { deleteTask } from "../../api/deleteTask.js";
+import { taskStatusChange } from "@/entities/Task/api/taskStatusChange.js";
+import { taskContentChange } from "@/entities/Task/api/taskContentChange.js";
+import { taskDeadlineChange } from "@/entities/Task/api/taskDeadlineChange.js";
 
 const KanbanTask = ({
   task,

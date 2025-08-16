@@ -4,7 +4,7 @@ import additional_styles from "@/shared/lib/classNames/Additional.module.css";
 import DefaultInput from "@/shared/ui/DefaultInput.jsx";
 import DeadlineDateTimePicker from "@/shared/ui/DeadlineDateTimePicker.jsx";
 import DefaultBtn from "@/shared/ui/DefaultBtn.jsx";
-import { addTask } from "@/features/TaskInput/modal/api/addTask.js";
+import { addTask } from "@/features/TaskInput/model/api/addTask.js";
 
 const TaskInput = ({ setTasks, setTaskDescriptionMap }) => {
   const [newTaskTitle, setNewTaskTitle] = useState("");

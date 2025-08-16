@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import search_styles from "@/features/SearchBox/ui/SearchBox.module.css";
 import DefaultInput from "@/shared/ui/DefaultInput.jsx";
 import styles from "@/shared/lib/classNames/Additional.module.css";
-import { searchUsersByLogin } from "@/services/ProjectPlannerTeamService.js";
 import { useDeleteUserByAdmin } from "@/entities/Admin/lib/hooks/useDeleteUserByAdmin.js";
 import UserItem from "@/shared/ui/UserItem.jsx";
+import { searchUsersByLogin } from "@/entities/User/api/searchUsersByLogin.js";
 
 const SearchBox = ({ setUsers }) => {
   const [queryForAdmin, setQueryForAdmin] = useState("");

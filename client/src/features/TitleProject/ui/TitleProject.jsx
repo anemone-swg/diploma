@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import titleProject_styles from "@/features/TitleProject/ui/TitleProject.module.css";
 import EditableTitle from "@/shared/ui/EditableTitle.jsx";
-import { renameProject } from "@/services/ProjectPlannerService.js";
+import { renameProject } from "../model/api/renameProject.js";
 
 const TitleProject = ({
   board,

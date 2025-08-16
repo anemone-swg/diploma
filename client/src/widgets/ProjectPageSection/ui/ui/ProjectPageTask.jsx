@@ -7,8 +7,8 @@ import project_page_styles from "@/pages/ProjectPage/ui/ProjectPage.module.css";
 import ReadOnlyDeadlineDatePicker from "@/shared/ui/ReadOnlyDeadlineDatePicker.jsx";
 import btn_styles from "@/shared/ui/DefaultBtn.module.css";
 import DefaultBtn from "@/shared/ui/DefaultBtn.jsx";
-import { taskStatusChange } from "@/services/ProjectPlannerService.js";
 import { RiProgress3Line } from "react-icons/ri";
+import { taskStatusChange } from "@/entities/Task/api/taskStatusChange.js";
 
 const ProjectPageTask = ({ task, currentUserId }) => {
   const isUserAssigned = task.assignedUsers?.some(
