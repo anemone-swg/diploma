@@ -72,6 +72,13 @@ User.init(
       defaultValue: "user",
       allowNull: false,
     },
+    isActivated: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    activationLink: {
+      type: DataTypes.STRING(255),
+    },
   },
   {
     sequelize,

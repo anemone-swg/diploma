@@ -20,7 +20,8 @@ const upload = multer({ storage });
 class AccountController {
   static async getAccount(req, res) {
     try {
-      const user = await AccountService.getAccount(req.session.user.id);
+      const { id } = req.params;
+      const user = await AccountService.getAccount(id);
       res.json({ user });
     } catch (error) {
       console.error(error);
@@ -48,7 +49,8 @@ class AccountController {
   static async updateInfo(req, res) {
     try {
       const { firstName, lastName } = req.body;
-      await AccountService.updateInfo(firstName, lastName, req.session.user.id);
+      const { id } = req.params;
+      await AccountService.updateInfo(firstName, lastName, id);
       res.sendStatus(204);
     } catch (error) {
       console.error("Ошибка обновления данных:", error);
@@ -59,18 +61,22 @@ class AccountController {
 
   static async deleteAccount(req, res) {
     try {
-      await AccountService.deleteAccount(req.session.user.id);
-
-      req.session.destroy((err) => {
-        if (err) {
-          return res
-            .status(500)
-            .json({ error: "Ошибка при выходе из системы" });
-        }
-        res.clearCookie("connect.sid");
-        io.emit("userDeleted");
-        res.sendStatus(204);
-      });
+      const { refreshToken } = req.cookies;
+      const { id } = req.params;
+      await AccountService.deleteAccount(refreshToken, id);
+      io.emit("userDeleted");
+      res.clearCookie("refreshToken");
+      res.sendStatus(204);
+      // req.session.destroy((err) => {
+      //   if (err) {
+      //     return res
+      //       .status(500)
+      //       .json({ error: "Ошибка при выходе из системы" });
+      //   }
+      //   res.clearCookie("connect.sid");
+      //   io.emit("userDeleted");
+      //   res.sendStatus(204);
+      // });
     } catch (error) {
       console.error("Ошибка удаления аккаунта:", error);
       const status = error.statusCode || 500;

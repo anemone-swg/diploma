@@ -4,11 +4,11 @@ import PageTitle from "@/shared/ui/PageTitle.jsx";
 import { FaHome } from "react-icons/fa";
 import HomePageSection from "@/widgets/HomePageSection/ui/HomePageSection.jsx";
 
-const HomePage = ({ onLogout }) => {
+const HomePage = ({ userData, onLogout }) => {
   return (
     <div className={styles.page}>
       <PageTitle title={"Ваш аккаунт"} icon={FaHome} />
-      <HomePageSection onLogout={onLogout} />
+      <HomePageSection userData={userData} onLogout={onLogout} />
     </div>
   );
 };

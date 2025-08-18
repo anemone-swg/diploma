@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import styles from "@/shared/lib/classNames/LogAndReg.module.css";
-import { useNavigate } from "react-router-dom";
 import DefaultInput from "@/shared/ui/DefaultInput.jsx";
 import DefaultBtn from "@/shared/ui/DefaultBtn.jsx";
 import { registerUser } from "@/features/RegistrationForm/modal/api/registerUser.js";
+import LoaderButton from "@/shared/ui/LoaderButton.jsx";
 
 const RegistrationForm = () => {
   const [username, setUsername] = useState("");
@@ -11,18 +11,20 @@ const RegistrationForm = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
       await registerUser(username, email, password, confirmPassword);
-      alert("Регистрация успешна.");
-      navigate("/login");
+      setError("Проверьте почту и подтвердите email, чтобы войти в систему.");
     } catch (error) {
       setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -76,8 +78,8 @@ const RegistrationForm = () => {
           required
         />
       </div>
-      <DefaultBtn className={styles.logButton} type="submit">
-        Зарегистрироваться
+      <DefaultBtn className={styles.logButton} type="submit" disabled={loading}>
+        {loading ? <LoaderButton /> : "Зарегистрироваться"}
       </DefaultBtn>
       {error && <p className={styles.failReg}>{error}</p>}
     </form>

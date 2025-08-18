@@ -16,10 +16,11 @@ const LoginForm = ({ onLogin }) => {
     setError("");
 
     try {
-      const role = await loginUser(username, password);
-      if (role) {
-        onLogin(role);
-        navigate(role === "admin" ? "/admin" : "/home");
+      const userData = await loginUser(username, password);
+      localStorage.setItem("token", userData.accessToken);
+      if (userData?.user) {
+        onLogin(userData.user);
+        navigate(userData.user.role === "admin" ? "/admin" : "/home");
       }
     } catch (error) {
       setError(error.message);

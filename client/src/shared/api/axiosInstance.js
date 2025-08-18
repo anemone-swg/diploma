@@ -7,9 +7,19 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
+const refreshInstance = axios.create({
+  baseURL: API_URL,
+  withCredentials: true,
+});
+
+axiosInstance.interceptors.request.use((config) => {
+  config.headers.Authorization = `Bearer ${localStorage.getItem("token")}`;
+  return config;
+});
+
 axiosInstance.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
     if (!error.response) {
       console.error("Сетевая ошибка:", error.message);
     } else {
@@ -18,8 +28,19 @@ axiosInstance.interceptors.response.use(
 
       console.error("Ошибка:", status, errorMessage);
 
-      if (status === 401) {
-        window.location.href = "/login";
+      const originalRequest = error.config;
+      if (status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
+        try {
+          const response = await refreshInstance.get(`/refresh`);
+          localStorage.setItem("token", response.data.accessToken);
+          return axiosInstance.request(originalRequest);
+        } catch (error) {
+          const status = error.response.status;
+          const errorMessage = error.response.data?.error || "Ошибка сервера";
+          console.error("Ошибка:", status, errorMessage);
+          window.location.href = "/login";
+        }
       }
     }
 

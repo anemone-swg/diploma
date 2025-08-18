@@ -17,7 +17,6 @@ import ProjectPage from "@/pages/ProjectPage/ui/ProjectPage.jsx";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import AdminPanelPage from "@/pages/AdminPanelPage/ui/AdminPanelPage.jsx";
-import Loader from "@/shared/ui/Loader.jsx";
 import { checkAuth } from "@/app/api/checkAuth.js";
 
 function App() {
@@ -32,28 +31,25 @@ function AppContent() {
   const [sidebarWidth, setSidebarWidth] = useState(200);
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [userRole, setUserRole] = useState(null);
+  const [userData, setUserData] = useState(null);
   const location = useLocation();
   const isAdminPage = location.pathname === "/admin";
 
   useEffect(() => {
-    const checkUserAuth = () => {
+    if (localStorage.getItem("token")) {
       checkAuth()
         .then((response) => {
-          setIsAuthenticated(response.isAuthenticated);
-          setUserRole(response.role);
+          setIsAuthenticated(true);
+          setUserRole(response.user.role);
+          setUserData(response.user);
+          localStorage.setItem("token", response.accessToken);
         })
         .catch(() => {
           setIsAuthenticated(false);
           setUserRole(null);
         });
-    };
-
-    checkUserAuth();
+    }
   }, []);
-
-  if (isAuthenticated === null) {
-    return <Loader />;
-  }
 
   return (
     <div
@@ -79,9 +75,10 @@ function AppContent() {
                 path="/login"
                 element={
                   <LoginPage
-                    onLogin={(role) => {
+                    onLogin={(user) => {
                       setIsAuthenticated(true);
-                      setUserRole(role);
+                      setUserData(user);
+                      setUserRole(user.role);
                     }}
                   />
                 }
@@ -108,6 +105,7 @@ function AppContent() {
                 path="/home"
                 element={
                   <HomePage
+                    userData={userData}
                     onLogout={() => {
                       setIsAuthenticated(false);
                       setUserRole(null);

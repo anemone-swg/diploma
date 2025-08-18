@@ -10,7 +10,7 @@ import { updateUserData } from "@/entities/User/api/updateUserData.js";
 import { deleteUserAccount } from "@/entities/User/api/deleteUserAccount.js";
 import { logoutUser } from "@/entities/User/api/logout.js";
 
-const HomePageSection = ({ onLogout }) => {
+const HomePageSection = ({ userData, onLogout }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [avatar, setAvatar] = useState(defaultAvatar);
@@ -64,7 +64,8 @@ const HomePageSection = ({ onLogout }) => {
 
   const handleUserInfoSave = () => {
     handleUserInfoSubmit({
-      action: async () => await updateUserData({ firstName, lastName }),
+      action: async () =>
+        await updateUserData({ firstName, lastName }, userData.id_user),
       setMessage,
       setError,
       setVisible: setMessageVisible,
@@ -73,7 +74,7 @@ const HomePageSection = ({ onLogout }) => {
   };
 
   const loadUserData = () => {
-    fetchUserData().then((data) => {
+    fetchUserData(userData.id_user).then((data) => {
       setUser(data.user);
       setAvatar(data.user.avatar || defaultAvatar);
       setFirstName(data.user.firstName || "");
@@ -92,6 +93,7 @@ const HomePageSection = ({ onLogout }) => {
   const handleLogout = () => {
     logoutUser().then(() => {
       onLogout();
+      localStorage.removeItem("token");
       navigate("/login");
     });
   };
@@ -101,7 +103,8 @@ const HomePageSection = ({ onLogout }) => {
       return;
     }
 
-    deleteUserAccount().then(() => {
+    deleteUserAccount(userData.id_user).then(() => {
+      localStorage.removeItem("token");
       alert("Аккаунт успешно удалён!");
       onLogout();
       navigate("/login");

@@ -8,7 +8,7 @@ import {
 const router = Router();
 router.use("/account", isAuthenticated);
 
-router.get("/account", AccountController.getAccount);
+router.get("/account/:id", AccountController.getAccount);
 
 router.post(
   "/account/upload_avatar",
@@ -16,9 +16,9 @@ router.post(
   AccountController.uploadAvatar,
 );
 
-router.put("/account/update_info", AccountController.updateInfo);
+router.put("/account/update_info/:id", AccountController.updateInfo);
 
-router.delete("/account/delete", AccountController.deleteAccount);
+router.delete("/account/delete/:id", AccountController.deleteAccount);
 
 router.put("/account/change_login", AccountController.changeLogin);
 

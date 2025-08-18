@@ -2,6 +2,7 @@ import { User } from "../models/export.js";
 import fs from "fs";
 import path from "path";
 import { Op } from "sequelize";
+import { TokenService } from "./token.service.js";
 
 class AccountService {
   static async getAccount(userId) {
@@ -63,7 +64,8 @@ class AccountService {
     return user;
   }
 
-  static async deleteAccount(userId) {
+  static async deleteAccount(refreshToken, userId) {
+    await TokenService.removeToken(refreshToken);
     const user = await User.findByPk(userId);
     if (!user) {
       const error = new Error("Пользователь не найден");

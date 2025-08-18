@@ -5,6 +5,7 @@ import path from "path";
 import "./config/env.js";
 import sequelize from "./config/db.js";
 import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 import regAndAuthRoutes from "./routes/authAndReg.routes.js";
 import accountRoutes from "./routes/account.routes.js";
 import dailyTaskRoutes from "./routes/dailyTask.routes.js";
@@ -59,6 +60,7 @@ app.use(
 );
 
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {

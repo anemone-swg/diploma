@@ -7,12 +7,13 @@ export const registerUser = async (
   confirmPassword,
 ) => {
   try {
-    await axiosInstance.post(`/register`, {
+    const response = await axiosInstance.post(`/register`, {
       username,
       email,
       password,
       confirmPassword,
     });
+    return response.data;
   } catch (error) {
     throw new Error(error.response?.data?.error || "Ошибка регистрации");
   }

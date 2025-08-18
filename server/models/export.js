@@ -7,6 +7,7 @@ import Task from "./task.model.js";
 import Invitation from "./invitation.model.js";
 import TeamOfProject from "./teamOfProject.model.js";
 import TeamMembers from "./teamMembers.model.js";
+import Token from "./token.model.js";
 
 export {
   User,
@@ -18,4 +19,5 @@ export {
   Invitation,
   TeamOfProject,
   TeamMembers,
+  Token,
 };

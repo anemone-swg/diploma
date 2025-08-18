@@ -7,6 +7,7 @@ import {
   Team,
   TeamMembers,
   TeamOfProject,
+  Token,
   User,
 } from "./export.js";
 
@@ -111,4 +112,15 @@ User.belongsToMany(Task, {
   foreignKey: "id_user",
   otherKey: "id_task",
   onDelete: "CASCADE",
+});
+
+//Один юзер имеет один токен
+User.hasOne(Token, {
+  foreignKey: "id_user",
+  as: "token",
+  onDelete: "CASCADE",
+});
+Token.belongsTo(User, {
+  foreignKey: "id_user",
+  as: "user",
 });
