@@ -86,7 +86,7 @@ const HomePageSection = ({ userData, onLogout }) => {
     const file = event.target.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-      uploadAvatar(file).then(() => setAvatar(imageUrl));
+      uploadAvatar(file, userData.id_user).then(() => setAvatar(imageUrl));
     }
   };
 

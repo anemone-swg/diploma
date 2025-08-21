@@ -33,7 +33,8 @@ const ChangeLoginModal = ({ isOpen, setIsOpen, onSuccess }) => {
     if (setDisabled) setDisabled(true);
 
     changeUserLogin(newLogin)
-      .then(() => {
+      .then((userData) => {
+        localStorage.setItem("token", userData.accessToken);
         onSuccess();
         setErrorLogin("");
         setMessageLogin("Данные успешно сохранены!");

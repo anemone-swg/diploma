@@ -120,7 +120,25 @@ class AccountService {
     const user = await User.findByPk(userId);
     user.login = finishedNewLogin;
     await user.save();
-    return user;
+
+    const tokens = TokenService.generateTokens({
+      id_user: user.id_user,
+      email: user.email,
+      isActivated: user.isActivated,
+      username: user.login,
+      role: user.role,
+    });
+    await TokenService.saveToken(user.id_user, tokens.refreshToken);
+    return {
+      ...tokens,
+      user: {
+        id_user: user.id_user,
+        email: user.email,
+        isActivated: user.isActivated,
+        username: user.login,
+        role: user.role,
+      },
+    };
   }
 
   static async getUsersForAdmin(userId) {

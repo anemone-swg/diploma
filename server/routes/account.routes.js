@@ -11,7 +11,7 @@ router.use("/account", isAuthenticated);
 router.get("/account/:id", AccountController.getAccount);
 
 router.post(
-  "/account/upload_avatar",
+  "/account/upload_avatar/:id",
   upload.single("avatar"),
   AccountController.uploadAvatar,
 );

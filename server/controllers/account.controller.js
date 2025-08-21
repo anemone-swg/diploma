@@ -9,10 +9,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "./server/uploads/"),
   filename: (req, file, cb) =>
-    cb(
-      null,
-      req.session.user.username + "-" + Date.now() + "-" + file.originalname,
-    ),
+    cb(null, req.user.username + "-" + Date.now() + "-" + file.originalname),
 });
 
 const upload = multer({ storage });
@@ -32,8 +29,9 @@ class AccountController {
 
   static async uploadAvatar(req, res) {
     try {
+      const { id } = req.params;
       await AccountService.uploadAvatar(
-        req.session.user.id,
+        id,
         "uploads/" + req.file.filename,
         __dirname,
       );
@@ -87,12 +85,15 @@ class AccountController {
   static async changeLogin(req, res) {
     try {
       const { newLogin } = req.body;
-      const user = await AccountService.changeLogin(
-        req.session.user.id,
+      const userData = await AccountService.changeLogin(
+        req.user.id_user,
         newLogin,
       );
-      req.session.user.username = user.login;
-      res.sendStatus(204);
+      res.cookie("refreshToken", userData.refreshToken, {
+        httpOnly: true,
+        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 дней
+      });
+      res.json(userData);
     } catch (error) {
       console.error("Ошибка обновления данных:", error);
       const status = error.statusCode || 500;
@@ -102,11 +103,11 @@ class AccountController {
 
   static async getUsersForAdmin(req, res) {
     try {
-      if (req.session.user?.role !== "admin") {
+      if (req.user.role !== "admin") {
         return res.status(403).json({ error: "Доступ запрещён" });
       }
 
-      const users = await AccountService.getUsersForAdmin(req.session.user.id);
+      const users = await AccountService.getUsersForAdmin(req.user.id_user);
 
       res.json({ users });
     } catch (error) {
@@ -121,7 +122,7 @@ class AccountController {
 
   static async deleteUserByAdmin(req, res) {
     try {
-      if (req.session.user?.role !== "admin") {
+      if (req.user.role !== "admin") {
         return res.status(403).json({ error: "Доступ запрещён" });
       }
 

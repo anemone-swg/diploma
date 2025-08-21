@@ -25,13 +25,6 @@ class AuthAndRegController {
     try {
       const { username, password } = req.body;
       const userData = await AuthAndRegService.login(username, password);
-      // req.session.user = {
-      //   id: user.id_user,
-      //   username: user.login,
-      //   email: user.email,
-      //   role: user.role,
-      // };
-      // res.json({ role: req.session.user.role });
       res.cookie("refreshToken", userData.refreshToken, {
         httpOnly: true,
         maxAge: 30 * 24 * 60 * 60 * 1000, // 30 дней
